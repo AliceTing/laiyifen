@@ -1,0 +1,119 @@
+//设计稿宽度
+//@function：函数  @mixin：混合
+$screen: 750;
+@function px2rem($px) {
+    @return #{$px/($screen/10)}rem
+}
+
+// font-size: #{$font-size/($screen/10)}rem;
+@mixin font-dpr($font-size) {
+    font-size: $font-size * 1px;
+    [data-dpr="2"] & {
+        font-size: $font-size * 2px;
+    }
+    [data-dpr="3"] & {
+        font-size: $font-size * 3px;
+    }
+}
+
+// 1px 仔细阅读后使用哟，以免出错
+@mixin one-left($color:#dedede, $type:solid) {
+    &:before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 1px;
+        bottom: 0;
+        border-left: 1px $type $color;
+        color: $color;
+        transform-origin: 0 0;
+        transform: scaleX(0.5);
+    }
+}
+
+@mixin one-right($color:#dedede, $type:solid) {
+    &:after {
+        content: " ";
+        position: absolute;
+        right: 0;
+        top: 0;
+        width: 1px;
+        bottom: 0;
+        border-right: 1px $type $color;
+        color: $color;
+        transform-origin: 100% 0;
+        transform: scaleX(0.5);
+    }
+}
+
+@mixin one-top($color:#dedede, $type:solid) {
+    &:before {
+        content: " ";
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        height: 1px;
+        border-top: 1px $type $color;
+        color: $color;
+        transform-origin: 0 0;
+        transform: scaleY(0.5);
+    }
+}
+
+@mixin one-bottom($color:#dedede, $type:solid) {
+    &:after {
+        content: " ";
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        right: 0;
+        height: 1px;
+        border-bottom: 1px $type $color;
+        color: $color;
+        transform-origin: 0 100%;
+        transform: scaleY(0.5);
+    }
+}
+
+@mixin icon-i-spirit($width:10, $height:10, $url:'', $left:0, $top:0, $bgwidth:400, $bgheight:400) {
+    width: px2remN($width);
+    height: px2remN($height);
+    display: inline-block;
+    background: url($url) px2remN($left) px2remN($top) no-repeat;
+    background-size: px2remN($bgwidth) px2remN($bgheight);
+}
+
+// 清除浮动
+@mixin clearfix() {
+    &:after {
+        content: '';
+        display: table;
+        clear: both;
+    }
+}
+
+// 超出隐藏
+@mixin ellipsis() {
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+@mixin line-ellipsis($line:2) {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: $line;
+}
+
+// fix iPhone X
+@mixin fix-ipx {
+    @media only screen and (device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3) {
+        @content;
+    }
+}
+
+@import "global";

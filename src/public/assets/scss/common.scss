@@ -1,0 +1,114 @@
+@import "mix";
+
+* {
+    tap-highlight-color: transparent;
+    -webkit-tap-highlight-color: transparent;
+    -ms-tap-highlight-color: transparent;
+    -moz-box-sizing: border-box;
+    -webkit-box-sizing: border-box;
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0
+}
+
+a, abbr, acronym, address, applet, article, aside, audio, b, big, blockquote, body, canvas, caption, center, cite, code, dd, del, details, dfn, div, dl, dt, em, embed, fieldset, figcaption, figure, footer, form, h1, h2, h3, h4, h5, h6, header, hgroup, html, i, iframe, img, ins, kbd, label, legend, li, mark, menu, nav, object, ol, output, p, pre, q, ruby, s, samp, section, small, span, strike, strong, sub, summary, sup, table, tbody, td, tfoot, th, thead, time, tr, tt, u, ul, var, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font: inherit;
+    vertical-align: baseline
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block
+}
+
+ol, li, ul {
+    list-style: none
+}
+
+a, div, header, span {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0)
+}
+
+blockquote, q {
+    quotes: none
+}
+
+blockquote:after, blockquote:before, q:after, q:before {
+    content: '';
+    content: none
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0
+}
+
+input, textarea {
+    outline: 0;
+    resize: none;
+    font-family: PingFangSC, Helvetica, "Droid Sans", Arial, sans-serif;
+    font-size: inherit;
+}
+
+a {
+    text-decoration: none;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+    height: 100%;
+}
+
+body {
+    height: 100%;
+    background-color: #f4f1f1;
+    -webkit-overflow-scrolling: touch;
+    overflow-scrolling: touch;
+    -webkit-font-smoothing: antialiased;
+    font-family: PingFangSC, Helvetica, "Droid Sans", Arial, sans-serif;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+select {
+    background: transparent;
+}
+
+.noscroll body, .noscroll .view {
+    overflow: hidden;
+    height: 100%;
+}
+
+.view {
+    max-width: px2rem(750);
+    min-width: px2rem(320);
+    margin: 0 auto;
+    font-size: px2rem(24);
+}
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    font-size: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+@include fix-ipx {
+    .fix-ipx-fixed {
+        &::after {
+            content: '';
+            display: block;
+            height: 0;
+            background-color: #232321;
+            transition: 0.3s;
+        }
+        &.fix-ipx-fixed-current {
+            &::after, .fix-ipx-fixed::after {
+                height: px2rem(68);
+            }
+        }
+    }
+}

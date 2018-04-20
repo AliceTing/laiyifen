@@ -12,7 +12,7 @@ const vueInstance = new Vuex.Store({
   actions: {},
   mutations: {},
   modules: {
-      realTimeModule
+
   }
 });
 

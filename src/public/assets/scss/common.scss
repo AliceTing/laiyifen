@@ -76,11 +76,6 @@ select {
     background: transparent;
 }
 
-.noscroll body, .noscroll .view {
-    overflow: hidden;
-    height: 100%;
-}
-
 .view {
     max-width: px2rem(750);
     min-width: px2rem(320);
@@ -94,21 +89,4 @@ select {
     font-size: 0;
     clear: both;
     visibility: hidden;
-}
-
-@include fix-ipx {
-    .fix-ipx-fixed {
-        &::after {
-            content: '';
-            display: block;
-            height: 0;
-            background-color: #232321;
-            transition: 0.3s;
-        }
-        &.fix-ipx-fixed-current {
-            &::after, .fix-ipx-fixed::after {
-                height: px2rem(68);
-            }
-        }
-    }
 }

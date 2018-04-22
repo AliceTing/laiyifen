@@ -79,7 +79,8 @@ select {
 .view {
     max-width: px2rem(750);
     min-width: px2rem(320);
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
     font-size: px2rem(24);
 }
 .clearfix:after {

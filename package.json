@@ -15,9 +15,9 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.16.2",
     "babel-polyfill": "^6.26.0",
     "fastclick": "^1.0.6",
-    "jsonp-retry": "^0.1.6",
     "vue": "^2.3.4",
     "vue-awesome-swiper": "^3.0.6",
     "vue-lazyload": "^1.2.1",

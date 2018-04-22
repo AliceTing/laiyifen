@@ -141,7 +141,15 @@ module.exports = {
             }
         })
     ],
-    devtool: isDev ? 'inline-source-map' : false
+    devtool: isDev ? 'inline-source-map' : false,
+    //本地开发server
+    devServer: {
+        host: 'localhost',
+        port: 80,
+        hot: true,
+        https: false,
+        disableHostCheck: true
+    }
 
 }
 
@@ -180,7 +188,7 @@ function getEntry(globPath,html) {
             pathname =  basename;
             entries[pathname] = [entry,'m' + '/' + basename];
         }else{
-            entries[pathname] = [ 'webpack-dev-server/client?http://0.0.0.0:8080',
+            entries[pathname] = [ 'webpack-dev-server/client?http://0.0.0.0',
                 'webpack/hot/only-dev-server','babel-polyfill',
                 entry];
         }

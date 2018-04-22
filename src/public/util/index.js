@@ -284,40 +284,6 @@ export function getValue(obj, exp) {
     }
 }
 
-export function createApi(routes) {
-    // let API_DOMAIN = '//api.toplife.com';
-    const pre = process.env.pre;
-    const test = process.env.test;
-
-    let API_DOMAIN = '//api.toplife.com';
-    // if(pre || test){
-    //     API_DOMAIN = '//api-beta.toplife.com';
-    // }
-
-    for (let key in routes) {
-        routes[key] = API_DOMAIN + routes[key]
-    }
-    return routes;
-}
-export function createMstone(routes) {
-    let API_DOMAIN = '//mstone-api.jd.com';
-
-    for (let key in routes) {
-        routes[key] = API_DOMAIN + routes[key]
-    }
-    return routes;
-}
-
-export function baseParam(obj) {
-    return {
-        uuid: Helper.getUUID(),
-        areas: Helper.getAreaId().areaIds.join('-'),
-        source: 3,
-        clientType: 'm',
-        cv: (obj && obj.cv) ? obj.cv : '2.6.0',
-    };
-}
-
 /**
  * 将人民币(String/Num)转带有分隔符（,）的字符串（String）
  * parseMoney ('16400') => "16,400"

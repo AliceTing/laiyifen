@@ -17,7 +17,9 @@
   "dependencies": {
     "axios": "^0.16.2",
     "babel-polyfill": "^6.26.0",
+    "echarts": "^4.0.4",
     "fastclick": "^1.0.6",
+    "v-charts": "^1.16.10",
     "vue": "^2.3.4",
     "vue-awesome-swiper": "^3.0.6",
     "vue-lazyload": "^1.2.1",

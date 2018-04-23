@@ -107,37 +107,54 @@
 
 <template>
     <div class="container">
-        <div class="tab_box">
-            <div class="tab_tit order_type_tit">
-                <div v-for="(typeItem,index) in orderTypeArr"
-                     :key="index"
-                     :class="{current : typeItem.current}"
-                     class="tab_item order_type_item">{{typeItem.name}}
-                </div>
-            </div>
-            <div class="tab-con">
-                <div class="tab_tit time_type_tit">
-                    <div v-for="(timeItem,i) in timeTypeArr"
-                         :key="i"
-                         :class="{current : timeItem.current}"
-                         class="tab_item time_type_item">{{timeItem.name}}
+        <v-touch @swipeleft="onSwipeLeft"
+                 @swiperight="onSwipeRight">
+            <div class="tab_box">
+                <div class="tab_tit order_type_tit">
+                    <div v-for="(typeItem,index) in orderTypeArr"
+                         :key="index"
+                         :class="{current : typeItem.current}"
+                         class="tab_item order_type_item">{{typeItem.name}}
                     </div>
                 </div>
-                <div class="switch_time">
-                    <div class="btn_switch prev" v-show="prevShow" @click="switchTime(-1)"></div>
-                    <div class="btn_switch next" v-show="nextShow" @click="switchTime(1)"></div>
-                    <div class="current_time">{{display}}</div>
+                <div class="tab-con">
+                    <!--年、月、日、周视图tab-->
+                    <div class="tab_tit time_type_tit">
+                        <div v-for="(timeItem,i) in timeTypeArr"
+                             :key="i"
+                             :class="{current : timeItem.current}"
+                             class="tab_item time_type_item">{{timeItem.name}}
+                        </div>
+                    </div>
+                    <!--箭头切换-->
+                    <div class="switch_time">
+                        <div class="btn_switch prev" v-show="prevShow" @click="switchTime(-1)"></div>
+                        <div class="btn_switch next" v-show="nextShow" @click="switchTime(1)"></div>
+                        <div class="current_time">{{display}}</div>
+                    </div>
+                    <!--年柱状图-->
+                    <div class="year_histogram">
+                        <ve-histogram :data="yearHistogramData(orderDataArr)" :settings="chartSettings"></ve-histogram>
+                    </div>
+
+                    <!--数据统计模块-->
+                    <statisticsModule :total="thisYearTotal(orderDataArr)"></statisticsModule>
+
                 </div>
             </div>
-        </div>
+        </v-touch>
     </div>
 </template>
 
 <script>
     import {mapState, mapActions, mapMutations} from 'vuex';
 
+    import statisticsModule from './components/statisticsModule';
+
     export default {
-        components: {},
+        components: {
+            statisticsModule
+        },
         data() {
             return {
                 //订单类型
@@ -191,7 +208,8 @@
                 //接口请求入参
                 param: {},
                 //页面展示类型
-                display: ''
+                display: '',
+                chartSettings:{}
             }
         },
         created() {
@@ -211,22 +229,24 @@
 
             me.init();
             me.orderDisplay(me.name, me.time, me.type);
+
         },
         methods: {
             ...mapActions([
                 'getData'
             ]),
+            //初始化时间
             init(){
                 let me = this;
                 let date = new Date();
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
                 let day = date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate();
-
                 me.year = year;
                 me.month = month;
                 me.day = day;
             },
+            //请求接口
             orderDisplay() {
                 let me = this;
                 me.param.day = me.year + '-' + me.month + '-' + me.day;
@@ -253,6 +273,7 @@
                     time: me.time
                 });
             },
+            //点击切换时间
             switchTime(e) {
                 let me = this;
                 let date = new Date();
@@ -289,6 +310,49 @@
                 }
                 console.log('switch:',me.year);
                 me.orderDisplay(me.name, me.time, me.type);
+            },
+            //滑动切换统计类型
+            onSwipeLeft(){
+                alert('left');
+            },
+            //滑动切换统计类型
+            onSwipeRight(){
+                alert('right');
+            },
+            //渲染年数据-柱状图
+            yearHistogramData(orderData){
+                let me  = this;
+                let tmp = {};
+                tmp = {
+                    columns: ['x轴', '成本'],
+                    rows:[]
+                };
+
+                let thisYearDetail = orderData.thisYearDetail;
+                console.log(thisYearDetail);
+                if(thisYearDetail){
+                    for(let i=0;i<thisYearDetail.length;i++){
+                        tmp.rows.push({
+                            'x轴': i,
+                            '成本':3000
+                        });
+                    }
+                }
+
+                return tmp;
+            },
+            //今天数据统计模块
+            thisYearTotal(orderData){
+                let me = this;
+                let tmp = {};
+                switch (me.time){
+                    case 'year':
+                        tmp.time = me.time;
+                        tmp.amount = orderData.thisYearTotalPayAmount;
+                        tmp.percent = orderData.yearAmountPercent;
+                        break;
+                }
+                return tmp;
             }
         },
         computed: {

@@ -40,13 +40,13 @@
     }
 
     .time_type_tit {
-        height: px2rem(54);
+        height: px2rem(58);
         margin: px2rem(15) px2rem(32);
         border: solid 1px $mainColor;
         border-radius: px2rem(8);
         background-color: #fff;
         color: $mainColor;
-        line-height: px2rem(54);
+        line-height: px2rem(56);
         @include font-dpr(12);
         .time_type_item {
             border-left: solid 1px $mainColor;
@@ -103,6 +103,59 @@
         }
     }
 
+    .tab_ditch_province {
+        .tab_tit {
+            margin: px2rem(15) px2rem(32) 0;
+            border: solid 1px $mainColor;
+            border-radius: px2rem(8);
+            .tab_item {
+                height: px2rem(58);
+                border-left: solid 1px $mainColor;
+                color: $mainColor;
+                line-height: px2rem(56);
+                @include font-dpr(10);
+                &:first-child {
+                    border-left: none;
+                }
+                &.current {
+                    background-color: $mainColor;
+                    color: #fff;
+                }
+            }
+        }
+        //渠道表格
+        .table_ditch{
+            width: 100%;
+            height: px2rem(90);
+            text-align: left;
+            line-height: px2rem(90);
+            @include font-dpr(15);
+            thead{
+                background-color: #fbfbfb;
+                color: #000;
+                th:nth-child(1){
+                    padding-left: px2rem(32);
+                }
+            }
+            tbody{
+                color: #999;
+                tr{
+                    background-color: #fbfbfb;
+                    &:nth-child(odd){
+                       background-color: #fff;
+                    }
+                    td:nth-child(1){
+                        padding-left: px2rem(32);
+                    }
+                    td:nth-child(2){
+                        color: #e74c39;
+                    }
+                }
+
+            }
+        }
+    }
+
 </style>
 
 <template>
@@ -133,12 +186,52 @@
                         <div class="current_time">{{display}}</div>
                     </div>
                     <!--年柱状图-->
-                    <div class="year_histogram">
-                        <ve-histogram :data="yearHistogramData(orderDataArr)" :settings="chartSettings"></ve-histogram>
-                    </div>
+                    <histogramItem></histogramItem>
 
                     <!--数据统计模块-->
-                    <statisticsModule :total="thisYearTotal(orderDataArr)"></statisticsModule>
+                    <statisticsItem :total="thisYearTotal(orderDataArr)"></statisticsItem>
+
+                    <!--省份、渠道-->
+                    <div class="tab_box tab_ditch_province">
+                        <div class="tab_tit">
+                            <div v-for="(item,index) in ditchProvinceArr"
+                                 :key="index"
+                                 class="tab_item"
+                                 :class="{current : item.current}" @click="onShowWay(index,item.way)">{{item.name}}
+                            </div>
+                        </div>
+                        <div class="tab_con">
+                            <!--渠道-->
+                            <template v-if="showWay === 1">
+                                <!--环形图-->
+                                <ve-ring :data="yearPieData(orderDataArr).data"
+                                         :settings="yearPieData(orderDataArr).settings"></ve-ring>
+                                <!--表格-->
+                                <table class="table_ditch">
+                                    <thead>
+                                    <tr>
+                                        <th>渠道</th>
+                                        <th>支付金额</th>
+                                        <th>年同比</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in orderDataArr.channelStat" :key="index">
+                                        <td>{{item.channel}}</td>
+                                        <td>{{item.payAmount?item.payAmount:0}}</td>
+                                        <td>{{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}%</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </template>
+
+                            <!--省份-->
+                            <template v-if="showWay === 2">
+                                <div>渠道</div>
+                            </template>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
@@ -149,11 +242,13 @@
 <script>
     import {mapState, mapActions, mapMutations} from 'vuex';
 
-    import statisticsModule from './components/statisticsModule';
+    import statisticsItem from './components/statisticsItem';
+    import histogramItem from './components/histogramItem';
 
     export default {
         components: {
-            statisticsModule
+            statisticsItem,
+            histogramItem
         },
         data() {
             return {
@@ -189,6 +284,16 @@
                     time: 'year',
                     current: true
                 }],
+                //渠道省份
+                ditchProvinceArr: [{
+                    name: '渠道',
+                    way: 'ditch',
+                    current: true
+                }, {
+                    name: '省份',
+                    way: 'province',
+                    current: false
+                }],
                 //当前视图类型，文字
                 name: '',
                 //当前视图类型，年、月、日、周
@@ -209,12 +314,12 @@
                 param: {},
                 //页面展示类型
                 display: '',
-                chartSettings:{}
+                showWay: 1
             }
         },
         created() {
             let me = this;
-
+            //初始化入参
             me.timeTypeArr.map(function (el) {
                 if (el.current) {
                     me.name = el.name;
@@ -226,17 +331,15 @@
                     })
                 }
             });
-
             me.init();
             me.orderDisplay(me.name, me.time, me.type);
-
         },
         methods: {
             ...mapActions([
                 'getData'
             ]),
             //初始化时间
-            init(){
+            init() {
                 let me = this;
                 let date = new Date();
                 let year = date.getFullYear();
@@ -287,7 +390,7 @@
                             //下一年
                             me.year++;
 
-                            if(me.year == year){
+                            if (me.year == year) {
                                 me.nextShow = false;
                             }
                             me.prevShow = true;
@@ -295,7 +398,7 @@
                             //上一年
                             me.year--;
                             me.display = me.year + me.name;
-                            if(me.year == 1970){
+                            if (me.year == 1970) {
                                 me.prevShow = false;
                             }
                             me.nextShow = true;
@@ -308,49 +411,105 @@
                     case 'week':
                         break;
                 }
-                console.log('switch:',me.year);
+                console.log('switch:', me.year);
                 me.orderDisplay(me.name, me.time, me.type);
             },
             //滑动切换统计类型
-            onSwipeLeft(){
+            onSwipeLeft() {
                 alert('left');
             },
             //滑动切换统计类型
-            onSwipeRight(){
+            onSwipeRight() {
                 alert('right');
             },
             //渲染年数据-柱状图
-            yearHistogramData(orderData){
-                let me  = this;
+            yearHistogramData(orderData) {
+                let me = this;
                 let tmp = {};
                 tmp = {
                     columns: ['x轴', '成本'],
-                    rows:[]
+                    rows: []
                 };
 
                 let thisYearDetail = orderData.thisYearDetail;
                 console.log(thisYearDetail);
-                if(thisYearDetail){
-                    for(let i=0;i<thisYearDetail.length;i++){
+                if (thisYearDetail) {
+                    for (let i = 0; i < thisYearDetail.length; i++) {
                         tmp.rows.push({
                             'x轴': i,
-                            '成本':3000
+                            '成本': 3000
                         });
                     }
                 }
 
                 return tmp;
             },
-            //今天数据统计模块
-            thisYearTotal(orderData){
+            //今年数据统计模块
+            thisYearTotal(orderData) {
                 let me = this;
                 let tmp = {};
-                switch (me.time){
+                tmp.time = me.time;
+                switch (me.time) {
                     case 'year':
-                        tmp.time = me.time;
-                        tmp.amount = orderData.thisYearTotalPayAmount;
+                        tmp.thisAmount = orderData.thisYearTotalPayAmount;
+                        tmp.lastAmount = orderData.lastYearTotalPayAmount;
                         tmp.percent = orderData.yearAmountPercent;
                         break;
+                }
+                return tmp;
+            },
+            //切换省份、渠道
+            onShowWay(index) {
+                let me = this;
+                me.ditchProvinceArr.map(function (el) {
+                    el.current = false;
+                });
+                me.ditchProvinceArr[index].current = true;
+                me.showWay = index + 1;
+            },
+            //渲染年数据-省份、渠道
+            yearPieData(orderData) {
+                let me = this;
+                let tmp = {
+                    data: {
+                        columns: ['channel', 'percent'],
+                        rows: []
+                    },
+                    settings: {
+                        dimension: 'channel',
+                        metrics: 'percent',
+                        dataType: 'percent',
+                        digit: 1,
+                        selectedMode: 'single',
+                        hoverAnimation: false,
+                        radius: [104, 50],
+                        offsetY: 150,
+                        label: {
+                            position: 'inside',
+                            formatter: ''
+                        },
+                        labelLine: {
+                            show: false
+                        }
+                    }
+                };
+
+                let channelStat = orderData.channelStat;
+                if (channelStat) {
+                    //总数
+                    let amount = 0;
+                    channelStat.map(function (el) {
+                        amount += el.payAmount;
+                    });
+
+                    channelStat.map(function (el) {
+                        tmp.data.rows.push({
+                            'channel': el.channel,
+                            'percent': ((el.payAmount / amount).toFixed(5) * 100).toFixed(1)
+                        });
+
+                        tmp.settings.label.formatter = '{@channel}' + '%';
+                    });
                 }
                 return tmp;
             }

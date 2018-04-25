@@ -124,30 +124,30 @@
             }
         }
         //渠道表格
-        .table_ditch{
+        .table_ditch {
             width: 100%;
             height: px2rem(90);
             text-align: left;
             line-height: px2rem(90);
             @include font-dpr(15);
-            thead{
+            thead {
                 background-color: #fbfbfb;
                 color: #000;
-                th:nth-child(1){
+                th:nth-child(1) {
                     padding-left: px2rem(32);
                 }
             }
-            tbody{
+            tbody {
                 color: #999;
-                tr{
+                tr {
                     background-color: #fbfbfb;
-                    &:nth-child(odd){
-                       background-color: #fff;
+                    &:nth-child(odd) {
+                        background-color: #fff;
                     }
-                    td:nth-child(1){
+                    td:nth-child(1) {
                         padding-left: px2rem(32);
                     }
-                    td:nth-child(2){
+                    td:nth-child(2) {
                         color: #e74c39;
                     }
                 }
@@ -186,7 +186,7 @@
                         <div class="current_time">{{display}}</div>
                     </div>
                     <!--年柱状图-->
-                    <histogramItem></histogramItem>
+                    <histogramItem :yearHistogram="orderDataArr" :year="year"></histogramItem>
 
                     <!--数据统计模块-->
                     <statisticsItem :total="thisYearTotal(orderDataArr)"></statisticsItem>
@@ -227,11 +227,12 @@
 
                             <!--省份-->
                             <template v-if="showWay === 2">
-                                <div>渠道</div>
+                                <!--条形图-->
+                                <ve-bar :data="yearBarData(orderDataArr).data"
+                                        :settings="yearBarData(orderDataArr).settings"></ve-bar>
                             </template>
                         </div>
                     </div>
-
 
                 </div>
             </div>
@@ -422,28 +423,6 @@
             onSwipeRight() {
                 alert('right');
             },
-            //渲染年数据-柱状图
-            yearHistogramData(orderData) {
-                let me = this;
-                let tmp = {};
-                tmp = {
-                    columns: ['x轴', '成本'],
-                    rows: []
-                };
-
-                let thisYearDetail = orderData.thisYearDetail;
-                console.log(thisYearDetail);
-                if (thisYearDetail) {
-                    for (let i = 0; i < thisYearDetail.length; i++) {
-                        tmp.rows.push({
-                            'x轴': i,
-                            '成本': 3000
-                        });
-                    }
-                }
-
-                return tmp;
-            },
             //今年数据统计模块
             thisYearTotal(orderData) {
                 let me = this;
@@ -461,15 +440,14 @@
             //切换省份、渠道
             onShowWay(index) {
                 let me = this;
-                me.ditchProvinceArr.map(function (el) {
+                me.ditchProvinceArr.map((el) => {
                     el.current = false;
                 });
                 me.ditchProvinceArr[index].current = true;
                 me.showWay = index + 1;
             },
-            //渲染年数据-省份、渠道
+            //渲染年数据-渠道
             yearPieData(orderData) {
-                let me = this;
                 let tmp = {
                     data: {
                         columns: ['channel', 'percent'],
@@ -483,7 +461,6 @@
                         selectedMode: 'single',
                         hoverAnimation: false,
                         radius: [104, 50],
-                        offsetY: 150,
                         label: {
                             position: 'inside',
                             formatter: ''
@@ -493,22 +470,50 @@
                         }
                     }
                 };
-
                 let channelStat = orderData.channelStat;
                 if (channelStat) {
                     //总数
                     let amount = 0;
-                    channelStat.map(function (el) {
+                    channelStat.map((el) => {
                         amount += el.payAmount;
                     });
 
-                    channelStat.map(function (el) {
+                    channelStat.map((el) => {
                         tmp.data.rows.push({
                             'channel': el.channel,
                             'percent': ((el.payAmount / amount).toFixed(5) * 100).toFixed(1)
                         });
 
                         tmp.settings.label.formatter = '{@channel}' + '%';
+                    });
+                }
+                return tmp;
+            },
+            //渲染年数据-省份
+            yearBarData(orderData) {
+                let tmp = {
+                    data: {
+                        columns: ['province', '支付金额'],
+                        rows: []
+                    },
+                    settings: {
+                        metrics: ['支付金额'],
+                        label: {
+                            show: true,
+                            position: 'right',
+                        },
+                        itemStyle: {
+                            color: '#ff6900'
+                        }
+                    }
+                };
+                let provinceStat = orderData.provinceStat;
+                if (provinceStat) {
+                    provinceStat.map((el) => {
+                        tmp.data.rows.push({
+                            'province': el.province,
+                            '支付金额': Math.round(el.payAmount)
+                        });
                     });
                 }
                 return tmp;

@@ -123,6 +123,9 @@
                 }
             }
         }
+        .tab_con{
+             margin-top: px2rem(30);
+        }
         //渠道表格
         .table_ditch {
             width: 100%;
@@ -190,14 +193,11 @@
                     <!--年视图>柱状图-->
                     <histogramItem :yearHistogram="orderDataArr" :year="year" v-show="time === 'year'"></histogramItem>
 
-                    <!--月视图>折线图-->
-                    <lineItem :monthLine="orderDataArr" :year="year" :month="month"
-                              v-show="time === 'month'"></lineItem>
-
+                    <!--折线图：月视图、日视图>-->
+                    <lineItem :total="orderDataArr" :year="year" :month="month" :day="day" :time="time"></lineItem>
 
                     <!--数据统计模块-->
                     <statisticsItem :total="orderDataArr" :time="time"></statisticsItem>
-
 
                     <!--省份、渠道-->
                     <div class="tab_box tab_ditch_province">
@@ -281,7 +281,7 @@
                 timeTypeArr: [{
                     name: '日',
                     time: 'day',
-                    current: false
+                    current: true
                 }, {
                     name: '周',
                     time: 'week',
@@ -289,7 +289,7 @@
                 }, {
                     name: '月',
                     time: 'month',
-                    current: true
+                    current: false
                 }, {
                     name: '年',
                     time: 'year',
@@ -356,7 +356,7 @@
                 let date = new Date();
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
-                let day = date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate();
+                let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
                 me.year = year;
                 me.month = month;
                 me.day = day;
@@ -364,14 +364,16 @@
             //请求接口
             orderDisplay() {
                 let me = this;
-                me.param.day = me.year + '-' + (parseInt(me.month) < 10 ? '0' + parseInt(me.month) : me.month) + '-' + me.day;
+                //TODO 今天天只能看今天之前的数据
+                me.param.day = me.year + '-' + (parseInt(me.month) < 10 ? '0' + parseInt(me.month) : me.month) + '-' + (me.day - 1);
                 me.param.type = me.type;
+                console.log(me.name);
                 switch (me.time) {
                     case 'year':
-                        me.display = me.year + me.name;
+                        me.display = me.year + '年';
                         break;
                     case 'month':
-                        me.display = me.year + '年' + me.month + me.name;
+                        me.display = me.year + '年' + me.month + '月';
                         break;
                     case 'day':
                         me.display = me.year + '年' + me.month + '月' + me.day + me.name;

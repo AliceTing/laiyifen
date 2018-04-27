@@ -176,7 +176,8 @@
                         <div v-for="(timeItem,i) in timeTypeArr"
                              :key="i"
                              :class="{current : timeItem.current}"
-                             class="tab_item time_type_item">{{timeItem.name}}
+                             class="tab_item time_type_item"
+                             @click="onChangeView(i)">{{timeItem.name}}
                         </div>
                     </div>
                     <!--箭头切换-->
@@ -185,11 +186,18 @@
                         <div class="btn_switch next" v-show="nextShow" @click="switchTime(1)"></div>
                         <div class="current_time">{{display}}</div>
                     </div>
-                    <!--年柱状图-->
-                    <histogramItem :yearHistogram="orderDataArr" :year="year"></histogramItem>
+
+                    <!--年视图>柱状图-->
+                    <histogramItem :yearHistogram="orderDataArr" :year="year" v-show="time === 'year'"></histogramItem>
+
+                    <!--月视图>折线图-->
+                    <lineItem :monthLine="orderDataArr" :year="year" :month="month"
+                              v-show="time === 'month'"></lineItem>
+
 
                     <!--数据统计模块-->
-                    <statisticsItem :total="thisYearTotal(orderDataArr)"></statisticsItem>
+                    <statisticsItem :total="orderDataArr" :time="time"></statisticsItem>
+
 
                     <!--省份、渠道-->
                     <div class="tab_box tab_ditch_province">
@@ -197,7 +205,8 @@
                             <div v-for="(item,index) in ditchProvinceArr"
                                  :key="index"
                                  class="tab_item"
-                                 :class="{current : item.current}" @click="onShowWay(index,item.way)">{{item.name}}
+                                 :class="{current : item.current}"
+                                 @click="onShowWay(index)">{{item.name}}
                             </div>
                         </div>
                         <div class="tab_con">
@@ -233,7 +242,6 @@
                             </template>
                         </div>
                     </div>
-
                 </div>
             </div>
         </v-touch>
@@ -245,11 +253,13 @@
 
     import statisticsItem from './components/statisticsItem';
     import histogramItem from './components/histogramItem';
+    import lineItem from './components/lineItem';
 
     export default {
         components: {
             statisticsItem,
-            histogramItem
+            histogramItem,
+            lineItem
         },
         data() {
             return {
@@ -279,11 +289,11 @@
                 }, {
                     name: '月',
                     time: 'month',
-                    current: false
+                    current: true
                 }, {
                     name: '年',
                     time: 'year',
-                    current: true
+                    current: false
                 }],
                 //渠道省份
                 ditchProvinceArr: [{
@@ -315,6 +325,7 @@
                 param: {},
                 //页面展示类型
                 display: '',
+                //年视图渠道或者省份切换
                 showWay: 1
             }
         },
@@ -333,7 +344,7 @@
                 }
             });
             me.init();
-            me.orderDisplay(me.name, me.time, me.type);
+            me.orderDisplay();
         },
         methods: {
             ...mapActions([
@@ -353,7 +364,7 @@
             //请求接口
             orderDisplay() {
                 let me = this;
-                me.param.day = me.year + '-' + me.month + '-' + me.day;
+                me.param.day = me.year + '-' + (parseInt(me.month) < 10 ? '0' + parseInt(me.month) : me.month) + '-' + me.day;
                 me.param.type = me.type;
                 switch (me.time) {
                     case 'year':
@@ -377,6 +388,24 @@
                     time: me.time
                 });
             },
+            //滑动（左滑）切换统计类型
+            onSwipeLeft() {
+                alert('left');
+            },
+            //滑动（右滑）切换统计类型
+            onSwipeRight() {
+                alert('right');
+            },
+            onChangeView(index) {
+                let me = this;
+                let time = me.timeTypeArr[index].time;
+                me.timeTypeArr.map((el) => {
+                    el.current = false;
+                });
+                me.timeTypeArr[index].current = true;
+                me.time = time;
+                me.orderDisplay();
+            },
             //点击切换时间
             switchTime(e) {
                 let me = this;
@@ -390,7 +419,6 @@
                         if (e > 0) {
                             //下一年
                             me.year++;
-
                             if (me.year == year) {
                                 me.nextShow = false;
                             }
@@ -406,37 +434,49 @@
                         }
                         break;
                     case 'month':
+                        if (e > 0) {
+                            //下一月
+                            me.month++;
+                            if (me.month == month) {
+                                me.nextShow = false;
+                            }
+                            me.prevShow = true;
+                        } else {
+                            //上一月
+                            me.month--;
+                            me.display = me.year + me.name;
+                            if (me.month == 1) {
+                                me.prevShow = false;
+                            }
+                            me.nextShow = true;
+                        }
                         break;
                     case 'day':
                         break;
                     case 'week':
                         break;
                 }
-                console.log('switch:', me.year);
-                me.orderDisplay(me.name, me.time, me.type);
+                me.orderDisplay();
             },
-            //滑动切换统计类型
-            onSwipeLeft() {
-                alert('left');
-            },
-            //滑动切换统计类型
-            onSwipeRight() {
-                alert('right');
-            },
-            //今年数据统计模块
-            thisYearTotal(orderData) {
-                let me = this;
-                let tmp = {};
-                tmp.time = me.time;
-                switch (me.time) {
-                    case 'year':
-                        tmp.thisAmount = orderData.thisYearTotalPayAmount;
-                        tmp.lastAmount = orderData.lastYearTotalPayAmount;
-                        tmp.percent = orderData.yearAmountPercent;
-                        break;
-                }
-                return tmp;
-            },
+            //数据统计模块
+            // thisTotal(orderData) {
+            //     let me = this;
+            //     let tmp = {};
+            //     tmp.time = me.time;
+            //     switch (me.time) {
+            //         case 'year':
+            //             tmp.thisAmount = orderData.thisYearTotalPayAmount;
+            //             tmp.lastAmount = orderData.lastYearTotalPayAmount;
+            //             tmp.percent = orderData.yearAmountPercent;
+            //             break;
+            //         case 'month':
+            //             tmp.thisAmount = orderData.thisYearTotalPayAmount;
+            //             tmp.lastAmount = orderData.lastYearTotalPayAmount;
+            //             tmp.percent = orderData.yearAmountPercent;
+            //             break;
+            //     }
+            //     return tmp;
+            // },
             //切换省份、渠道
             onShowWay(index) {
                 let me = this;

@@ -1,7 +1,5 @@
 <style lang="scss" scoped>
     @import '../../../public/assets/scss/mix.scss';
-
-    $mainColor: #ff6900;
 </style>
 <template>
     <div class="year_histogram">

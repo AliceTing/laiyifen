@@ -123,8 +123,8 @@
                 }
             }
         }
-        .tab_con{
-             margin-top: px2rem(30);
+        .tab_con {
+            margin-top: px2rem(30);
         }
         //渠道表格
         .table_ditch {
@@ -169,6 +169,7 @@
                 <div class="tab_tit order_type_tit">
                     <div v-for="(typeItem,index) in orderTypeArr"
                          :key="index"
+                         @click="onChangeParam(index,'type')"
                          :class="{current : typeItem.current}"
                          class="tab_item order_type_item">{{typeItem.name}}
                     </div>
@@ -180,7 +181,7 @@
                              :key="i"
                              :class="{current : timeItem.current}"
                              class="tab_item time_type_item"
-                             @click="onChangeView(i)">{{timeItem.name}}
+                             @click="onChangeParam(i,'time')">{{timeItem.name}}
                         </div>
                     </div>
                     <!--箭头切换-->
@@ -364,10 +365,14 @@
             //请求接口
             orderDisplay() {
                 let me = this;
+                let nowDate = new Date();
+                let nowYear = nowDate.getFullYear();
+                let nowMonth = nowDate.getMonth() + 1 < 10 ? '0' + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
+                let nowDay = nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate();
+
                 //TODO 今天天只能看今天之前的数据
-                me.param.day = me.year + '-' + (parseInt(me.month) < 10 ? '0' + parseInt(me.month) : me.month) + '-' + (me.day - 1);
+                me.param.day = me.year + '-' + (parseInt(me.month) < 10 ? '0' + parseInt(me.month) : me.month) + '-' + me.day;
                 me.param.type = me.type;
-                console.log(me.name);
                 switch (me.time) {
                     case 'year':
                         me.display = me.year + '年';
@@ -376,7 +381,13 @@
                         me.display = me.year + '年' + me.month + '月';
                         break;
                     case 'day':
-                        me.display = me.year + '年' + me.month + '月' + me.day + me.name;
+                        if(me.year == nowYear && me.month == nowMonth && me.day == nowDay){
+                            me.display = '今天';
+                        }else if(me.year == nowYear && me.month == nowMonth && me.day == (nowDay-1)){
+                            me.display = '昨天';
+                        }else{
+                            me.display = me.year + '年' + me.month + '月' + me.day + me.name;
+                        }
                         break;
                     case 'week':
                         //TODO
@@ -392,20 +403,49 @@
             },
             //滑动（左滑）切换统计类型
             onSwipeLeft() {
-                alert('left');
+                let me = this;
+                if (me.type === (me.orderTypeArr.length - 1)) {
+                    me.type = 0
+                } else {
+                    me.type++;
+                }
+                me.orderTypeArr.map((el) => {
+                    el.current = false;
+                });
+                me.orderTypeArr[me.type].current = true;
+                me.orderDisplay();
             },
             //滑动（右滑）切换统计类型
             onSwipeRight() {
-                alert('right');
-            },
-            onChangeView(index) {
                 let me = this;
-                let time = me.timeTypeArr[index].time;
-                me.timeTypeArr.map((el) => {
+                if (me.type === 0) {
+                    me.type = me.orderTypeArr.length - 1
+                } else {
+                    me.type--;
+                }
+                me.orderTypeArr.map((el) => {
                     el.current = false;
                 });
-                me.timeTypeArr[index].current = true;
-                me.time = time;
+                me.orderTypeArr[me.type].current = true;
+                me.orderDisplay();
+            },
+            //切换入参
+            onChangeParam(index, paramType) {
+                let me = this;
+                let tmpArr;
+                switch (paramType) {
+                    case 'type':
+                        tmpArr = me.orderTypeArr;
+                        break;
+                    case 'time':
+                        tmpArr = me.timeTypeArr;
+                        break;
+                }
+                tmpArr.map((el) => {
+                    el.current = false;
+                });
+                tmpArr[index].current = true;
+                me[paramType] = tmpArr[index][paramType];
                 me.orderDisplay();
             },
             //点击切换时间
@@ -454,31 +494,28 @@
                         }
                         break;
                     case 'day':
+                        if (e > 0) {
+                            //明天
+                            me.day++;
+                            if (me.day == day) {
+                                me.nextShow = false;
+                            }
+                            me.prevShow = true;
+                        } else {
+                            //昨天
+                            me.day--;
+                            me.display = me.year + me.name;
+                            if (me.day == 1) {
+                                me.prevShow = false;
+                            }
+                            me.nextShow = true;
+                        }
                         break;
                     case 'week':
                         break;
                 }
                 me.orderDisplay();
             },
-            //数据统计模块
-            // thisTotal(orderData) {
-            //     let me = this;
-            //     let tmp = {};
-            //     tmp.time = me.time;
-            //     switch (me.time) {
-            //         case 'year':
-            //             tmp.thisAmount = orderData.thisYearTotalPayAmount;
-            //             tmp.lastAmount = orderData.lastYearTotalPayAmount;
-            //             tmp.percent = orderData.yearAmountPercent;
-            //             break;
-            //         case 'month':
-            //             tmp.thisAmount = orderData.thisYearTotalPayAmount;
-            //             tmp.lastAmount = orderData.lastYearTotalPayAmount;
-            //             tmp.percent = orderData.yearAmountPercent;
-            //             break;
-            //     }
-            //     return tmp;
-            // },
             //切换省份、渠道
             onShowWay(index) {
                 let me = this;

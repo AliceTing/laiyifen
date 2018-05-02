@@ -349,6 +349,12 @@
                 param: {},
                 //页面展示类型
                 display: '',
+                //周视图开始时间
+                mondayTime: '',
+                //周视图结束时间
+                sundayTime: '',
+                originStartTime: '',
+                originEndTime: '',
                 //年视图渠道或者省份切换
                 showWay: 1
             }
@@ -381,9 +387,23 @@
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
                 let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
+                //星期
+                let nowTime = date.getTime();
+                let weekDay = date.getDay();
+                let oneDayLong = 24 * 60 * 60 * 1000;
+                let mondayTime = nowTime - (weekDay - 1) * oneDayLong;
+                let sundayTime = nowTime + (7 - weekDay) * oneDayLong;
+                let originStartTime = Date.parse(new Date(1970, 1, 1));
+                //1970年1月1号为周四，结束日期 = 开始日期 + 4
+                let originEndTime = originStartTime + oneDayLong * 4;
                 me.year = year;
                 me.month = month;
                 me.day = day;
+                me.mondayTime = mondayTime;
+                me.sundayTime = sundayTime;
+                me.originStartTime = originStartTime;
+                me.originEndTime = originEndTime;
+
                 //左右切换箭头初始化
                 switch (me.time) {
                     case 'year':
@@ -405,13 +425,13 @@
                         }
                         break;
                     case  'week':
-                        // if (me.week == 1) {
-                        //     me.prevShow = false;
-                        //     me.nextShow = true;
-                        // } else if (me.week == week) {
-                        //     me.prevShow = true;
-                        //     me.nextShow = false;
-                        // }
+                        if (me.mondayTime >= me.originStartTime && me.mondayTime <= me.originEndTime) {
+                            me.prevShow = false;
+                            me.nextShow = true;
+                        } else if (me.sundayTime >= me.mondayTime && me.sundayTime <= me.sundayTime) {
+                            me.prevShow = true;
+                            me.nextShow = false;
+                        }
                         break;
                     case 'day':
                         if (me.day == 1) {
@@ -431,15 +451,6 @@
                 let nowYear = nowDate.getFullYear();
                 let nowMonth = nowDate.getMonth() + 1 < 10 ? '0' + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
                 let nowDay = nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate();
-                let nowTime = nowDate.getTime();
-                //星期
-                let weekDay = nowDate.getDay();
-                let oneDayLong = 24 * 60 * 60 * 1000;
-                let MondayTime = nowTime - (weekDay - 1) * oneDayLong;
-                let SundayTime = nowTime + (7 - weekDay) * oneDayLong;
-                let monday = new Date(MondayTime);
-                let sunday = new Date(SundayTime);
-
                 me.param.day = me.year + '-' + (parseInt(me.month) < 10 ? '0' + parseInt(me.month) : me.month) + '-' + me.day;
                 me.param.type = me.type;
                 switch (me.time) {
@@ -460,6 +471,8 @@
                         break;
                     case 'week':
                         delete me.param.day;
+                        let monday = new Date(me.mondayTime);
+                        let sunday = new Date(me.sundayTime);
                         me.display = monday.Format('Y-MM-dd') + '至' + sunday.Format('Y-MM-dd');
                         me.param.startTime = monday.Format('Y-MM-dd');
                         me.param.endTime = sunday.Format('Y-MM-dd');
@@ -586,6 +599,24 @@
                         me.day = me.day < 10 ? '0' + me.day : me.day;
                         break;
                     case 'week':
+                        let oneDayLong = 24 * 60 * 60 * 1000;
+                        if (e > 0) {
+                            //下周
+                            me.mondayTime = me.mondayTime + oneDayLong * 7;
+                            me.sundayTime = me.sundayTime + oneDayLong * 7;
+                            if (me.sundayTime >= me.mondayTime && me.sundayTime <= me.sundayTime) {
+                                me.nextShow = false;
+                            }
+                            me.prevShow = true;
+                        } else {
+                            //上周
+                            me.mondayTime = (me.mondayTime - oneDayLong * 7);
+                            me.sundayTime = (me.sundayTime - oneDayLong * 7);
+                            if (me.mondayTime >= me.originStartTime && me.mondayTime <= me.originEndTime) {
+                                me.prevShow = false;
+                            }
+                            me.nextShow = true;
+                        }
                         break;
                 }
                 me.orderDisplay();

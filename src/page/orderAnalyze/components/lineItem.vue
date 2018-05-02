@@ -107,7 +107,13 @@
                 if (!isEmpty(preWeekDayDetail)) {
                     tmp.data.columns.push('周同比');
                     Object.values(preWeekDayDetail).map((el, index) => {
-                        dayLineArr[index].preWeekDayDetail = el;
+                        if (dayLineArr.length > 0) {
+                            dayLineArr[index].preWeekDayDetail = el;
+                        } else {
+                            dayLineArr[index] = {
+                                'preWeekDayDetail': el
+                            };
+                        }
                     });
                 }
                 if (!isEmpty(preDayDetail)) {

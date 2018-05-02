@@ -86,6 +86,29 @@
                     <div class="value">{{total.weekPayAmountPercent?total.weekPayAmountPercent:0}}</div>
                 </div>
             </div>
+            <!--周-->
+            <div v-show="time ==='week'">
+                <div class="item">
+                    <div class="title">当周累计</div>
+                    <div class="value">{{total.thisWeekTotalPayAmount?total.thisWeekTotalPayAmount:0}}元</div>
+                </div>
+                <div class="item">
+                    <div class="title">上周累计</div>
+                    <div class="value">{{total.lastWeekTotalPayAmount?total.lastWeekTotalPayAmount:0}}</div>
+                </div>
+                <div class="item">
+                    <div class="title">周环比</div>
+                    <div class="value">{{total.weekPayAmountPercent?total.weekPayAmountPercent:0}}</div>
+                </div>
+                <div class="item">
+                    <div class="title">去年同期</div>
+                    <div class="value">{{total.lastYearWeekTotalPayAmount?total.lastYearWeekTotalPayAmount:0}}</div>
+                </div>
+                <div class="item">
+                    <div class="title">年同比</div>
+                    <div class="value">{{total.yearPayAmountPercent?total.yearPayAmountPercent:0}}</div>
+                </div>
+            </div>
         </div>
     </section>
 </template>

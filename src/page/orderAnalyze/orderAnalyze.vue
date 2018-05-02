@@ -191,8 +191,8 @@
                         <div class="current_time">{{display}}</div>
                     </div>
 
-                    <!--年视图>柱状图-->
-                    <histogramItem :yearHistogram="orderDataArr" :year="year" v-show="time === 'year'"></histogramItem>
+                    <!--柱状图：年视图、周视图-->
+                    <histogramItem :total="orderDataArr" :year="year" :time="time"></histogramItem>
 
                     <!--折线图：月视图、日视图>-->
                     <lineItem :total="orderDataArr" :year="year" :month="month" :day="day" :time="time"></lineItem>
@@ -455,12 +455,18 @@
                 me.param.type = me.type;
                 switch (me.time) {
                     case 'year':
+                        delete me.param.startTime;
+                        delete me.param.endTime;
                         me.display = me.year + '年';
                         break;
                     case 'month':
+                        delete me.param.startTime;
+                        delete me.param.endTime;
                         me.display = me.year + '年' + me.month + '月';
                         break;
                     case 'day':
+                        delete me.param.startTime;
+                        delete me.param.endTime;
                         if (me.year == nowYear && me.month == nowMonth && me.day == nowDay) {
                             me.display = '今天';
                         } else if (me.year == nowYear && me.month == nowMonth && me.day == (nowDay - 1)) {

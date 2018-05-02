@@ -305,11 +305,11 @@
                 timeTypeArr: [{
                     name: '日',
                     time: 'day',
-                    current: true
+                    current: false
                 }, {
                     name: '周',
                     time: 'week',
-                    current: false
+                    current: true
                 }, {
                     name: '月',
                     time: 'month',
@@ -405,14 +405,13 @@
                         }
                         break;
                     case  'week':
-                        //fixme
-                        if (me.week == 1) {
-                            me.prevShow = false;
-                            me.nextShow = true;
-                        } else if (me.week == week) {
-                            me.prevShow = true;
-                            me.nextShow = false;
-                        }
+                        // if (me.week == 1) {
+                        //     me.prevShow = false;
+                        //     me.nextShow = true;
+                        // } else if (me.week == week) {
+                        //     me.prevShow = true;
+                        //     me.nextShow = false;
+                        // }
                         break;
                     case 'day':
                         if (me.day == 1) {
@@ -432,8 +431,15 @@
                 let nowYear = nowDate.getFullYear();
                 let nowMonth = nowDate.getMonth() + 1 < 10 ? '0' + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
                 let nowDay = nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate();
+                let nowTime = nowDate.getTime();
+                //星期
+                let weekDay = nowDate.getDay();
+                let oneDayLong = 24 * 60 * 60 * 1000;
+                let MondayTime = nowTime - (weekDay - 1) * oneDayLong;
+                let SundayTime = nowTime + (7 - weekDay) * oneDayLong;
+                let monday = new Date(MondayTime);
+                let sunday = new Date(SundayTime);
 
-                //TODO 今天天只能看今天之前的数据
                 me.param.day = me.year + '-' + (parseInt(me.month) < 10 ? '0' + parseInt(me.month) : me.month) + '-' + me.day;
                 me.param.type = me.type;
                 switch (me.time) {
@@ -444,19 +450,19 @@
                         me.display = me.year + '年' + me.month + '月';
                         break;
                     case 'day':
-                        // if(me.year == nowYear && me.month == nowMonth && me.day == nowDay){
-                        //     me.display = '今天';
-                        // }else if(me.year == nowYear && me.month == nowMonth && me.day == (nowDay-1)){
-                        //     me.display = '昨天';
-                        // }else{
-                        me.display = me.year + '年' + me.month + '月' + me.day + me.name;
-                        // }
+                        if (me.year == nowYear && me.month == nowMonth && me.day == nowDay) {
+                            me.display = '今天';
+                        } else if (me.year == nowYear && me.month == nowMonth && me.day == (nowDay - 1)) {
+                            me.display = '昨天';
+                        } else {
+                            me.display = me.year + '年' + me.month + '月' + me.day + me.name;
+                        }
                         break;
                     case 'week':
-                        //TODO
-                        me.display = me.day + me.name;
-                        me.param.startTime = '';
-                        me.param.endTime = '';
+                        delete me.param.day;
+                        me.display = monday.Format('Y-MM-dd') + '至' + sunday.Format('Y-MM-dd');
+                        me.param.startTime = monday.Format('Y-MM-dd');
+                        me.param.endTime = sunday.Format('Y-MM-dd');
                         break;
                 }
                 me.getData({

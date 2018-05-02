@@ -198,7 +198,7 @@
                     <lineItem :total="orderDataArr" :year="year" :month="month" :day="day" :time="time"></lineItem>
 
                     <!--数据统计模块-->
-                    <statisticsItem :total="orderDataArr" :time="time"></statisticsItem>
+                    <statisticsItem :total="orderDataArr" :day="day" :time="time"></statisticsItem>
 
                     <!--省份、渠道-->
                     <div class="tab_box tab_ditch_province">
@@ -221,15 +221,38 @@
                                     <thead>
                                     <tr>
                                         <th>渠道</th>
-                                        <th>支付金额</th>
+                                        <th v-show="type === 0">支付金额</th>
+                                        <th v-show="type === 1">支付订单数</th>
+                                        <th v-show="type === 2">单均价</th>
+                                        <th>日环比</th>
+                                        <th>周同比</th>
                                         <th>年同比</th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr v-for="(item,index) in orderDataArr.channelStat" :key="index">
                                         <td>{{item.channel}}</td>
-                                        <td>{{item.payAmount?item.payAmount:0}}</td>
-                                        <td>{{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}%</td>
+                                        <!--支付金额-->
+                                        <template v-if="type === 0">
+                                            <td>{{item.payAmount?item.payAmount:0}}</td>
+                                            <td>{{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}</td>
+                                            <td>{{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}</td>
+                                            <td>{{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}</td>
+                                        </template>
+                                        <!--支付订单数-->
+                                        <template v-if="type === 1">
+                                            <td>{{item.payOrderNum?item.payOrderNum:0}}</td>
+                                            <td>{{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}</td>
+                                            <td>{{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}</td>
+                                            <td>{{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}</td>
+                                        </template>
+                                        <!--单均价-->
+                                        <template v-if="type === 2">
+                                            <td>{{item.avgAmount?item.avgAmount:0}}</td>
+                                            <td>{{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}</td>
+                                            <td>{{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}</td>
+                                            <td>{{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}</td>
+                                        </template>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -321,7 +344,7 @@
                 //上一个切换箭头
                 prevShow: true,
                 //下一个切换箭头
-                nextShow: false,
+                nextShow: true,
                 //接口请求入参
                 param: {},
                 //页面展示类型
@@ -351,7 +374,7 @@
             ...mapActions([
                 'getData'
             ]),
-            //初始化时间
+            //初始化
             init() {
                 let me = this;
                 let date = new Date();
@@ -361,6 +384,46 @@
                 me.year = year;
                 me.month = month;
                 me.day = day;
+                //左右切换箭头初始化
+                switch (me.time) {
+                    case 'year':
+                        if (me.year == 1970) {
+                            me.prevShow = false;
+                            me.nextShow = true;
+                        } else if (me.year == year) {
+                            me.prevShow = true;
+                            me.nextShow = false;
+                        }
+                        break;
+                    case 'month':
+                        if (me.month == 1) {
+                            me.prevShow = false;
+                            me.nextShow = true;
+                        } else if (me.month == month) {
+                            me.prevShow = true;
+                            me.nextShow = false;
+                        }
+                        break;
+                    case  'week':
+                        //fixme
+                        if (me.week == 1) {
+                            me.prevShow = false;
+                            me.nextShow = true;
+                        } else if (me.week == week) {
+                            me.prevShow = true;
+                            me.nextShow = false;
+                        }
+                        break;
+                    case 'day':
+                        if (me.day == 1) {
+                            me.prevShow = false;
+                            me.nextShow = true;
+                        } else if (me.day == day) {
+                            me.prevShow = true;
+                            me.nextShow = false;
+                        }
+                        break;
+                }
             },
             //请求接口
             orderDisplay() {
@@ -381,13 +444,13 @@
                         me.display = me.year + '年' + me.month + '月';
                         break;
                     case 'day':
-                        if(me.year == nowYear && me.month == nowMonth && me.day == nowDay){
-                            me.display = '今天';
-                        }else if(me.year == nowYear && me.month == nowMonth && me.day == (nowDay-1)){
-                            me.display = '昨天';
-                        }else{
-                            me.display = me.year + '年' + me.month + '月' + me.day + me.name;
-                        }
+                        // if(me.year == nowYear && me.month == nowMonth && me.day == nowDay){
+                        //     me.display = '今天';
+                        // }else if(me.year == nowYear && me.month == nowMonth && me.day == (nowDay-1)){
+                        //     me.display = '昨天';
+                        // }else{
+                        me.display = me.year + '年' + me.month + '月' + me.day + me.name;
+                        // }
                         break;
                     case 'week':
                         //TODO
@@ -446,9 +509,12 @@
                 });
                 tmpArr[index].current = true;
                 me[paramType] = tmpArr[index][paramType];
+                if (paramType === 'time') {
+                    me.init();
+                }
                 me.orderDisplay();
             },
-            //点击切换时间
+            //左右箭头点击切换时间
             switchTime(e) {
                 let me = this;
                 let date = new Date();
@@ -492,12 +558,13 @@
                             }
                             me.nextShow = true;
                         }
+                        me.month = me.month < 10 ? '0' + me.month : me.month;
                         break;
                     case 'day':
                         if (e > 0) {
                             //明天
                             me.day++;
-                            if (me.day == day) {
+                            if (me.day == day && me.month == month && me.year == year) {
                                 me.nextShow = false;
                             }
                             me.prevShow = true;
@@ -510,6 +577,7 @@
                             }
                             me.nextShow = true;
                         }
+                        me.day = me.day < 10 ? '0' + me.day : me.day;
                         break;
                     case 'week':
                         break;

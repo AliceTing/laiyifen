@@ -7,7 +7,6 @@
             <ve-line :data="monthLineData(total).data"
                      :settings="monthLineData(total).settings"></ve-line>
         </div>
-
         <div v-show="time === 'day'">
             <ve-line :data="dayLineData(total).data"
                      :settings="dayLineData(total).settings"></ve-line>
@@ -16,6 +15,8 @@
 </template>
 
 <script>
+    import {isEmpty, getValue} from "Public/util";
+
     export default {
         components: {},
         props: {
@@ -27,8 +28,7 @@
         },
         data() {
             return {
-                chartData: {},
-                chartSettings: {}
+                showDayLine: true
             }
         },
         created() {
@@ -49,9 +49,10 @@
                 //当前年、月数据
                 let thisMonthDetail = data.thisMonthDetail;
                 if (thisMonthDetail) {
+                    let xAxis;
                     tmp.data.columns.push(me.month + '');
                     thisMonthDetail.map((el) => {
-                        let xAxis = el.dt.substr(-2, 2);
+                        xAxis = el.dt.substr(-2, 2);
                         tmp.data.rows.push({
                             'xAxis': xAxis,
                             [me.month + '']: +[el.payAmount]
@@ -86,17 +87,51 @@
                     },
                     settings: {},
                 };
-                //当前年、月数据
+                //当天24小时数据
                 let curDayDetail = data.curDayDetail;
-                if (curDayDetail) {
-                    // tmp.data.columns.push(me.day + '');
-                    // thisMonthDetail.map((el) => {
-                    //     let xAxis = el.dt.substr(-2, 2);
-                    //     tmp.data.rows.push({
-                    //         'xAxis': xAxis,
-                    //         [me.month + '']: +[el.payAmount]
-                    //     })
-                    // });
+                //周同比24小时数据
+                let preWeekDayDetail = data.preWeekDayDetail;
+                //日环比
+                let preDayDetail = data.preDayDetail;
+                //年同比
+                let preYearDayDetail = data.preYearDayDetail;
+                let dayLineArr = [];
+                if (!isEmpty(curDayDetail)) {
+                    tmp.data.columns.push('今天');
+                    Object.values(curDayDetail).map((el, index) => {
+                        dayLineArr[index] = {
+                            'curDayDetail': el
+                        };
+                    });
+                }
+                if (!isEmpty(preWeekDayDetail)) {
+                    tmp.data.columns.push('周同比');
+                    Object.values(preWeekDayDetail).map((el, index) => {
+                        dayLineArr[index].preWeekDayDetail = el;
+                    });
+                }
+                if (!isEmpty(preDayDetail)) {
+                    tmp.data.columns.push('日环比');
+                    Object.values(preDayDetail).map((el, index) => {
+                        dayLineArr[index].preDayDetail = el;
+                    });
+                }
+                if (!isEmpty(preYearDayDetail)) {
+                    tmp.data.columns.push('年同比');
+                    Object.values(preYearDayDetail).map((el, index) => {
+                        dayLineArr[index].preYearDayDetail = el;
+                    });
+                }
+                if (dayLineArr && dayLineArr.length > 0) {
+                    dayLineArr.map((el, index) => {
+                        tmp.data.rows.push({
+                            'xAxis': index + 1,
+                            '今天': el.curDayDetail,
+                            '周同比': el.preWeekDayDetail,
+                            '日环比': el.preDayDetail,
+                            '年同比': el.preYearDayDetail,
+                        });
+                    })
                     // tmp.settings = {
                     //     labelMap: {
                     //         [me.month + '']: me.year + '年' + me.month + '日'
@@ -117,6 +152,12 @@
                 return tmp;
             }
         },
-        computed: {}
+        computed: {
+            // showDayLine(){
+            //     let me = this;
+            //     console.log(getValue(me.total,'curDayDetail'));
+            //     return me.total && me.total.curDayDetail;
+            // }
+        }
     }
 </script>

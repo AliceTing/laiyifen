@@ -40,7 +40,7 @@
                     <div class="value">{{total.yearAmountPercent?total.yearAmountPercent:0}}%</div>
                 </div>
             </div>
-
+            <!--月-->
             <div v-show="time ==='month'">
                 <div class="item">
                     <div class="title">当月累计</div>
@@ -60,7 +60,30 @@
                 </div>
                 <div class="item">
                     <div class="title">年同比</div>
-                    <div class="value">{{total.yearAmountPercent?total.yearAmountPercent:0}}%</div>
+                    <div class="value">{{total.yearPayAmountPercent?total.yearPayAmountPercent:0}}%</div>
+                </div>
+            </div>
+            <!--日-->
+            <div v-show="time ==='day'">
+                <div class="item">
+                    <div class="title">当日累计</div>
+                    <div class="value">{{total.curDayTotalPayAmount?total.curDayTotalPayAmount:0}}元</div>
+                </div>
+                <div class="item">
+                    <div class="title">昨日累计</div>
+                    <div class="value">{{total.preDayTotalPayAmount?total.preDayTotalPayAmount:0}}</div>
+                </div>
+                <div class="item">
+                    <div class="title">日环比</div>
+                    <div class="value">{{total.dayPayAmountPercent?total.dayPayAmountPercent:0}}</div>
+                </div>
+                <div class="item">
+                    <div class="title">上周同期</div>
+                    <div class="value">{{total.preWeekDayTotalPayAmount?total.preWeekDayTotalPayAmount:0}}</div>
+                </div>
+                <div class="item">
+                    <div class="title">周同比</div>
+                    <div class="value">{{total.weekPayAmountPercent?total.weekPayAmountPercent:0}}</div>
                 </div>
             </div>
         </div>
@@ -72,7 +95,8 @@
         components: {},
         props: {
             total: {},
-            time: ''
+            time: '',
+            day: ''
         },
         data() {
             return {}

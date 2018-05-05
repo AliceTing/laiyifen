@@ -3,13 +3,14 @@
 </style>
 <template>
     <div class="line">
-        <div v-show="time ==='month'">
-            <ve-line :data="monthLineData(total).data"
-                     :settings="monthLineData(total).settings"></ve-line>
-        </div>
         <div v-show="time === 'day'">
             <ve-line :data="dayLineData(total).data"
                      :settings="dayLineData(total).settings"></ve-line>
+        </div>
+
+        <div v-show="time ==='month'">
+            <ve-line :data="monthLineData(total).data"
+                     :settings="monthLineData(total).settings"></ve-line>
         </div>
     </div>
 </template>
@@ -20,7 +21,8 @@
     export default {
         components: {},
         props: {
-            total: {},
+            total: '',
+            type: '',
             time: '',
             year: '',
             month: '',
@@ -28,7 +30,7 @@
         },
         data() {
             return {
-                showDayLine: true
+
             }
         },
         created() {
@@ -87,73 +89,88 @@
                     },
                     settings: {},
                 };
-                //当天24小时数据
-                let curDayDetail = data.curDayDetail;
-                //周同比24小时数据
-                let preWeekDayDetail = data.preWeekDayDetail;
-                //日环比
-                let preDayDetail = data.preDayDetail;
-                //年同比
-                let preYearDayDetail = data.preYearDayDetail;
-                let dayLineArr = [];
-                if (!isEmpty(curDayDetail)) {
-                    tmp.data.columns.push('今天');
-                    Object.values(curDayDetail).map((el, index) => {
-                        dayLineArr[index] = {
-                            'curDayDetail': el
-                        };
-                    });
-                }
-                if (!isEmpty(preWeekDayDetail)) {
-                    tmp.data.columns.push('周同比');
-                    Object.values(preWeekDayDetail).map((el, index) => {
-                        if (dayLineArr.length > 0) {
-                            dayLineArr[index].preWeekDayDetail = el;
-                        } else {
-                            dayLineArr[index] = {
-                                'preWeekDayDetail': el
-                            };
-                        }
-                    });
-                }
-                if (!isEmpty(preDayDetail)) {
-                    tmp.data.columns.push('日环比');
-                    Object.values(preDayDetail).map((el, index) => {
-                        dayLineArr[index].preDayDetail = el;
-                    });
-                }
-                if (!isEmpty(preYearDayDetail)) {
-                    tmp.data.columns.push('年同比');
-                    Object.values(preYearDayDetail).map((el, index) => {
-                        dayLineArr[index].preYearDayDetail = el;
-                    });
-                }
-                if (dayLineArr && dayLineArr.length > 0) {
-                    dayLineArr.map((el, index) => {
-                        tmp.data.rows.push({
-                            'xAxis': index + 1,
-                            '今天': el.curDayDetail,
-                            '周同比': el.preWeekDayDetail,
-                            '日环比': el.preDayDetail,
-                            '年同比': el.preYearDayDetail,
-                        });
-                    })
-                    // tmp.settings = {
-                    //     labelMap: {
-                    //         [me.month + '']: me.year + '年' + me.month + '日'
-                    //     }
+                if (!isEmpty(data)) {
+                    //24小时
+                    let len = 24;
+                    let dayLineArr = [];
+                    let curDay = me.year + me.year + me.day;
+                    switch (me.type) {
+                        //支付金额
+                        case 0:
+                            //当天
+                            let curDayDetail = data.curDayDetail;
+                            //周同比
+                            let preWeekDayDetail = data.preWeekDayDetail;
+                            //当天
+                            if (!isEmpty(curDayDetail)) {
+                                tmp.data.columns.push(curDay);
+                                Object.values(curDayDetail).map((el, index) => {
+                                    dayLineArr[index] = {
+                                        'curDayDetail': el
+                                    };
+                                });
+                            }
+                            //周同比
+                            if (!isEmpty(preWeekDayDetail)) {
+                                tmp.data.columns.push('周同比');
+                                Object.values(preWeekDayDetail).map((el, index) => {
+                                    if(dayLineArr.length === len){
+                                        dayLineArr[index].preWeekDayDetail = el;
+                                    }else{
+                                        dayLineArr[index] = {
+                                            'preWeekDayDetail': el
+                                        };
+                                    }
+                                });
+                            }
+                            break;
+                            //周同比
+                        //支付订单数
+                        case 1:
+                            break;
+                        //单均价
+                        case 2:
+                            break;
+                    }
+                    if (dayLineArr.length > 0) {
+                        dayLineArr.map((el, index) => {
+                            tmp.data.rows.push({
+                                'xAxis': index + 1,
+                                curDay: el.curDayDetail,
+                                '周同比': el.preWeekDayDetail,
+                                '日环比': el.preDayDetail,
+                                '年同比': el.preYearDayDetail,
+                            });
+                        })
+                    }
+
+
+
+
+                    // if (!isEmpty(preDayDetail)) {
+                    //     tmp.data.columns.push('日环比');
+                    //     Object.values(preDayDetail).map((el, index) => {
+                    //         dayLineArr[index].preDayDetail = el;
+                    //     });
                     // }
-                }
-                //上一天数据
-                let lastMonthDetail = data.lastMonthDetail;
-                if (lastMonthDetail && lastMonthDetail.length > 0) {
-                    tmp.data.columns.push(me.year - 1);
-                    tmp.settings.metrics.push(me.year - 1 + '');
-                    lastMonthDetail.map((el, index) => {
-                        if (tmp.data.rows[index]) {
-                            tmp.data.rows[index][me.year - 1 + ''] = el.payAmount;
-                        }
-                    })
+                    // if (!isEmpty(preYearDayDetail)) {
+                    //     tmp.data.columns.push('年同比');
+                    //     Object.values(preYearDayDetail).map((el, index) => {
+                    //         dayLineArr[index].preYearDayDetail = el;
+                    //     });
+                    // }
+                    //上一天数据
+                    // let lastMonthDetail = data.lastMonthDetail;
+                    // if (lastMonthDetail && lastMonthDetail.length > 0) {
+                    //     tmp.data.columns.push(me.year - 1);
+                    //     tmp.settings.metrics.push(me.year - 1 + '');
+                    //     lastMonthDetail.map((el, index) => {
+                    //         if (tmp.data.rows[index]) {
+                    //             tmp.data.rows[index][me.year - 1 + ''] = el.payAmount;
+                    //         }
+                    //     })
+                    // }
+                    // console.log('tmp', tmp);
                 }
                 return tmp;
             }

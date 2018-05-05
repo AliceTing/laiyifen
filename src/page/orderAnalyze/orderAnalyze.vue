@@ -195,7 +195,7 @@
                     <histogramItem :total="orderDataArr" :year="year" :time="time"></histogramItem>
 
                     <!--折线图：月视图、日视图>-->
-                    <lineItem :total="orderDataArr" :year="year" :month="month" :day="day" :time="time"></lineItem>
+                    <lineItem :total="orderDataArr" :year="year" :month="month" :day="day" :time="time" :type="type"></lineItem>
 
                     <!--数据统计模块-->
                     <statisticsItem :total="orderDataArr" :day="day" :time="time"></statisticsItem>
@@ -305,11 +305,11 @@
                 timeTypeArr: [{
                     name: '日',
                     time: 'day',
-                    current: false
+                    current: true
                 }, {
                     name: '周',
                     time: 'week',
-                    current: true
+                    current: false
                 }, {
                     name: '月',
                     time: 'month',
@@ -356,11 +356,13 @@
                 originStartTime: '',
                 originEndTime: '',
                 //年视图渠道或者省份切换
-                showWay: 1
+                showWay: 1,
+                stompClient: null
             }
         },
         created() {
             let me = this;
+
             //初始化入参
             me.timeTypeArr.map(function (el) {
                 if (el.current) {
@@ -380,6 +382,17 @@
             ...mapActions([
                 'getData'
             ]),
+            //初始化当天实时数据
+            initRealTime() {
+                let me = this;
+                let socket = new SockJS('http://tj.laiyifen.com/cloudraker/tianpan-websocket');
+                me.stompClient = Stomp.over(socket);
+                me.stompClient.connect({"system": "TP", "page": "order"}, function (frame) {
+                    me.stompClient.subscribe('/user/topic/getRealTimeOrderPayMoney', function (msg) {
+                        console.log(11111,msg);
+                    });
+                });
+            },
             //初始化
             init() {
                 let me = this;
@@ -469,6 +482,7 @@
                         delete me.param.endTime;
                         if (me.year == nowYear && me.month == nowMonth && me.day == nowDay) {
                             me.display = '今天';
+                            me.initRealTime();
                         } else if (me.year == nowYear && me.month == nowMonth && me.day == (nowDay - 1)) {
                             me.display = '昨天';
                         } else {

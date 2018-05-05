@@ -131,9 +131,7 @@
             //实时时钟显示
             me.getRealTime();
             me.initRealTime();
-            setTimeout(function () {
-                me.send();
-            },200)
+            me.send();
         },
         methods: {
             //实时时钟显示
@@ -159,17 +157,17 @@
                 let me = this;
                 let socket = new SockJS('http://tj.laiyifen.com/cloudraker/tianpan-websocket');
                 me.stompClient = Stomp.over(socket);
-                me.stompClient.connect({"system": "TP", "page": "flow"}, function (frame) {
-                    me.stompClient.subscribe('/topic/getRealTimeOverall', function (msg) {
+                me.stompClient.connect({"system": "TP", "page": "overall"}, function (frame) {
+                    me.stompClient.subscribe('/user/topic/getRealTimeOverall', function (msg) {
                         console.log(11111,msg);
                     });
-                    me.connected = true;
                 });
             },
             send() {
                 let me = this;
-                let msg = '';
-                me.stompClient.send("/app/initRealTimeData", {}, msg);
+                setTimeout(function () {
+                    me.stompClient.send("/app/initRealTimeOverall", {}, '');
+                },1000);
             }
         }
     }

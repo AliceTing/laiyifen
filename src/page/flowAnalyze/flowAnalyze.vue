@@ -584,8 +584,45 @@
                 let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
                 let nowTime = date.getTime();
                 let weekDay = date.getDay();
-                let mondayTime = nowTime - (weekDay - 1) * me.oneDayLong;
-                let sundayTime = nowTime + (7 - weekDay) * me.oneDayLong;
+                let mondayTime ;
+                let sundayTime ;
+                switch (weekDay){
+                    // 周一
+                    case 1:
+                        mondayTime = nowTime;
+                        sundayTime = nowTime + (me.oneDayLong * 6);
+                        break;
+                    // 周二
+                    case 2:
+                        mondayTime = nowTime - (me.oneDayLong * 1);
+                        sundayTime = nowTime + (me.oneDayLong * 5);
+                        break;
+                    // 周三
+                    case 3:
+                        mondayTime = (nowTime - me.oneDayLong * 2);
+                        sundayTime = nowTime + (me.oneDayLong * 4);
+                        break;
+                    // 周四
+                    case 4:
+                        mondayTime = (nowTime - me.oneDayLong * 3);
+                        sundayTime = nowTime + (me.oneDayLong * 3);
+                        break;
+                    // 周五
+                    case 5:
+                        mondayTime = (nowTime - me.oneDayLong * 4);
+                        sundayTime = nowTime + (me.oneDayLong * 2);
+                        break;
+                    // 周六
+                    case 6:
+                        mondayTime = nowTime - (me.oneDayLong * 5);
+                        sundayTime = nowTime + (me.oneDayLong * 1);
+                        break;
+                    //周日
+                    case 0:
+                        mondayTime = nowTime - (me.oneDayLong * 6);
+                        sundayTime = nowTime;
+                        break;
+                }
                 me.year = year;
                 me.month = month;
                 me.day = day;

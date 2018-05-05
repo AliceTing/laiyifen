@@ -36,6 +36,7 @@
                     color: #000;
                     font-size: px2rem(20);
                     .value {
+                        margin-right: px2rem(10);
                         font-size: px2rem(40);
                     }
                 }
@@ -57,27 +58,59 @@
         <div class="mod mod_order">
             <div class="title">订单</div>
             <div class="content clearfix">
-                <div class="item" v-for="(item,index) in orderArr" :key="index">
-                    <div class="key">{{item.key}}</div>
-                    <div class="value_box"><span class="value">{{item.value}}</span>元</div>
+                <div class="item">
+                    <div class="key">支付金额</div>
+                    <div class="value_box"><span class="value">{{orderArr.payAmount}}</span>元</div>
+                </div>
+                <div class="item">
+                    <div class="key">支付订单数</div>
+                    <div class="value_box"><span class="value">{{orderArr.payOrderNum}}</span>单</div>
+                </div>
+                <div class="item">
+                    <div class="key">单均价</div>
+                    <div class="value_box"><span class="value">{{orderArr.avgOrderAmount}}</span>元</div>
                 </div>
             </div>
         </div>
         <div class="mod">
             <div class="title">流量</div>
             <div class="content clearfix">
-                <div class="item" v-for="(item,index) in orderArr" :key="index">
-                    <div class="key">{{item.key}}</div>
-                    <div class="value_box"><span class="value">{{item.value}}</span>元</div>
+                <div class="item">
+                    <div class="key">访客数（UV）</div>
+                    <div class="value_box"><span class="value">{{flowArr.uv}}</span>位</div>
+                </div>
+                <div class="item">
+                    <div class="key">浏览量（PV）</div>
+                    <div class="value_box"><span class="value">{{flowArr.pv}}</span>次</div>
+                </div>
+                <div class="item">
+                    <div class="key">登录用户数</div>
+                    <div class="value_box"><span class="value">{{flowArr.loginUserNum}}</span>位</div>
+                </div>
+                <div class="item">
+                    <div class="key">下单用户数</div>
+                    <div class="value_box"><span class="value">{{flowArr.orderUserNum}}</span>位</div>
+                </div>
+                <div class="item">
+                    <div class="key">客单价</div>
+                    <div class="value_box"><span class="value">{{flowArr.avgUserAmount}}</span>元</div>
+                </div>
+                <div class="item">
+                    <div class="key">转换率</div>
+                    <div class="value_box"><span class="value">{{flowArr.conversionPercent}}</span>%</div>
                 </div>
             </div>
         </div>
         <div class="mod">
             <div class="title">物流</div>
             <div class="content clearfix">
-                <div class="item" v-for="(item,index) in orderArr" :key="index">
-                    <div class="key">{{item.key}}</div>
-                    <div class="value_box"><span class="value">{{item.value}}</span>元</div>
+                <div class="item">
+                    <div class="key">DO单</div>
+                    <div class="value_box"><span class="value">{{logisticsArr.doNum}}</span>件</div>
+                </div>
+                <div class="item">
+                    <div class="key">发货量</div>
+                    <div class="value_box"><span class="value">{{logisticsArr.deliveryNum}}</span>件</div>
                 </div>
             </div>
         </div>
@@ -85,45 +118,33 @@
 </template>
 
 <script>
+    import Vue from 'vue';
+
     export default {
         data() {
             return {
                 realTime: '',
                 //订单
-                orderArr: [{
-                    'key': '支付金额',
-                    'value': '1200000000'
-                }, {
-                    'key': '支付订单数',
-                    'value': '1200000000'
-                }, {
-                    'key': '单均价',
-                    'value': '1200000000'
-                }],
+                orderArr: {
+                    payAmount: 0,
+                    payOrderNum:0,
+                    avgOrderAmount: 0
+                },
                 //流量
-                flowArr: [{
-                    'key': '支付金额',
-                    'value': '1200000000'
-                }, {
-                    'key': '支付订单数',
-                    'value': '1200000000'
-                }, {
-                    'key': '单均价',
-                    'value': '1200000000'
-                }],
+                flowArr:{
+                    uv: 0,
+                    pv:0,
+                    loginUserNum: 0,
+                    orderUserNum:0 ,
+                    avgUserAmount: 0,
+                    conversionPercent: '0'
+                },
                 //物流
-                logisticsArr: [{
-                    'key': '支付金额',
-                    'value': '1200000000'
-                }, {
-                    'key': '支付订单数',
-                    'value': '1200000000'
-                }, {
-                    'key': '单均价',
-                    'value': '1200000000'
-                }],
-                stompClient: null,
-                connected: false
+                logisticsArr: {
+                    doNum: 0,
+                    deliveryNum: 0
+                },
+                stompClient: null
             }
         },
         created() {
@@ -159,14 +180,34 @@
                 me.stompClient = Stomp.over(socket);
                 me.stompClient.connect({"system": "TP", "page": "overall"}, function (frame) {
                     me.stompClient.subscribe('/user/topic/getRealTimeOverall', function (msg) {
-                        console.log(11111,msg);
+                        let data = JSON.parse(msg.body);
+                        me.orderArr.payAmount = data.payAmount || 0;
+                        me.orderArr.payOrderNum = data.payOrderNum || 0;
+                        me.orderArr.avgOrderAmount = data.avgOrderAmount || 0;
+                        me.flowArr.uv = data.uv || 0;
+                        me.flowArr.pv = data.pv || 0;
+                        me.flowArr.loginUserNum = data.loginUserNum || 0;
+                        me.flowArr.orderUserNum = data.orderUserNum || 0;
+                        me.flowArr.avgUserAmount = data.avgUserAmount || 0;
+                        me.flowArr.conversionPercent = data.conversionPercent || 0;
+                        me.logisticsArr.doNum = data.doNum || 0;
+                        me.logisticsArr.deliveryNum = data.deliveryNum || 0;
                     });
                 });
             },
             send() {
                 let me = this;
                 setTimeout(function () {
-                    me.stompClient.send("/app/initRealTimeOverall", {}, '');
+                    try {
+                        me.stompClient.send("/app/initRealTimeOverall", {}, '');
+                    }catch (e) {
+                        Vue.$toast.show({
+                            toastText: '网络开小差，稍后重试'
+                        });
+                        setTimeout(function () {
+                            Vue.$toast.close();
+                        }, 2000)
+                    }
                 },1000);
             }
         }

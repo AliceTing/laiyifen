@@ -125,7 +125,7 @@
         }
         .tab_con {
             margin-top: px2rem(30);
-            .ring_type{
+            .ring_type {
                 margin-bottom: px2rem(20);
                 color: #000;
                 font-size: px2rem(30);
@@ -198,12 +198,12 @@
                     </div>
 
                     <!--柱状图：年视图、周视图-->
-                    <histogramItem :total="orderDataArr" :time="time" :type="type" :year="year" :month="month"
-                                   :day="day" :mondayTime="mondayTime" :sundayTime="sundayTime"></histogramItem>
+                    <histogramItem :total="orderDataArr" :time="time" :type="type" :oneDayLong="oneDayLong"
+                                   :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime" :year="year"></histogramItem>
 
                     <!--折线图：月视图、日视图>-->
-                    <lineItem :total="orderDataArr" :time="time" :type="type" :year="year" :month="month" :day="day"
-                              :mondayTime="mondayTime"></lineItem>
+                    <lineItem :total="orderDataArr" :time="time" :type="type" :mondayTime="mondayTime"
+                              :oneDayLong="oneDayLong" :timeStamp="timeStamp"></lineItem>
 
                     <!--数据统计模块-->
                     <statisticsItem :total="orderDataArr" :time="time" :type="type" :day="day"></statisticsItem>
@@ -234,10 +234,10 @@
                                         <th v-show="type === 0">支付金额</th>
                                         <th v-show="type === 1">支付订单数</th>
                                         <th v-show="type === 2">单均价</th>
-                                        <!--<th>日环比</th>-->
-                                        <!--<th>周同比</th>-->
+                                        <th v-show="time === 'day'">日环比</th>
+                                        <th v-show="time === 'day'">周同比</th>
                                         <th v-show="time === 'week'">周环比</th>
-                                        <th v-show="time === 'week'">年同比</th>
+                                        <th v-show="time === 'week' || time === 'day'">年同比</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -246,9 +246,15 @@
                                         <!--支付金额-->
                                         <template v-if="type === 0">
                                             <td>{{item.payAmount?item.payAmount:0}}</td>
-                                            <!--<td>{{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}</td>-->
-                                            <!--<td>{{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}</td>-->
-                                            <!--<td>{{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}</td>-->
+                                            <td v-show="time === 'day'">
+                                                {{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'day'">
+                                                {{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'day'">
+                                                {{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}
+                                            </td>
                                             <td v-show="time === 'week'">
                                                 {{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}
                                             </td>
@@ -259,9 +265,15 @@
                                         <!--支付订单数-->
                                         <template v-if="type === 1">
                                             <td>{{item.payOrderNum?item.payOrderNum:0}}</td>
-                                            <!--<td>{{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}</td>-->
-                                            <!--<td>{{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}</td>-->
-                                            <!--<td>{{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}</td>-->
+                                            <td v-show="time === 'day'">
+                                                {{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'day'">
+                                                {{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'day'">
+                                                {{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}
+                                            </td>
                                             <td v-show="time === 'week'">
                                                 {{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}
                                             </td>
@@ -272,9 +284,15 @@
                                         <!--单均价-->
                                         <template v-if="type === 2">
                                             <td>{{item.avgAmount?item.avgAmount:0}}</td>
-                                            <!--<td>{{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}</td>-->
-                                            <!--<td>{{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}</td>-->
-                                            <!--<td>{{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}</td>-->
+                                            <td v-show="time === 'day'">
+                                                {{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'day'">
+                                                {{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'day'">
+                                                {{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}
+                                            </td>
                                             <td v-show="time === 'week'">
                                                 {{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}
                                             </td>
@@ -364,6 +382,8 @@
                 time: '',
                 //订单类型
                 type: '',
+                timeStamp: 0,
+                curTimeStamp: 0,
                 //展示年
                 year: '',
                 //当前年
@@ -384,8 +404,6 @@
                 curMondayTime: '',
                 //当前周日
                 curSundayTime: '',
-                originStartTime: '',
-                originEndTime: '',
                 //上一个切换箭头
                 prevShow: true,
                 //下一个切换箭头
@@ -396,11 +414,13 @@
                 display: '',
                 //年视图渠道或者省份切换
                 showWay: 1,
-                stompClient: null
+                stompClient: null,
+                oneDayLong: 0
             }
         },
         created() {
             let me = this;
+            me.oneDayLong = 24 * 60 * 60 * 1000;
 
             //初始化入参
             me.timeTypeArr.map(function (el) {
@@ -439,104 +459,50 @@
                 let year = date.getFullYear();
                 let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
                 let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
-                //星期
                 let nowTime = date.getTime();
                 let weekDay = date.getDay();
-                let oneDayLong = 24 * 60 * 60 * 1000;
-                let mondayTime = nowTime - (weekDay - 1) * oneDayLong;
-                let sundayTime = nowTime + (7 - weekDay) * oneDayLong;
-                let originStartTime = Date.parse(new Date(1970, 1, 1));
-                //1970年1月1号为周四，结束日期 = 开始日期 + 4
-                let originEndTime = originStartTime + oneDayLong * 4;
+                let mondayTime = nowTime - (weekDay - 1) * me.oneDayLong;
+                let sundayTime = nowTime + (7 - weekDay) * me.oneDayLong;
                 me.year = year;
                 me.month = month;
                 me.day = day;
                 me.mondayTime = mondayTime;
                 me.sundayTime = sundayTime;
-                me.originStartTime = originStartTime;
-                me.originEndTime = originEndTime;
                 //当前年月日周
+                me.curTimeStamp = nowTime;
+                me.timeStamp = nowTime;
                 me.curYear = year;
                 me.curMonth = month;
                 me.curDay = day;
                 me.curMondayTime = mondayTime;
                 me.curSundayTime = sundayTime;
+
                 //左右切换箭头初始化
-                switch (me.time) {
-                    case 'year':
-                        if (me.year == 1970) {
-                            me.prevShow = false;
-                            me.nextShow = true;
-                        } else if (me.year == year) {
-                            me.prevShow = true;
-                            me.nextShow = false;
-                        }
-                        break;
-                    case 'month':
-                        if (me.month == 1) {
-                            me.prevShow = false;
-                            me.nextShow = true;
-                        } else if (me.month == month) {
-                            me.prevShow = true;
-                            me.nextShow = false;
-                        }
-                        break;
-                    case  'week':
-                        if (me.mondayTime <= me.originStartTime) {
-                            me.prevShow = false;
-                            me.nextShow = true;
-                        } else if (me.sundayTime >= me.curSundayTime) {
-                            me.prevShow = true;
-                            me.nextShow = false;
-                        }
-                        break;
-                    case 'day':
-                        if (me.day == 1) {
-                            me.prevShow = false;
-                            me.nextShow = true;
-                        } else if (me.day == day) {
-                            me.prevShow = true;
-                            me.nextShow = false;
-                        }
-                        break;
-                }
+                me.prevShow = true;
+                me.nextShow = false;
             },
             //请求接口
             orderDisplay() {
                 let me = this;
-                me.param.day = me.year + '-' + me.month + '-' + me.day;
                 me.param.type = me.type;
+                me.param.day = new Date(me.timeStamp).Format('Y-MM-dd');
+                delete me.param.startTime;
+                delete me.param.endTime;
                 switch (me.time) {
                     case 'year':
-                        delete me.param.startTime;
-                        delete me.param.endTime;
-                        me.display = me.year + '年';
+                        me.display = new Date(me.timeStamp).Format('Y年');
                         break;
                     case 'month':
-                        delete me.param.startTime;
-                        delete me.param.endTime;
-                        me.display = me.year + '年' + me.month + '月';
-                        break;
-                    case 'day':
-                        delete me.param.startTime;
-                        delete me.param.endTime;
-                        if (me.year === me.curYear && me.month === me.curMonth && me.day === me.curDay) {
-                            me.display = '今天';
-                            me.initRealTime();
-                            //fixme 昨天
-                        } else if (me.year === me.curYear && me.month === me.curMonth && me.day === (me.curDay - 1)) {
-                            me.display = '昨天';
-                        } else {
-                            me.display = me.year + '年' + me.month + '月' + me.day + me.name;
-                        }
+                        me.display = new Date(me.timeStamp).Format('Y年MM月');
                         break;
                     case 'week':
                         delete me.param.day;
-                        let monday = new Date(me.mondayTime);
-                        let sunday = new Date(me.sundayTime);
-                        me.display = monday.Format('Y年MM月dd日') + '至' + sunday.Format('MM月dd日');
-                        me.param.startTime = monday.Format('Y-MM-dd');
-                        me.param.endTime = sunday.Format('Y-MM-dd');
+                        me.param.startTime = new Date(me.mondayTime).Format('Y-MM-dd');
+                        me.param.endTime = new Date(me.sundayTime).Format('Y-MM-dd');
+                        me.display = new Date(me.mondayTime).Format('Y年MM月dd日') + '至' + new Date(me.sundayTime).Format('Y年MM月dd日');
+                        break;
+                    case 'day':
+                        me.display = new Date(me.timeStamp).Format('Y年MM月dd日');
                         break;
                 }
                 me.getData({
@@ -597,85 +563,65 @@
             //左右箭头点击切换时间
             switchTime(e) {
                 let me = this;
-                let date = new Date();
-                let year = date.getFullYear();
-                let month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : date.getMonth() + 1;
-                let day = date.getDate() + 1 < 10 ? '0' + date.getDate() : date.getDate();
-
                 switch (me.time) {
                     case 'year':
                         if (e > 0) {
                             //下一年
                             me.year++;
-                            if (me.year == year) {
+                            me.prevShow = true;
+                            if (me.year === me.curYear) {
                                 me.nextShow = false;
                             }
-                            me.prevShow = true;
                         } else {
                             //上一年
                             me.year--;
-                            me.display = me.year + me.name;
-                            if (me.year == 1970) {
-                                me.prevShow = false;
-                            }
                             me.nextShow = true;
                         }
+                        me.timeStamp = Date.parse(me.year);
                         break;
                     case 'month':
                         if (e > 0) {
                             //下一月
-                            me.month++;
-                            if (me.month == month) {
+                            me.timeStamp = me.timeStamp + me.oneDayLong * me.getDaysInMonth();
+                            me.prevShow = true;
+                            if (me.timeStamp === me.curTimeStamp) {
                                 me.nextShow = false;
                             }
-                            me.prevShow = true;
                         } else {
                             //上一月
-                            me.month--;
-                            me.display = me.year + me.name;
-                            if (me.month == 1) {
-                                me.prevShow = false;
-                            }
+                            me.timeStamp = me.timeStamp - me.oneDayLong * me.getDaysInMonth();
                             me.nextShow = true;
                         }
-                        me.month = me.month < 10 ? '0' + me.month : me.month;
+                        me.display = new Date(me.timeStamp).Format('Y年MM月');
                         break;
                     case 'day':
                         if (e > 0) {
                             //明天
-                            me.day++;
-                            if (me.day == day && me.month == month && me.year == year) {
+                            me.timeStamp = me.timeStamp + me.oneDayLong;
+                            me.prevShow = true;
+                            if (me.timeStamp === me.curTimeStamp) {
                                 me.nextShow = false;
                             }
-                            me.prevShow = true;
                         } else {
                             //昨天
-                            me.day--;
-                            me.display = me.year + me.name;
-                            if (me.day == 1) {
-                                me.prevShow = false;
-                            }
+                            me.timeStamp = me.timeStamp - me.oneDayLong;
                             me.nextShow = true;
                         }
-                        me.day = me.day < 10 ? '0' + me.day : me.day;
+                        me.display = new Date(me.timeStamp).Format('Y年MM月dd日');
                         break;
                     case 'week':
-                        let oneDayLong = 24 * 60 * 60 * 1000;
                         if (e > 0) {
                             //下周
-                            me.mondayTime = me.mondayTime + oneDayLong * 7;
-                            me.sundayTime = me.sundayTime + oneDayLong * 7;
+                            me.mondayTime = me.mondayTime + me.oneDayLong * 7;
+                            me.sundayTime = me.sundayTime + me.oneDayLong * 7;
+                            me.prevShow = true;
                             if (me.sundayTime >= me.curSundayTime) {
                                 me.nextShow = false;
                             }
-                            me.prevShow = true;
                         } else {
                             //上周
-                            me.mondayTime = (me.mondayTime - oneDayLong * 7);
-                            me.sundayTime = (me.sundayTime - oneDayLong * 7);
-                            if (me.mondayTime <= me.originStartTime) {
-                                me.prevShow = false;
-                            }
+                            me.mondayTime = (me.mondayTime - me.oneDayLong * 7);
+                            me.sundayTime = (me.sundayTime - me.oneDayLong * 7);
                             me.nextShow = true;
                         }
                         break;
@@ -779,11 +725,20 @@
                     provinceStat.map((el) => {
                         tmp.data.rows.push({
                             'xAxis': el.province,
-                            [dataTypeText]:  Math.round(el[dataType])
+                            [dataTypeText]: Math.round(el[dataType])
                         });
                     });
                 }
                 return tmp;
+            },
+            //获取展示月的天数
+            getDaysInMonth() {
+                let me = this;
+                let curDate = new Date();
+                let curMonth = me.month;
+                curDate.setMonth(curMonth);
+                curDate.setDate(0);
+                return curDate.getDate();
             }
         },
         computed: {

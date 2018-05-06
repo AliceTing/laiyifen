@@ -7,7 +7,6 @@
             <ve-line :data="dayLineData(total).data"
                      :settings="dayLineData(total).settings"></ve-line>
         </div>
-
         <div v-show="time ==='month'">
             <ve-line :data="monthLineData(total).data"
                      :settings="monthLineData(total).settings"></ve-line>
@@ -16,7 +15,7 @@
 </template>
 
 <script>
-    import {isEmpty, getValue} from "Public/util";
+    import {isEmpty} from "Public/util";
 
     export default {
         components: {},
@@ -24,10 +23,8 @@
             total: '',
             type: '',
             time: '',
-            year: '',
-            month: '',
-            day: '',
-            mondayTime: ''
+            timeStamp: 0,
+            oneDayLong: 0
         },
         data() {
             return {}
@@ -40,8 +37,8 @@
             //月视图
             monthLineData(data) {
                 let me = this;
-                let thisYearMonthX = me.year + '年' + me.month + '月';
-                let lastYearMonthX = (me.year - 1) + '年' + me.month + '月';
+                let thisYearMonthX = new Date(me.timeStamp).Format('Y年MM月');
+                let lastYearMonthX = new Date(me.timeStamp - me.oneDayLong * me.getDaysInMonth()).Format('Y年MM月');
                 let tmp = {
                     data: {
                         columns: ['xAxis', thisYearMonthX, lastYearMonthX],
@@ -76,7 +73,7 @@
                             {'xAxis': '28', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
                             {'xAxis': '29', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
                             {'xAxis': '30', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '31', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
+                            {'xAxis': '31', [thisYearMonthX]: 0, [lastYearMonthX]: 0}
                         ]
                     },
                     settings: {},
@@ -94,93 +91,47 @@
             //日视图
             dayLineData(data) {
                 let me = this;
+                let thisDayX = new Date(me.timeStamp).Format('Y年MM月dd日');
+                let lastDayX = new Date(me.timeStamp - me.oneDayLong).Format('Y年MM月dd日');
                 let tmp = {
                     data: {
-                        columns: ['xAxis'],
-                        rows: []
+                        columns: ['xAxis', thisDayX, lastDayX],
+                        rows: [
+                            {'xAxis': '1', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '2', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '3', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '4', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '5', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '6', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '7', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '8', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '9', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '10', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '11', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '12', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '13', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '14', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '15', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '16', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '17', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '18', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '19', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '20', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '21', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '22', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '23', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '24', [thisDayX]: 0, [lastDayX]: 0},
+                        ]
                     },
                     settings: {},
                 };
                 if (!isEmpty(data)) {
-                    //24小时
-                    let len = 24;
-                    let dayLineArr = [];
-                    let curDay = me.year + me.year + me.day;
-                    switch (me.type) {
-                        //支付金额
-                        case 0:
-                            //当天
-                            let curDayDetail = data.curDayDetail;
-                            //周同比
-                            let preWeekDayDetail = data.preWeekDayDetail;
-                            //当天
-                            if (!isEmpty(curDayDetail)) {
-                                tmp.data.columns.push(curDay);
-                                Object.values(curDayDetail).map((el, index) => {
-                                    dayLineArr[index] = {
-                                        'curDayDetail': el
-                                    };
-                                });
-                            }
-                            //周同比
-                            if (!isEmpty(preWeekDayDetail)) {
-                                tmp.data.columns.push('周同比');
-                                Object.values(preWeekDayDetail).map((el, index) => {
-                                    if (dayLineArr.length === len) {
-                                        dayLineArr[index].preWeekDayDetail = el;
-                                    } else {
-                                        dayLineArr[index] = {
-                                            'preWeekDayDetail': el
-                                        };
-                                    }
-                                });
-                            }
-                            break;
-                        //周同比
-                        //支付订单数
-                        case 1:
-                            break;
-                        //单均价
-                        case 2:
-                            break;
-                    }
-                    if (dayLineArr.length > 0) {
-                        dayLineArr.map((el, index) => {
-                            tmp.data.rows.push({
-                                'xAxis': index + 1,
-                                curDay: el.curDayDetail,
-                                '周同比': el.preWeekDayDetail,
-                                '日环比': el.preDayDetail,
-                                '年同比': el.preYearDayDetail,
-                            });
-                        })
-                    }
-
-
-                    // if (!isEmpty(preDayDetail)) {
-                    //     tmp.data.columns.push('日环比');
-                    //     Object.values(preDayDetail).map((el, index) => {
-                    //         dayLineArr[index].preDayDetail = el;
-                    //     });
-                    // }
-                    // if (!isEmpty(preYearDayDetail)) {
-                    //     tmp.data.columns.push('年同比');
-                    //     Object.values(preYearDayDetail).map((el, index) => {
-                    //         dayLineArr[index].preYearDayDetail = el;
-                    //     });
-                    // }
-                    //上一天数据
-                    // let lastMonthDetail = data.lastMonthDetail;
-                    // if (lastMonthDetail && lastMonthDetail.length > 0) {
-                    //     tmp.data.columns.push(me.year - 1);
-                    //     tmp.settings.metrics.push(me.year - 1 + '');
-                    //     lastMonthDetail.map((el, index) => {
-                    //         if (tmp.data.rows[index]) {
-                    //             tmp.data.rows[index][me.year - 1 + ''] = el.payAmount;
-                    //         }
-                    //     })
-                    // }
-                    // console.log('tmp', tmp);
+                    // 当天
+                    let curDayDetail = data.curDayDetail;
+                    me.rendDayDate(curDayDetail,thisDayX,tmp);
+                    //昨天
+                    let preDayDetail = data.preDayDetail;
+                    me.rendDayDate(preDayDetail,lastDayX,tmp);
                 }
                 return tmp;
             },
@@ -204,7 +155,7 @@
                         tmpData.push(el[dataType]);
                     });
                     //初始化时设定31天，实际展示要根据展示月天数
-                    for (let a = 0; a < 31 - getDaysInMonth(); a++) {
+                    for (let a = 0; a < 31 - me.getDaysInMonth(); a++) {
                         tmp.data.rows.pop();
                         tmpData.pop();
                     }
@@ -212,16 +163,22 @@
                         tmp.data.rows[i][which] = el;
                     });
                 }
-
-                //获取展示月的天数
-                function getDaysInMonth() {
-                    let curDate = new Date();
-                    let curMonth = me.month;
-                    curDate.setMonth(curMonth);
-                    curDate.setDate(0);
-                    return curDate.getDate();
+            },
+            rendDayDate(arr,which,tmp){
+                if (!isEmpty(arr)) {
+                    Object.values(arr).map((el, i) => {
+                        tmp.data.rows[i][which] = el;
+                    });
                 }
-
+            },
+            //获取展示月的天数
+            getDaysInMonth(){
+                let me = this;
+                let curDate = new Date();
+                let curMonth = me.month;
+                curDate.setMonth(curMonth);
+                curDate.setDate(0);
+                return curDate.getDate();
             }
         }
     }

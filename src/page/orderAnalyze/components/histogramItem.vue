@@ -21,13 +21,13 @@
         components: {},
         props: {
             total: {},
-            year: '',
-            month: '',
-            day: '',
             mondayTime: '',
             sundayTime: '',
             time: '',
-            type: ''
+            type: '',
+            timeStamp:0,
+            oneDayLong:0,
+            year:''
         },
         data() {
             return {

@@ -29,23 +29,33 @@
             <div v-show="time ==='day'">
                 <div class="item">
                     <div class="title">当日累计</div>
-                    <div class="value">{{total.curDayTotalPayAmount?total.curDayTotalPayAmount:0}}元</div>
+                    <div class="value" v-show="type === 0">{{total.curDayTotalPayAmount?total.curDayTotalPayAmount:0}}元</div>
+                    <div class="value" v-show="type === 1">{{total.curDayPayOrderNum?total.curDayPayOrderNum:0}}件</div>
+                    <div class="value" v-show="type === 2">{{total.curDayAvgAmount?total.curDayAvgAmount:0}}元</div>
                 </div>
                 <div class="item">
                     <div class="title">昨日累计</div>
-                    <div class="value">{{total.preDayTotalPayAmount?total.preDayTotalPayAmount:0}}</div>
+                    <div class="value" v-show="type === 0">{{total.preDayTotalPayAmount?total.preDayTotalPayAmount:0}}元</div>
+                    <div class="value" v-show="type === 1">{{total.preDayPayOrderNum?total.preDayPayOrderNum:0}}件</div>
+                    <div class="value" v-show="type === 2">{{total.preDayAvgAmount?total.preDayAvgAmount:0}}元</div>
                 </div>
                 <div class="item">
                     <div class="title">日环比</div>
-                    <div class="value">{{total.dayPayAmountPercent?total.dayPayAmountPercent:0}}</div>
+                    <div class="value" v-show="type === 0">{{total.dayPayAmountPercent?total.dayPayAmountPercent:0}}</div>
+                    <div class="value" v-show="type === 1">{{total.dayPayOrderNumPercent?total.dayPayOrderNumPercent:0}}</div>
+                    <div class="value" v-show="type === 2">{{total.dayAvgAmountPercent?total.dayAvgAmountPercent:0}}</div>
                 </div>
                 <div class="item">
                     <div class="title">上周同期</div>
-                    <div class="value">{{total.preWeekDayTotalPayAmount?total.preWeekDayTotalPayAmount:0}}</div>
+                    <div class="value" v-show="type === 0">{{total.preWeekDayTotalPayAmount?total.preWeekDayTotalPayAmount:0}}</div>
+                    <div class="value" v-show="type === 1">{{total.preWeekPayOrderNum?total.preWeekPayOrderNum:0}}</div>
+                    <div class="value" v-show="type === 2">{{total.preWeekAvgAmount?total.preWeekAvgAmount:0}}</div>
                 </div>
                 <div class="item">
                     <div class="title">周同比</div>
-                    <div class="value">{{total.weekPayAmountPercent?total.weekPayAmountPercent:0}}</div>
+                    <div class="value" v-show="type === 0">{{total.weekPayAmountPercent?total.weekPayAmountPercent:0}}</div>
+                    <div class="value" v-show="type === 1">{{total.weekPayOrderNumPercent?total.weekPayOrderNumPercent:0}}</div>
+                    <div class="value" v-show="type === 2">{{total.weekAvgAmountPercent?total.weekAvgAmountPercent:0}}</div>
                 </div>
             </div>
             <!--周-->

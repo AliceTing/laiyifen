@@ -125,6 +125,12 @@
         }
         .tab_con {
             margin-top: px2rem(30);
+            .ring_type{
+                margin-bottom: px2rem(20);
+                color: #000;
+                font-size: px2rem(30);
+                text-align: center;
+            }
         }
         //渠道表格
         .table_ditch {
@@ -192,16 +198,19 @@
                     </div>
 
                     <!--柱状图：年视图、周视图-->
-                    <histogramItem :total="orderDataArr" :year="year" :time="time"></histogramItem>
+                    <histogramItem :total="orderDataArr" :time="time" :type="type" :year="year" :month="month"
+                                   :day="day" :mondayTime="mondayTime" :sundayTime="sundayTime"></histogramItem>
 
                     <!--折线图：月视图、日视图>-->
-                    <lineItem :total="orderDataArr" :year="year" :month="month" :day="day" :time="time" :type="type"></lineItem>
+                    <lineItem :total="orderDataArr" :time="time" :type="type" :year="year" :month="month" :day="day"
+                              :mondayTime="mondayTime"></lineItem>
 
                     <!--数据统计模块-->
-                    <statisticsItem :total="orderDataArr" :day="day" :time="time"></statisticsItem>
+                    <statisticsItem :total="orderDataArr" :time="time" :type="type" :day="day"></statisticsItem>
 
                     <!--省份、渠道-->
-                    <div class="tab_box tab_ditch_province">
+                    <div class="tab_box tab_ditch_province"
+                         v-show="!isEmpty(orderDataArr.channelStat)&&!isEmpty(orderDataArr.provinceStat)">
                         <div class="tab_tit">
                             <div v-for="(item,index) in ditchProvinceArr"
                                  :key="index"
@@ -214,6 +223,7 @@
                             <!--渠道-->
                             <template v-if="showWay === 1">
                                 <!--环形图-->
+                                <div class="ring_type">{{orderTypeArr[type].name}}</div>
                                 <ve-ring :data="yearPieData(orderDataArr).data"
                                          :settings="yearPieData(orderDataArr).settings"></ve-ring>
                                 <!--表格-->
@@ -224,9 +234,10 @@
                                         <th v-show="type === 0">支付金额</th>
                                         <th v-show="type === 1">支付订单数</th>
                                         <th v-show="type === 2">单均价</th>
-                                        <th>日环比</th>
-                                        <th>周同比</th>
-                                        <th>年同比</th>
+                                        <!--<th>日环比</th>-->
+                                        <!--<th>周同比</th>-->
+                                        <th v-show="time === 'week'">周环比</th>
+                                        <th v-show="time === 'week'">年同比</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -235,23 +246,41 @@
                                         <!--支付金额-->
                                         <template v-if="type === 0">
                                             <td>{{item.payAmount?item.payAmount:0}}</td>
-                                            <td>{{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}</td>
-                                            <td>{{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}</td>
-                                            <td>{{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}</td>
+                                            <!--<td>{{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}</td>-->
+                                            <!--<td>{{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}</td>-->
+                                            <!--<td>{{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}</td>-->
+                                            <td v-show="time === 'week'">
+                                                {{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'week'">
+                                                {{item.yearPayAmountPercent?item.yearPayAmountPercent:0}}
+                                            </td>
                                         </template>
                                         <!--支付订单数-->
                                         <template v-if="type === 1">
                                             <td>{{item.payOrderNum?item.payOrderNum:0}}</td>
-                                            <td>{{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}</td>
-                                            <td>{{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}</td>
-                                            <td>{{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}</td>
+                                            <!--<td>{{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}</td>-->
+                                            <!--<td>{{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}</td>-->
+                                            <!--<td>{{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}</td>-->
+                                            <td v-show="time === 'week'">
+                                                {{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'week'">
+                                                {{item.yearPayOrderNumPercent?item.yearPayOrderNumPercent:0}}
+                                            </td>
                                         </template>
                                         <!--单均价-->
                                         <template v-if="type === 2">
                                             <td>{{item.avgAmount?item.avgAmount:0}}</td>
-                                            <td>{{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}</td>
-                                            <td>{{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}</td>
-                                            <td>{{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}</td>
+                                            <!--<td>{{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}</td>-->
+                                            <!--<td>{{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}</td>-->
+                                            <!--<td>{{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}</td>-->
+                                            <td v-show="time === 'week'">
+                                                {{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}
+                                            </td>
+                                            <td v-show="time === 'week'">
+                                                {{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}
+                                            </td>
                                         </template>
                                     </tr>
                                     </tbody>
@@ -335,26 +364,36 @@
                 time: '',
                 //订单类型
                 type: '',
-                //当前年
+                //展示年
                 year: '',
-                //当前月
+                //当前年
+                curYear: '',
+                //展示月
                 month: '',
-                //当前日
+                //当前月
+                curMonth: '',
+                //展示年
                 day: '',
+                //当前日
+                curDay: '',
+                //展示周一
+                mondayTime: '',
+                //展示周日
+                sundayTime: '',
+                //当前周一
+                curMondayTime: '',
+                //当前周日
+                curSundayTime: '',
+                originStartTime: '',
+                originEndTime: '',
                 //上一个切换箭头
                 prevShow: true,
                 //下一个切换箭头
-                nextShow: true,
+                nextShow: false,
                 //接口请求入参
                 param: {},
                 //页面展示类型
                 display: '',
-                //周视图开始时间
-                mondayTime: '',
-                //周视图结束时间
-                sundayTime: '',
-                originStartTime: '',
-                originEndTime: '',
                 //年视图渠道或者省份切换
                 showWay: 1,
                 stompClient: null
@@ -389,7 +428,7 @@
                 me.stompClient = Stomp.over(socket);
                 me.stompClient.connect({"system": "TP", "page": "order"}, function (frame) {
                     me.stompClient.subscribe('/user/topic/getRealTimeOrderPayMoney', function (msg) {
-                        console.log(11111,msg);
+                        console.log(11111, msg);
                     });
                 });
             },
@@ -416,7 +455,12 @@
                 me.sundayTime = sundayTime;
                 me.originStartTime = originStartTime;
                 me.originEndTime = originEndTime;
-
+                //当前年月日周
+                me.curYear = year;
+                me.curMonth = month;
+                me.curDay = day;
+                me.curMondayTime = mondayTime;
+                me.curSundayTime = sundayTime;
                 //左右切换箭头初始化
                 switch (me.time) {
                     case 'year':
@@ -438,10 +482,10 @@
                         }
                         break;
                     case  'week':
-                        if (me.mondayTime >= me.originStartTime && me.mondayTime <= me.originEndTime) {
+                        if (me.mondayTime <= me.originStartTime) {
                             me.prevShow = false;
                             me.nextShow = true;
-                        } else if (me.sundayTime >= me.mondayTime && me.sundayTime <= me.sundayTime) {
+                        } else if (me.sundayTime >= me.curSundayTime) {
                             me.prevShow = true;
                             me.nextShow = false;
                         }
@@ -460,11 +504,7 @@
             //请求接口
             orderDisplay() {
                 let me = this;
-                let nowDate = new Date();
-                let nowYear = nowDate.getFullYear();
-                let nowMonth = nowDate.getMonth() + 1 < 10 ? '0' + (nowDate.getMonth() + 1) : nowDate.getMonth() + 1;
-                let nowDay = nowDate.getDate() < 10 ? '0' + nowDate.getDate() : nowDate.getDate();
-                me.param.day = me.year + '-' + (parseInt(me.month) < 10 ? '0' + parseInt(me.month) : me.month) + '-' + me.day;
+                me.param.day = me.year + '-' + me.month + '-' + me.day;
                 me.param.type = me.type;
                 switch (me.time) {
                     case 'year':
@@ -480,10 +520,11 @@
                     case 'day':
                         delete me.param.startTime;
                         delete me.param.endTime;
-                        if (me.year == nowYear && me.month == nowMonth && me.day == nowDay) {
+                        if (me.year === me.curYear && me.month === me.curMonth && me.day === me.curDay) {
                             me.display = '今天';
                             me.initRealTime();
-                        } else if (me.year == nowYear && me.month == nowMonth && me.day == (nowDay - 1)) {
+                            //fixme 昨天
+                        } else if (me.year === me.curYear && me.month === me.curMonth && me.day === (me.curDay - 1)) {
                             me.display = '昨天';
                         } else {
                             me.display = me.year + '年' + me.month + '月' + me.day + me.name;
@@ -493,7 +534,7 @@
                         delete me.param.day;
                         let monday = new Date(me.mondayTime);
                         let sunday = new Date(me.sundayTime);
-                        me.display = monday.Format('Y-MM-dd') + '至' + sunday.Format('Y-MM-dd');
+                        me.display = monday.Format('Y年MM月dd日') + '至' + sunday.Format('MM月dd日');
                         me.param.startTime = monday.Format('Y-MM-dd');
                         me.param.endTime = sunday.Format('Y-MM-dd');
                         break;
@@ -624,7 +665,7 @@
                             //下周
                             me.mondayTime = me.mondayTime + oneDayLong * 7;
                             me.sundayTime = me.sundayTime + oneDayLong * 7;
-                            if (me.sundayTime >= me.mondayTime && me.sundayTime <= me.sundayTime) {
+                            if (me.sundayTime >= me.curSundayTime) {
                                 me.nextShow = false;
                             }
                             me.prevShow = true;
@@ -632,7 +673,7 @@
                             //上周
                             me.mondayTime = (me.mondayTime - oneDayLong * 7);
                             me.sundayTime = (me.sundayTime - oneDayLong * 7);
-                            if (me.mondayTime >= me.originStartTime && me.mondayTime <= me.originEndTime) {
+                            if (me.mondayTime <= me.originStartTime) {
                                 me.prevShow = false;
                             }
                             me.nextShow = true;
@@ -652,25 +693,32 @@
             },
             //渲染年数据-渠道
             yearPieData(orderData) {
+                let me = this;
+                let dataType;
+                switch (me.type) {
+                    case 0:
+                        dataType = 'payAmount';
+                        break;
+                    case 1:
+                        dataType = 'payOrderNum';
+                        break;
+                    case 2:
+                        dataType = 'avgAmount';
+                        break;
+                }
                 let tmp = {
                     data: {
                         columns: ['channel', 'percent'],
                         rows: []
                     },
                     settings: {
-                        dimension: 'channel',
-                        metrics: 'percent',
                         dataType: 'percent',
-                        digit: 1,
                         selectedMode: 'single',
                         hoverAnimation: false,
                         radius: [104, 50],
                         label: {
                             position: 'inside',
                             formatter: ''
-                        },
-                        labelLine: {
-                            show: false
                         }
                     }
                 };
@@ -679,13 +727,12 @@
                     //总数
                     let amount = 0;
                     channelStat.map((el) => {
-                        amount += el.payAmount;
+                        amount += el[dataType];
                     });
-
                     channelStat.map((el) => {
                         tmp.data.rows.push({
                             'channel': el.channel,
-                            'percent': ((el.payAmount / amount).toFixed(5) * 100).toFixed(1)
+                            'percent': ((el[dataType] / amount).toFixed(5) * 100).toFixed(1)
                         });
 
                         tmp.settings.label.formatter = '{@channel}' + '%';
@@ -695,13 +742,29 @@
             },
             //渲染年数据-省份
             yearBarData(orderData) {
+                let me = this;
+                let dataType;
+                let dataTypeText;
+                switch (me.type) {
+                    case 0:
+                        dataType = 'payAmount';
+                        dataTypeText = '支付金额';
+                        break;
+                    case 1:
+                        dataType = 'payOrderNum';
+                        dataTypeText = '支付订单数';
+                        break;
+                    case 2:
+                        dataType = 'avgAmount';
+                        dataTypeText = '单均价';
+                        break;
+                }
                 let tmp = {
                     data: {
-                        columns: ['province', '支付金额'],
+                        columns: ['xAxis', dataTypeText],
                         rows: []
                     },
                     settings: {
-                        metrics: ['支付金额'],
                         label: {
                             show: true,
                             position: 'right',
@@ -715,8 +778,8 @@
                 if (provinceStat) {
                     provinceStat.map((el) => {
                         tmp.data.rows.push({
-                            'province': el.province,
-                            '支付金额': Math.round(el.payAmount)
+                            'xAxis': el.province,
+                            [dataTypeText]:  Math.round(el[dataType])
                         });
                     });
                 }

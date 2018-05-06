@@ -8,22 +8,31 @@
                           :settings="yearHistogramData(total).settings"></ve-histogram>
         </div>
         <div v-show="time === 'week'">
-            <ve-line :data="weekHistogramData(total).data"
-                     :settings="weekHistogramData(total).settings"></ve-line>
+            <ve-histogram :data="weekHistogramData(total).data"
+                          :settings="weekHistogramData(total).settings"></ve-histogram>
         </div>
     </div>
 </template>
 
 <script>
+    import {isEmpty} from 'Public/util/';
+
     export default {
         components: {},
         props: {
             total: {},
             year: '',
-            time: ''
+            month: '',
+            day: '',
+            mondayTime: '',
+            sundayTime: '',
+            time: '',
+            type: ''
         },
         data() {
-            return {}
+            return {
+                dataType: ''
+            }
         },
         created() {
         },
@@ -32,94 +41,111 @@
         methods: {
             yearHistogramData(data) {
                 let me = this;
+                let thisYearX = me.year + '年';
+                let lastYearX = me.year - 1 + '年';
                 let tmp = {
                     data: {
-                        columns: ['xAxis', me.year + ''],
-                        rows: []
-                    },
-                    settings: {
-                        metrics: [me.year + '']
+                        columns: ['xAxis', thisYearX, lastYearX],
+                        rows: [
+                            {'xAxis': '1月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '2月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '3月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '4月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '5月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '6月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '7月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '8月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '9月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '10月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '11月', [thisYearX]: 0, [lastYearX]: 0},
+                            {'xAxis': '12月', [thisYearX]: 0, [lastYearX]: 0}
+                        ]
                     }
                 };
-                //当前年数据
-                let thisYearDetail = data.thisYearDetail;
-                if (thisYearDetail) {
-                    thisYearDetail.map((el) => {
-                        tmp.data.rows.push({
-                            'xAxis': [el.month] + '月',
-                            [me.year]: +[el.payAmount]
-                        })
-                    });
-                }
-                //前一年数据
-                let lastYearDetail = data.lastYearDetail;
-                if (lastYearDetail && lastYearDetail.length > 0) {
-                    tmp.data.columns.push(me.year - 1);
-                    tmp.settings.metrics.push(me.year - 1 + '');
-                    lastYearDetail.map((el, index) => {
-                        if (tmp.data.rows[index]) {
-                            tmp.data.rows[index][me.year - 1 + ''] = el.payAmount;
-                        }
-                    })
+                if (!isEmpty(data)) {
+                    //当年数据
+                    me.rendYearData(data.thisYearDetail, thisYearX, tmp);
+                    //去年数据
+                    me.rendYearData(data.lastYearDetail, lastYearX, tmp);
                 }
                 return tmp;
             },
             weekHistogramData(data) {
                 let me = this;
+                let oneWeek = 7;
+                let oneDayLong = 24 * 60 * 60 * 1000;
+                let thisWeekX = new Date(me.mondayTime).Format('Y年MM月dd日') + '至' + new Date(me.sundayTime).Format('Y年MM月dd日');
+                let lastWeekX = new Date(me.mondayTime - oneWeek * oneDayLong).Format('Y年MM月dd日') + '至' + new Date(me.sundayTime - oneWeek * oneDayLong).Format('Y年MM月dd日');
                 let tmp = {
                     data: {
-                        columns: ['xAxis', me.year + ''],
-                        rows: []
+                        columns: ['xAxis', thisWeekX, lastWeekX],
+                        rows: [
+                            {'xAxis': '周一', [thisWeekX]: 0, [lastWeekX]: 0},
+                            {'xAxis': '周二', [thisWeekX]: 0, [lastWeekX]: 0},
+                            {'xAxis': '周三', [thisWeekX]: 0, [lastWeekX]: 0},
+                            {'xAxis': '周四', [thisWeekX]: 0, [lastWeekX]: 0},
+                            {'xAxis': '周五', [thisWeekX]: 0, [lastWeekX]: 0},
+                            {'xAxis': '周六', [thisWeekX]: 0, [lastWeekX]: 0},
+                            {'xAxis': '周日', [thisWeekX]: 0, [lastWeekX]: 0}
+                        ]
                     },
-                    settings: {
-                        metrics: [me.year + '']
-                    }
+                    settings: {}
                 };
-
-                //当前周数据
-                let thisWeekDetail = data.thisWeekDetail;
-                if (thisWeekDetail) {
-
-                    thisWeekDetail.map((el) => {
-                        let weekRv;
-                        try {
-                            console.log(new Date([el.dt]).getDay());
-                            switch (new Date([el.dt]).getDay()) {
-                                case 1:
-                                    weekRv = '一';
-                                    break;
-                                case 2:
-                                    weekRv = '二';
-                                    break;
-                                case 3:
-                                    weekRv = '三';
-                                    break;
-                                case 4:
-                                    weekRv = '四';
-                                    break;
-                                case 5:
-                                    weekRv = '五';
-                                    break;
-                                case 6:
-                                    weekRv = '六';
-                                    break;
-                                case 0:
-                                    weekRv = '日';
-                                    break;
-                            }
-                        } catch (e) {
-
-                        }
-
-                        tmp.data.rows.push({
-                            'xAxis': '周' + weekRv,
-                            [me.year]: +[el.payAmount]
-                        })
-                    });
+                if (!isEmpty(data)) {
+                    //本周数据
+                    let thisWeekDetail = data.thisWeekDetail;
+                    me.rendData(thisWeekDetail, thisWeekX, tmp);
+                    //上周数据
+                    let lastWeekDetail = data.lastWeekDetail;
+                    me.rendData(lastWeekDetail, lastWeekX, tmp);
                 }
                 return tmp;
+            },
+            rendData(arr, which, tmp) {
+                let me = this;
+                let tmpData = [];
+                let dataType;
+                if (!isEmpty(arr)) {
+                    switch (me.type) {
+                        case 0:
+                            dataType = 'payAmount';
+                            break;
+                        case 1:
+                            dataType = 'payOrderNum';
+                            break;
+                        case 2:
+                            dataType = 'avgPayAmount';
+                            break;
+                    }
+                    arr.map((el) => {
+                        tmpData.push(el[dataType]);
+                    });
+                    tmpData.map((el, i) => {
+                        tmp.data.rows[i][which] = el;
+                    })
+                }
+            },
+            rendYearData(arr, which, tmp) {
+                let me = this;
+                let dataType;
+                switch (me.type) {
+                    case 0:
+                        dataType = 'payAmount';
+                        break;
+                    case 1:
+                        dataType = 'payOrderNum';
+                        break;
+                    case 2:
+                        dataType = 'avgPayAmount';
+                        break;
+                }
+                if (!isEmpty(arr)) {
+                    arr.map((el) => {
+                        tmp.data.rows[el.month - 1][which] = el[dataType];
+                    });
+                }
             }
         },
-        computed: {}
+        computed: {},
     }
 </script>

@@ -177,21 +177,25 @@
             initRealTime() {
                 let me = this;
                 let socket = new SockJS('http://tj.laiyifen.com/cloudraker/tianpan-websocket');
+                Vue.$loading.show();
                 me.stompClient = Stomp.over(socket);
                 me.stompClient.connect({"system": "TP", "page": "overall"}, function (frame) {
                     me.stompClient.subscribe('/user/topic/getRealTimeOverall', function (msg) {
-                        let data = JSON.parse(msg.body);
-                        me.orderArr.payAmount = data.payAmount || 0;
-                        me.orderArr.payOrderNum = data.payOrderNum || 0;
-                        me.orderArr.avgOrderAmount = data.avgOrderAmount || 0;
-                        me.flowArr.uv = data.uv || 0;
-                        me.flowArr.pv = data.pv || 0;
-                        me.flowArr.loginUserNum = data.loginUserNum || 0;
-                        me.flowArr.orderUserNum = data.orderUserNum || 0;
-                        me.flowArr.avgUserAmount = data.avgUserAmount || 0;
-                        me.flowArr.conversionPercent = data.conversionPercent || 0;
-                        me.logisticsArr.doNum = data.doNum || 0;
-                        me.logisticsArr.deliveryNum = data.deliveryNum || 0;
+                        if(msg){
+                            Vue.$loading.close();
+                            let data = JSON.parse(msg.body);
+                            me.orderArr.payAmount = data.payAmount || 0;
+                            me.orderArr.payOrderNum = data.payOrderNum || 0;
+                            me.orderArr.avgOrderAmount = data.avgOrderAmount || 0;
+                            me.flowArr.uv = data.uv || 0;
+                            me.flowArr.pv = data.pv || 0;
+                            me.flowArr.loginUserNum = data.loginUserNum || 0;
+                            me.flowArr.orderUserNum = data.orderUserNum || 0;
+                            me.flowArr.avgUserAmount = data.avgUserAmount || 0;
+                            me.flowArr.conversionPercent = data.conversionPercent || 0;
+                            me.logisticsArr.doNum = data.doNum || 0;
+                            me.logisticsArr.deliveryNum = data.deliveryNum || 0;
+                        }
                     });
                 });
             },

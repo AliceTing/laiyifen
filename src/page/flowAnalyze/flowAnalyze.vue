@@ -24,6 +24,9 @@
         font-size: px2rem(30);
         .order_type_item {
             position: relative;
+            height: px2rem(87);
+            font-size: px2rem(24);
+            overflow: hidden;
             &.current {
                 color: $mainColor;
                 &:after {
@@ -65,7 +68,7 @@
         height: px2rem(84);
         line-height: px2rem(84);
         text-align: center;
-        @include font-dpr(17);
+        font-size: px2rem(34);
         .btn_switch {
             position: absolute;
             top: 0;
@@ -102,66 +105,36 @@
             }
         }
     }
-
-    .tab_ditch_province {
-        .tab_tit {
-            margin: px2rem(15) px2rem(32) 0;
-            border: solid 1px $mainColor;
-            border-radius: px2rem(8);
-            .tab_item {
-                height: px2rem(58);
-                border-left: solid 1px $mainColor;
-                color: $mainColor;
-                line-height: px2rem(56);
-                @include font-dpr(10);
-                &:first-child {
-                    border-left: none;
-                }
-                &.current {
-                    background-color: $mainColor;
-                    color: #fff;
-                }
+    //渠道表格
+    .table {
+        width: 100%;
+        height: px2rem(90);
+        margin-top: px2rem(20);
+        text-align: left;
+        line-height: px2rem(90);
+        font-size: px2rem(30);
+        thead {
+            background-color: #fbfbfb;
+            color: #000;
+            th:nth-child(1) {
+                padding-left: px2rem(32);
             }
         }
-        .tab_con {
-            margin-top: px2rem(30);
-            .ring_type {
-                margin-bottom: px2rem(20);
-                color: #000;
-                font-size: px2rem(30);
-                text-align: center;
-            }
-        }
-        //渠道表格
-        .table_ditch {
-            width: 100%;
-            height: px2rem(90);
-            text-align: left;
-            line-height: px2rem(90);
-            @include font-dpr(15);
-            thead {
+        tbody {
+            color: #999;
+            tr {
                 background-color: #fbfbfb;
-                color: #000;
-                th:nth-child(1) {
+                &:nth-child(odd) {
+                    background-color: #fff;
+                }
+                td:nth-child(1) {
                     padding-left: px2rem(32);
                 }
-            }
-            tbody {
-                color: #999;
-                tr {
-                    background-color: #fbfbfb;
-                    &:nth-child(odd) {
-                        background-color: #fff;
-                    }
-                    td:nth-child(1) {
-                        padding-left: px2rem(32);
-                    }
-                    td:nth-child(2) {
-                        color: #e74c39;
-                    }
+                td:nth-child(2) {
+                    color: #e74c39;
                 }
-
             }
+
         }
     }
 
@@ -173,7 +146,7 @@
                  @swiperight="onSwipeRight">
             <div class="tab_box">
                 <div class="tab_tit order_type_tit">
-                    <div v-for="(typeItem,index) in orderTypeArr"
+                    <div v-for="(typeItem,index) in flowTypeArr"
                          :key="index"
                          @click="onChangeParam(index,'type')"
                          :class="{current : typeItem.current}"
@@ -198,120 +171,100 @@
                     </div>
 
                     <!--柱状图：年视图、周视图-->
-                    <histogramItem :total="orderDataArr" :time="time" :type="type" :oneDayLong="oneDayLong"
-                                   :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime"
-                                   :year="year"></histogramItem>
+                    <histogramItem :total="flowDataArr" :time="time" :type="type" :oneDayLong="oneDayLong"
+                    :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime"
+                    :year="year"></histogramItem>
 
                     <!--折线图：月视图、日视图>-->
-                    <lineItem :total="orderDataArr" :time="time" :type="type" :mondayTime="mondayTime"
-                              :oneDayLong="oneDayLong" :month="month" :timeStamp="timeStamp" :curTimeStamp="curTimeStamp"></lineItem>
+                    <lineItem :total="flowDataArr" :time="time" :type="type" :mondayTime="mondayTime"
+                              :oneDayLong="oneDayLong" :year="year" :month="month" :timeStamp="timeStamp" :curTimeStamp="curTimeStamp"></lineItem>
 
                     <!--数据统计模块-->
-                    <statisticsItem :total="orderDataArr" :time="time" :type="type" :day="day"></statisticsItem>
+                    <statisticsItem :total="flowDataArr" :time="time" :type="type"></statisticsItem>
 
-                    <!--省份、渠道-->
-                    <div class="tab_box tab_ditch_province"
-                         v-show="!isEmpty(orderDataArr.channelStat)&&!isEmpty(orderDataArr.provinceStat)">
-                        <div class="tab_tit">
-                            <div v-for="(item,index) in ditchProvinceArr"
-                                 :key="index"
-                                 class="tab_item"
-                                 :class="{current : item.current}"
-                                 @click="onShowWay(index)">{{item.name}}
-                            </div>
-                        </div>
-                        <div class="tab_con">
-                            <!--渠道-->
-                            <template v-if="showWay === 1">
-                                <!--环形图-->
-                                <div class="ring_type">{{orderTypeArr[type].name}}</div>
-                                <ve-ring :data="yearPieData(orderDataArr).data"
-                                         :settings="yearPieData(orderDataArr).settings"></ve-ring>
-                                <!--表格-->
-                                <table class="table_ditch">
-                                    <thead>
-                                    <tr>
-                                        <th>渠道</th>
-                                        <th>{{orderTypeArr[type].name}}</th>
-                                        <th v-show="time === 'day'">日环比</th>
-                                        <th v-show="time === 'day'">周同比</th>
-                                        <th v-show="time === 'week'">周环比</th>
-                                        <th v-show="time === 'week' || time === 'day'">年同比</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(item,index) in orderDataArr.channelStat" :key="index">
-                                        <td>{{item.channel}}</td>
-                                        <!--支付金额-->
-                                        <template v-if="type === 0">
-                                            <td>{{item.payAmount?item.payAmount:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.yearPayAmountPercent?item.yearPayAmountPercent:0}}
-                                            </td>
-                                        </template>
-                                        <!--支付订单数-->
-                                        <template v-if="type === 1">
-                                            <td>{{item.payOrderNum?item.payOrderNum:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.yearPayOrderNumPercent?item.yearPayOrderNumPercent:0}}
-                                            </td>
-                                        </template>
-                                        <!--单均价-->
-                                        <template v-if="type === 2">
-                                            <td>{{item.avgAmount?item.avgAmount:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}
-                                            </td>
-                                        </template>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </template>
+                    <!--渠道表格-->
+                    <template v-if="!isEmpty(flowDataArr.channelStat)">
+                        <!--表格-->
+                        <table class="table" v-if="!isEmpty(flowDataArr.channelStat[0].channel)">
+                            <thead>
+                            <tr>
+                                <th>渠道</th>
+                                <th>{{flowTypeArr[type].name}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item,index) in flowDataArr.channelStat" :key="index">
+                                <td>{{item.channel}}</td>
+                                <!--UV-->
+                                <template v-if="type === 0">
+                                    <td>{{item.uv?item.uv:0}}</td>
+                                </template>
+                                <!--PV-->
+                                <template v-if="type === 1">
+                                    <td>{{item.pv?item.pv:0}}</td>
+                                </template>
+                                <!--登录用户数-->
+                                <template v-if="type === 2">
+                                    <td>{{item.loginUV?item.loginUV:0}}</td>
+                                </template>
+                                <!--下单用户数-->
+                                <template v-if="type === 3">
+                                    <td>{{item.orderUV?item.orderUV:0}}</td>
+                                </template>
+                                <!--客单价-->
+                                <template v-if="type === 4">
+                                    <td>{{item.unitPrice?item.unitPrice:0}}</td>
+                                </template>
+                                <!--转化率-->
+                                <template v-if="type === 5">
+                                    <td>{{item.conversionRate?item.conversionRate:0}}</td>
+                                </template>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </template>
 
-                            <!--省份-->
-                            <template v-if="showWay === 2">
-                                <!--条形图-->
-                                <ve-bar :data="yearBarData(orderDataArr).data"
-                                        :settings="yearBarData(orderDataArr).settings"></ve-bar>
-                            </template>
-                        </div>
-                    </div>
+                    <!--页面表格-->
+                    <template v-if="!isEmpty(flowDataArr.pageStat)">
+                        <!--表格-->
+                        <table class="table" v-if="!isEmpty(flowDataArr.pageStat[0].page)">
+                            <thead>
+                            <tr>
+                                <th>页面</th>
+                                <th>{{flowTypeArr[type].name}}</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr v-for="(item,index) in flowDataArr.pageStat" :key="index">
+                                <td>{{item.page}}</td>
+                                <!--UV-->
+                                <template v-if="type === 0">
+                                    <td>{{item.uv?item.uv:0}}</td>
+                                </template>
+                                <!--PV-->
+                                <template v-if="type === 1">
+                                    <td>{{item.pv?item.pv:0}}</td>
+                                </template>
+                                <!--登录用户数-->
+                                <template v-if="type === 2">
+                                    <td>{{item.loginUV?item.loginUV:0}}</td>
+                                </template>
+                                <!--下单用户数-->
+                                <template v-if="type === 3">
+                                    <td>{{item.orderUV?item.orderUV:0}}</td>
+                                </template>
+                                <!--客单价-->
+                                <template v-if="type === 4">
+                                    <td>{{item.unitPrice?item.unitPrice:0}}</td>
+                                </template>
+                                <!--转化率-->
+                                <template v-if="type === 5">
+                                    <td>{{item.conversionRate?item.conversionRate:0}}</td>
+                                </template>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </template>
                 </div>
             </div>
         </v-touch>
@@ -320,7 +273,7 @@
 
 <script>
     import {mapState, mapActions, mapMutations} from 'vuex';
-
+    import Vue from 'vue';
     import statisticsItem from './components/statisticsItem';
     import histogramItem from './components/histogramItem';
     import lineItem from './components/lineItem';
@@ -333,19 +286,32 @@
         },
         data() {
             return {
+                arr:[],
                 //订单类型
-                orderTypeArr: [{
-                    name: '支付金额',
+                flowTypeArr: [{
+                    name: '访客数(UV)',
                     current: true,
                     type: 0
                 }, {
-                    name: '支付订单数',
+                    name: '浏览量(PV)',
                     current: false,
                     type: 1
                 }, {
-                    name: '单均价',
+                    name: '登录用户数',
                     current: false,
                     type: 2
+                }, {
+                    name: '下单用户数',
+                    current: false,
+                    type: 3
+                }, {
+                    name: '客单价',
+                    current: false,
+                    type: 4
+                }, {
+                    name: '转化率',
+                    current: false,
+                    type: 5
                 }],
                 //时间类型
                 timeTypeArr: [{
@@ -363,16 +329,6 @@
                 }, {
                     name: '年',
                     time: 'year',
-                    current: false
-                }],
-                //渠道省份
-                ditchProvinceArr: [{
-                    name: '渠道',
-                    way: 'ditch',
-                    current: true
-                }, {
-                    name: '省份',
-                    way: 'province',
                     current: false
                 }],
                 //当前视图类型，文字
@@ -411,22 +367,20 @@
                 param: {},
                 //页面展示类型
                 display: '',
-                //年视图渠道或者省份切换
-                showWay: 1,
                 stompClient: null,
-                oneDayLong: 0
+                oneDayLong: 0,
+                // flowDataArr:[]
             }
         },
         created() {
             let me = this;
             me.oneDayLong = 24 * 60 * 60 * 1000;
-
             //初始化入参
             me.timeTypeArr.map(function (el) {
                 if (el.current) {
                     me.name = el.name;
                     me.time = el.time;
-                    me.orderTypeArr.map(function (item) {
+                    me.flowTypeArr.map(function (item) {
                         if (item.current) {
                             me.type = item.type;
                         }
@@ -455,21 +409,36 @@
                 let me = this;
                 let socket = new SockJS('http://tj.laiyifen.com/cloudraker/tianpan-websocket');
                 me.stompClient = Stomp.over(socket);
-                me.stompClient.connect({"system": "TP", "page": "order"}, function (frame) {
+                me.stompClient.connect({"system": "TP", "page": "flow"}, function (frame) {
                     let url;
                     switch (me.type) {
+                        //访客数
                         case 0:
-                            url = '/user/topic/getRealTimeOrderPayMoney';
+                            url = '/user/topic/getRealTimeFlowUv';
                             break;
+                        //浏览量
                         case 1:
-                            url = '/user/topic/getRealTimeOrderPayNum';
+                            url = '/user/topic/getRealTimeFlowPv';
                             break;
+                        //登录用户数
                         case 2:
-                            url = '/user/topic/getRealTimeOrderAvgMoney';
+                            url = '/user/topic/getRealTimeFlowLogin';
+                            break;
+                        //下单用户数
+                        case 3:
+                            url = '/user/topic/getRealTimeFlowOrderUser';
+                            break;
+                        //客单价
+                        case 4:
+                            url = '/user/topic/getRealTimeFlowAvgUserMoney';
+                            break;
+                        //转化率
+                        case 5:
+                            url = '/user/topic/getRealTimeFlowConversion';
                             break;
                     }
                     me.stompClient.subscribe(url, function (msg) {
-                        console.log(11111, msg);
+                        console.log(11111, JSON.parse(msg.body));
                         //TODO 实时数据替换接口返回数据
                     });
                 });
@@ -541,29 +510,29 @@
             //滑动（左滑）切换统计类型
             onSwipeLeft() {
                 let me = this;
-                if (me.type === (me.orderTypeArr.length - 1)) {
+                if (me.type === (me.flowTypeArr.length - 1)) {
                     me.type = 0
                 } else {
                     me.type++;
                 }
-                me.orderTypeArr.map((el) => {
+                me.flowTypeArr.map((el) => {
                     el.current = false;
                 });
-                me.orderTypeArr[me.type].current = true;
+                me.flowTypeArr[me.type].current = true;
                 me.orderDisplay();
             },
             //滑动（右滑）切换统计类型
             onSwipeRight() {
                 let me = this;
                 if (me.type === 0) {
-                    me.type = me.orderTypeArr.length - 1
+                    me.type = me.flowTypeArr.length - 1
                 } else {
                     me.type--;
                 }
-                me.orderTypeArr.map((el) => {
+                me.flowTypeArr.map((el) => {
                     el.current = false;
                 });
-                me.orderTypeArr[me.type].current = true;
+                me.flowTypeArr[me.type].current = true;
                 me.orderDisplay();
             },
             //切换入参
@@ -572,7 +541,7 @@
                 let tmpArr;
                 switch (paramType) {
                     case 'type':
-                        tmpArr = me.orderTypeArr;
+                        tmpArr = me.flowTypeArr;
                         break;
                     case 'time':
                         tmpArr = me.timeTypeArr;
@@ -665,15 +634,6 @@
                         break;
                 }
                 me.orderDisplay();
-            },
-            //切换省份、渠道
-            onShowWay(index) {
-                let me = this;
-                me.ditchProvinceArr.map((el) => {
-                    el.current = false;
-                });
-                me.ditchProvinceArr[index].current = true;
-                me.showWay = index + 1;
             },
             //渲染年数据-渠道
             yearPieData(orderData) {
@@ -781,9 +741,9 @@
         },
         computed: {
             ...mapState({
-                orderDataArr: state => state.orderAnalyze.orderDataArr,
+                flowDataArr: state => state.flowAnalyze.flowDataArr,
             })
-        },
+    },
     }
 </script>
 

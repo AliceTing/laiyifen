@@ -15,21 +15,9 @@ let ENV = process.env.NODE_ENV || 'development';
 let pre = process.env.pre;
 let test = process.env.test;
 let isDev = (ENV === 'development');
-let publicPath = '//static.360buyimg.com/tp-statics/' + new Date().getFullYear() + '-' + (parseInt(new Date().getMonth() + 1)) + '-' + new Date().getDate() + '/';
-let domain = '//m.toplife.com';
-let outPath = path.join(__dirname, 'cdn');
-
-if (pre) {
-    publicPath = '//mbeta.toplife.com/';
-    domain = '//mbeta.toplife.com';
-    outPath = path.join(__dirname, 'dist');
-}
-
-if (test) {
-    publicPath = '/';
-    domain = '//m.toplife.com';
-    outPath = path.join(__dirname, 'dist');
-}
+// let publicPath = '//m.lyf.edu.laiyifen.com';
+let publicPath = '//m.lyf.edu.laiyifen.com';
+let outPath = path.join(__dirname, 'dist');
 
 let glob = require('glob');
 
@@ -169,10 +157,7 @@ module.exports = {
         //定义全局变量
         new webpack.DefinePlugin({
             'process.env': {
-                NODE_ENV: JSON.stringify(process.env.NODE_ENV),
-                test: process.env.test,
-                pre: process.env.pre,
-                HOME_DOMAIN:JSON.stringify(domain)
+                NODE_ENV: JSON.stringify(process.env.NODE_ENV)
             }
         }),
 

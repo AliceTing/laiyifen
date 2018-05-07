@@ -204,7 +204,8 @@
 
                     <!--折线图：月视图、日视图>-->
                     <lineItem :total="orderDataArr" :time="time" :type="type" :mondayTime="mondayTime"
-                              :oneDayLong="oneDayLong" :month="month" :timeStamp="timeStamp" :curTimeStamp="curTimeStamp"></lineItem>
+                              :oneDayLong="oneDayLong" :month="month" :timeStamp="timeStamp"
+                              :curTimeStamp="curTimeStamp"></lineItem>
 
                     <!--数据统计模块-->
                     <statisticsItem :total="orderDataArr" :time="time" :type="type" :day="day"></statisticsItem>
@@ -414,7 +415,8 @@
                 //年视图渠道或者省份切换
                 showWay: 1,
                 stompClient: null,
-                oneDayLong: 0
+                oneDayLong: 0,
+                orderDataArr: []
             }
         },
         created() {
@@ -469,8 +471,7 @@
                             break;
                     }
                     me.stompClient.subscribe(url, function (msg) {
-                        console.log(11111, msg);
-                        //TODO 实时数据替换接口返回数据
+                        me.orderDataArr = JSON.parse(msg.body);
                     });
                 });
             },
@@ -781,9 +782,15 @@
         },
         computed: {
             ...mapState({
-                orderDataArr: state => state.orderAnalyze.orderDataArr,
+                orderData: state => state.orderAnalyze.orderDataArr,
             })
         },
+        watch: {
+            orderData() {
+                let me = this;
+                me.orderDataArr = me.orderData;
+            }
+        }
     }
 </script>
 

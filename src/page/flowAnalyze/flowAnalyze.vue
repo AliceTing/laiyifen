@@ -24,7 +24,7 @@
         font-size: px2rem(30);
         .order_type_item {
             position: relative;
-            height: px2rem(87);
+            height: px2rem(86);
             font-size: px2rem(24);
             overflow: hidden;
             &.current {
@@ -105,6 +105,7 @@
             }
         }
     }
+
     //渠道表格
     .table {
         width: 100%;
@@ -172,12 +173,13 @@
 
                     <!--柱状图：年视图、周视图-->
                     <histogramItem :total="flowDataArr" :time="time" :type="type" :oneDayLong="oneDayLong"
-                    :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime"
-                    :year="year"></histogramItem>
+                                   :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime"
+                                   :year="year"></histogramItem>
 
                     <!--折线图：月视图、日视图>-->
                     <lineItem :total="flowDataArr" :time="time" :type="type" :mondayTime="mondayTime"
-                              :oneDayLong="oneDayLong" :year="year" :month="month" :timeStamp="timeStamp" :curTimeStamp="curTimeStamp"></lineItem>
+                              :oneDayLong="oneDayLong" :month="month" :timeStamp="timeStamp"
+                              :curTimeStamp="curTimeStamp"></lineItem>
 
                     <!--数据统计模块-->
                     <statisticsItem :total="flowDataArr" :time="time" :type="type"></statisticsItem>
@@ -286,11 +288,11 @@
         },
         data() {
             return {
-                arr:[],
+                arr: [],
                 //订单类型
                 flowTypeArr: [{
                     name: '访客数(UV)',
-                    current: true,
+                    current: false,
                     type: 0
                 }, {
                     name: '浏览量(PV)',
@@ -306,7 +308,7 @@
                     type: 3
                 }, {
                     name: '客单价',
-                    current: false,
+                    current: true,
                     type: 4
                 }, {
                     name: '转化率',
@@ -317,7 +319,7 @@
                 timeTypeArr: [{
                     name: '日',
                     time: 'day',
-                    current: true
+                    current: false
                 }, {
                     name: '周',
                     time: 'week',
@@ -329,7 +331,7 @@
                 }, {
                     name: '年',
                     time: 'year',
-                    current: false
+                    current: true
                 }],
                 //当前视图类型，文字
                 name: '',
@@ -369,7 +371,7 @@
                 display: '',
                 stompClient: null,
                 oneDayLong: 0,
-                // flowDataArr:[]
+                flowDataArr: []
             }
         },
         created() {
@@ -438,8 +440,7 @@
                             break;
                     }
                     me.stompClient.subscribe(url, function (msg) {
-                        console.log(11111, JSON.parse(msg.body));
-                        //TODO 实时数据替换接口返回数据
+                        me.flowDataArr = JSON.parse(msg.body);
                     });
                 });
             },
@@ -741,9 +742,15 @@
         },
         computed: {
             ...mapState({
-                flowDataArr: state => state.flowAnalyze.flowDataArr,
+                flowData: state => state.flowAnalyze.flowDataArr,
             })
-    },
+        },
+        watch: {
+            flowData() {
+                let me = this;
+                me.flowDataArr = me.flowData;
+            }
+        }
     }
 </script>
 

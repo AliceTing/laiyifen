@@ -27,7 +27,6 @@
             total: '',
             type: '',
             time: '',
-            year: '',
             month: '',
             timeStamp: 0,
             curTimeStamp: 0,
@@ -44,8 +43,8 @@
             //年视图
             yearHistogramData(data) {
                 let me = this;
-                let thisYearX = me.year + '年';
-                let lastYearX = me.year - 1 + '年';
+                let thisYearX = new Date(me.timeStamp).Format('Y年');
+                let lastYearX = new Date(me.timeStamp).Format('Y') - 1 + '年';
                 let tmp = {
                     data: {
                         columns: ['xAxis', thisYearX, lastYearX],
@@ -66,49 +65,69 @@
                     }
                 };
                 if (!isEmpty(data)) {
-                    //当年数据
-                    me.rendYearData(data.curYearChartInfo, thisYearX, tmp);
-                    //去年数据
-                    me.rendYearData(data.lastYearChartInfo, lastYearX, tmp);
+                    //客单价
+                    if (me.type === 4) {
+                        me.rendYearData(data.curYearDetail, thisYearX, tmp, 'this');
+                        me.rendYearData(data.preYearDetail, lastYearX, tmp, 'last');
+                    } else {
+                        //其他
+                        me.rendYearData(data.curYearChartInfo, thisYearX, tmp);
+                        me.rendYearData(data.lastYearChartInfo, lastYearX, tmp);
+                    }
                 }
                 return tmp;
             },
             //年视图
-            rendYearData(arr, which, tmp) {
+            rendYearData(arr, which, tmp,diff) {
                 let me = this;
                 let dataType;
-                switch (me.type) {
-                    case 0:
-                        dataType = 'uv';
-                        break;
-                    case 1:
-                        dataType = 'pv';
-                        break;
-                    case 2:
-                        dataType = 'loginUv';
-                        break;
-                    case 3:
-                        dataType = 'orderUv';
-                        break;
-                    case 4:
-                        //todo 接口没客单价数据返回
-                        dataType = 'unitPrice';
-                        break;
-                    case 5:
-                        dataType = 'conversionRate';
-                        break;
-                }
                 if (!isEmpty(arr)) {
+                    switch (me.type) {
+                        case 0:
+                            dataType = 'uv';
+                            normalData(arr, which, tmp, dataType);
+                            break;
+                        case 1:
+                            dataType = 'pv';
+                            normalData(arr, which, tmp, dataType);
+                            break;
+                        case 2:
+                            dataType = 'loginUv';
+                            normalData(arr, which, tmp, dataType);
+                            break;
+                        case 3:
+                            dataType = 'orderUv';
+                            normalData(arr, which, tmp, dataType);
+                            break;
+                        case 4:
+                            specialData(arr, which, tmp, diff);
+                            break;
+                        case 5:
+                            dataType = 'conversionRate';
+                            normalData(arr, which, tmp, dataType);
+                            break;
+                    }
+                }
+                function normalData(arr, which, tmp, dataType) {
                     arr.map((el) => {
                         tmp.data.rows[el.month - 1][which] = el[dataType];
                     });
+                }
+
+                function specialData(arr, which, tmp, diff) {
+                    arr.map((el) => {
+                        if (Object.values(el) && Object.values(Object.values(el))) {
+                            console.log(Object.values(Object.values(el)));
+                            tmp.data.rows[Object.values(Object.values(el))[0].month][which] = Object.values(Object.values(el))[0][diff + 'YearUnitPrice'];
+                        }
+                    })
                 }
             },
             //月视图
             monthLineData(data) {
                 let me = this;
                 let thisYearMonthX = new Date(me.timeStamp).Format('Y年MM月');
-                let lastYearMonthX = new Date(me.timeStamp - me.oneDayLong * me.getDaysInMonth()).Format('Y年MM月');
+                let lastYearMonthX = new Date(me.timeStamp).Format('Y') - 1 + '年' + new Date(me.timeStamp).Format('MM月');
                 let tmp = {
                     data: {
                         columns: ['xAxis', thisYearMonthX, lastYearMonthX],
@@ -149,10 +168,15 @@
                     settings: {},
                 };
                 if (!isEmpty(data)) {
-                    //本年本月数据
-                    me.rendData(data.curMonthChartInfo, thisYearMonthX, tmp);
-                    //去年本月数据
-                    me.rendData(data.preYearMonthChartInfo, lastYearMonthX, tmp);
+                    //客单价
+                    if (me.type === 4) {
+                        me.rendMonthData(data.curMonthDetail, thisYearMonthX, tmp, 'this');
+                        me.rendMonthData(data.preYearMonthDetail, thisYearMonthX, tmp, 'last');
+                    } else {
+                        //其他
+                        me.rendMonthData(data.curMonthChartInfo, thisYearMonthX, tmp);
+                        me.rendMonthData(data.preMonthChartInfo, thisYearMonthX, tmp);
+                    }
                 }
                 return tmp;
             },
@@ -203,55 +227,69 @@
                 };
                 if (!isEmpty(data)) {
                     // 当天
-                    me.rendDayDate(data.curDayDetail, thisDayX, tmp);
+                    me.rendDayData(data.curDayDetail, thisDayX, tmp);
                     //昨天
-                    me.rendDayDate(data.preDayDetail, lastDayX, tmp);
+                    me.rendDayData(data.preDayDetail, lastDayX, tmp);
                 }
                 return tmp;
             },
-            rendData(arr, which, tmp) {
+            rendMonthData(arr, which, tmp, diff) {
                 let me = this;
-                let tmpData = [];
                 let dataType;
                 if (!isEmpty(arr)) {
                     switch (me.type) {
                         case 0:
                             dataType = 'uv';
+                            normalData(arr, which, tmp, dataType);
                             break;
                         case 1:
                             dataType = 'pv';
+                            normalData(arr, which, tmp, dataType);
                             break;
                         case 2:
                             dataType = 'loginUv';
+                            normalData(arr, which, tmp, dataType);
                             break;
                         case 3:
                             dataType = 'orderUv';
+                            normalData(arr, which, tmp, dataType);
                             break;
                         case 4:
-                            //todo 接口没客单价数据返回
-                            dataType = 'unitPrice';
+                            specialData(arr, which, tmp, diff);
                             break;
                         case 5:
                             dataType = 'conversionRate';
+                            normalData(arr, which, tmp, dataType);
                             break;
                     }
-                    arr.map((el) => {
-                        tmpData.push(el[dataType]);
-                    });
-                    //初始化时设定31天，实际展示要根据展示月天数
-                    for (let a = 0; a < 31 - me.getDaysInMonth(); a++) {
-                        tmp.data.rows.pop();
-                        tmpData.pop();
+
+                    function normalData(arr, which, tmp, dataType) {
+                        let tmpData = [];
+                        arr.map((el) => {
+                            tmpData.push(el[dataType]);
+                        });
+                        //初始化时设定31天，实际展示要根据展示月天数
+                        for (let a = 0; a < 31 - me.getDaysInMonth(); a++) {
+                            tmp.data.rows.pop();
+                            tmpData.pop();
+                        }
+                        tmpData.map((el, i) => {
+                            tmp.data.rows[i][which] = el;
+                        });
                     }
-                    tmpData.map((el, i) => {
-                        tmp.data.rows[i][which] = el;
-                    });
+                    function specialData(arr, which, tmp, diff) {
+                        arr.map((el, i) => {
+                            if (Object.values(el) && Object.values(el)[0][diff + 'MonthUnitPrice']) {
+                                tmp.data.rows[i][which] = Object.values(el)[0][diff + 'MonthUnitPrice'];
+                            }
+                        })
+                    }
                 }
             },
-            rendDayDate(arr, which, tmp) {
-                if (!isEmpty(arr)) {
-                    Object.values(arr).map((el, i) => {
-                        tmp.data.rows[i][which] = el;
+            rendDayData(obj, which, tmp) {
+                if (!isEmpty(obj)) {
+                    Object.keys(obj).sort().map((el, i) => {
+                        tmp.data.rows[i][which] = obj[el];
                     });
                 }
             },

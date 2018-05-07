@@ -21,9 +21,9 @@
             sundayTime: '',
             time: '',
             type: '',
-            timeStamp:0,
-            oneDayLong:0,
-            year:''
+            timeStamp: 0,
+            oneDayLong: 0,
+            year: ''
         },
         data() {
             return {
@@ -57,47 +57,65 @@
                     settings: {}
                 };
                 if (!isEmpty(data)) {
-                    //本周数据
-                    let curWeekChartInfo = data.curWeekChartInfo;
-                    me.rendData(curWeekChartInfo, thisWeekX, tmp);
-                    //上周数据
-                    let preWeekChartInfo = data.preWeekChartInfo;
-                    me.rendData(preWeekChartInfo, lastWeekX, tmp);
+                    //客单价
+                    if (me.type === 4) {
+                        me.rendData(data.curWeekDetail, thisWeekX, tmp, 'this');
+                        me.rendData(data.preWeekDetail, lastWeekX, tmp, 'last');
+                    } else {
+                        //其他
+                        me.rendData(data.curWeekChartInfo, thisWeekX, tmp);
+                        me.rendData(data.preWeekChartInfo, lastWeekX, tmp);
+                    }
                 }
                 return tmp;
             },
-            rendData(arr, which, tmp) {
+            rendData(arr, which, tmp, diff) {
                 let me = this;
-                let tmpData = [];
                 let dataType;
                 if (!isEmpty(arr)) {
                     switch (me.type) {
                         case 0:
                             dataType = 'uv';
+                            normalData(arr, which, tmp, dataType);
                             break;
                         case 1:
                             dataType = 'pv';
+                            normalData(arr, which, tmp, dataType);
                             break;
                         case 2:
                             dataType = 'loginUv';
+                            normalData(arr, which, tmp, dataType);
                             break;
                         case 3:
                             dataType = 'orderUv';
+                            normalData(arr, which, tmp, dataType);
                             break;
                         case 4:
-                            //todo 接口没客单价数据返回
-                            dataType = 'unitPrice';
+                            specialData(arr, which, tmp, diff);
                             break;
                         case 5:
                             dataType = 'conversionRate';
+                            normalData(arr, which, tmp, dataType);
                             break;
                     }
-                    arr.map((el) => {
-                        tmpData.push(el[dataType]);
-                    });
-                    tmpData.map((el, i) => {
-                        tmp.data.rows[i][which] = el;
-                    })
+
+                    function normalData(arr, which, tmp, dataType) {
+                        let tmpData = [];
+                        arr.map((el) => {
+                            tmpData.push(el[dataType]);
+                        });
+                        tmpData.map((el, i) => {
+                            tmp.data.rows[i][which] = el;
+                        })
+                    }
+
+                    function specialData(arr, which, tmp, diff) {
+                        arr.map((el, i) => {
+                            if (Object.values(el) && Object.values(el)[0][diff + 'WeekNuitPrice']) {
+                                tmp.data.rows[i][which] = Object.values(el)[0][diff + 'WeekNuitPrice'];
+                            }
+                        })
+                    }
                 }
             }
         },

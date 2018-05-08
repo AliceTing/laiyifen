@@ -143,8 +143,8 @@
 
 <template>
     <div class="container">
-        <v-touch @swipeleft="onSwipeLeft"
-                 @swiperight="onSwipeRight">
+        <!--<v-touch @swipeleft="onSwipeLeft"-->
+                 <!--@swiperight="onSwipeRight">-->
             <div class="tab_box">
                 <div class="tab_tit order_type_tit">
                     <div v-for="(typeItem,index) in flowTypeArr"
@@ -269,7 +269,7 @@
                     </template>
                 </div>
             </div>
-        </v-touch>
+        <!--</v-touch>-->
     </div>
 </template>
 

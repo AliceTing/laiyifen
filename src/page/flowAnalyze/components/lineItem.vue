@@ -118,7 +118,7 @@
                     arr.map((el) => {
                         if (Object.values(el) && Object.values(Object.values(el))) {
                             console.log(Object.values(Object.values(el)));
-                            tmp.data.rows[Object.values(Object.values(el))[0].month][which] = Object.values(Object.values(el))[0][diff + 'YearUnitPrice'];
+                            tmp.data.rows[Object.values(Object.values(el))[0].month - 1][which] = Object.values(Object.values(el))[0][diff + 'YearUnitPrice'];
                         }
                     })
                 }

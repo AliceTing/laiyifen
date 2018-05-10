@@ -107,8 +107,8 @@
                 </div>
                 <div class="item">
                     <div class="title">月环比</div>
-                    <div class="value" v-show="type === 0">{{total.monthPayAmountPercent?total.monthPayAmountPercent:0}}</div>
-                    <div class="value" v-show="type === 1">{{total.monthPayOrderNumPercent?total.monthPayOrderNumPercent:0}}</div>
+                    <div class="value" v-show="type === 0">{{total.monthAmountPercent?total.monthAmountPercent:0}}</div>
+                    <div class="value" v-show="type === 1">{{total.monthOrderNumPercent?total.monthOrderNumPercent:0}}</div>
                     <div class="value" v-show="type === 2">{{total.monthAvgAmountPercent?total.monthAvgAmountPercent:0}}</div>
                 </div>
                 <div class="item">

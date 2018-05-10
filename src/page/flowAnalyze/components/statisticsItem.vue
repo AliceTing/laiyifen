@@ -134,12 +134,12 @@
                 </div>
                 <div class="item">
                     <div class="title">前一月</div>
-                    <div class="value" v-show="type === 0">{{total.preWeekUV?total.preWeekUV:0}}</div>
-                    <div class="value" v-show="type === 1">{{total.preWeekPV?total.preWeekPV:0}}</div>
-                    <div class="value" v-show="type === 2">{{total.preWeekLoginUV?total.preWeekLoginUV:0}}</div>
-                    <div class="value" v-show="type === 3">{{total.preWeekOrderUV?total.preWeekOrderUV:0}}</div>
-                    <div class="value" v-show="type === 4">{{total.preWeekUnitPrice?total.preWeekUnitPrice:0}}</div>
-                    <div class="value" v-show="type === 5">{{total.preWeekConversionRate?total.preWeekConversionRate:0}}</div>
+                    <div class="value" v-show="type === 0">{{total.preMonthUV?total.preMonthUV:0}}</div>
+                    <div class="value" v-show="type === 1">{{total.preMonthPV?total.preMonthPV:0}}</div>
+                    <div class="value" v-show="type === 2">{{total.preMonthLoginUV?total.preMonthLoginUV:0}}</div>
+                    <div class="value" v-show="type === 3">{{total.preMonthOrderUV?total.preMonthOrderUV:0}}</div>
+                    <div class="value" v-show="type === 4">{{total.preMonthUnitPrice?total.preMonthUnitPrice:0}}</div>
+                    <div class="value" v-show="type === 5">{{total.preMonthConversionRate?total.preMonthConversionRate:0}}</div>
                 </div>
                 <div class="item">
                     <div class="title">去年同期</div>

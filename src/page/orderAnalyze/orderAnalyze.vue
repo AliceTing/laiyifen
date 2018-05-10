@@ -170,151 +170,151 @@
 <template>
     <div class="container">
         <!--<v-touch @swipeleft="onSwipeLeft"-->
-                 <!--@swiperight="onSwipeRight">-->
-            <div class="tab_box">
-                <div class="tab_tit order_type_tit">
-                    <div v-for="(typeItem,index) in orderTypeArr"
-                         :key="index"
-                         @click="onChangeParam(index,'type')"
-                         :class="{current : typeItem.current}"
-                         class="tab_item order_type_item">{{typeItem.name}}
+        <!--@swiperight="onSwipeRight">-->
+        <div class="tab_box">
+            <div class="tab_tit order_type_tit">
+                <div v-for="(typeItem,index) in orderTypeArr"
+                     :key="index"
+                     @click="onChangeParam(index,'type')"
+                     :class="{current : typeItem.current}"
+                     class="tab_item order_type_item">{{typeItem.name}}
+                </div>
+            </div>
+            <div class="tab-con">
+                <!--年、月、日、周视图tab-->
+                <div class="tab_tit time_type_tit">
+                    <div v-for="(timeItem,i) in timeTypeArr"
+                         :key="i"
+                         :class="{current : timeItem.current}"
+                         class="tab_item time_type_item"
+                         @click="onChangeParam(i,'time')">{{timeItem.name}}
                     </div>
                 </div>
-                <div class="tab-con">
-                    <!--年、月、日、周视图tab-->
-                    <div class="tab_tit time_type_tit">
-                        <div v-for="(timeItem,i) in timeTypeArr"
-                             :key="i"
-                             :class="{current : timeItem.current}"
-                             class="tab_item time_type_item"
-                             @click="onChangeParam(i,'time')">{{timeItem.name}}
+                <!--箭头切换-->
+                <div class="switch_time">
+                    <div class="btn_switch prev" v-show="prevShow" @click="switchTime(-1)"></div>
+                    <div class="btn_switch next" v-show="nextShow" @click="switchTime(1)"></div>
+                    <div class="current_time">{{display}}</div>
+                </div>
+
+                <!--柱状图：年视图、周视图-->
+                <histogramItem :total="orderDataArr" :time="time" :type="type" :oneDayLong="oneDayLong"
+                               :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime"
+                               :year="year"></histogramItem>
+
+                <!--折线图：月视图、日视图>-->
+                <lineItem :total="orderDataArr" :time="time" :type="type" :mondayTime="mondayTime"
+                          :oneDayLong="oneDayLong" :month="month" :timeStamp="timeStamp"
+                          :curTimeStamp="curTimeStamp"></lineItem>
+
+                <!--数据统计模块-->
+                <statisticsItem :total="orderDataArr" :time="time" :type="type" :day="day"></statisticsItem>
+
+                <!--省份、渠道-->
+                <div class="tab_box tab_ditch_province"
+                     v-show="!isEmpty(orderDataArr.channelStat)&&!isEmpty(orderDataArr.provinceStat)">
+                    <div class="tab_tit">
+                        <div v-for="(item,index) in ditchProvinceArr"
+                             :key="index"
+                             class="tab_item"
+                             :class="{current : item.current}"
+                             @click="onShowWay(index)">{{item.name}}
                         </div>
                     </div>
-                    <!--箭头切换-->
-                    <div class="switch_time">
-                        <div class="btn_switch prev" v-show="prevShow" @click="switchTime(-1)"></div>
-                        <div class="btn_switch next" v-show="nextShow" @click="switchTime(1)"></div>
-                        <div class="current_time">{{display}}</div>
-                    </div>
+                    <div class="tab_con">
+                        <!--渠道-->
+                        <template v-if="showWay === 1">
+                            <!--环形图-->
+                            <div class="ring_type">{{orderTypeArr[type].name}}</div>
+                            <ve-ring :data="yearPieData(orderDataArr).data"
+                                     :settings="yearPieData(orderDataArr).settings"></ve-ring>
+                            <!--表格-->
+                            <table class="table_ditch">
+                                <thead>
+                                <tr>
+                                    <th>渠道</th>
+                                    <th>{{orderTypeArr[type].name}}</th>
+                                    <th v-show="time === 'day'">日环比</th>
+                                    <th v-show="time === 'day'">周同比</th>
+                                    <th v-show="time === 'week'">周环比</th>
+                                    <th v-show="time === 'week' || time === 'day'">年同比</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr v-for="(item,index) in orderDataArr.channelStat" :key="index">
+                                    <td>{{item.channel}}</td>
+                                    <!--支付金额-->
+                                    <template v-if="type === 0">
+                                        <td>{{item.payAmount?item.payAmount:0}}</td>
+                                        <td v-show="time === 'day'">
+                                            {{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'day'">
+                                            {{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'day'">
+                                            {{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'week'">
+                                            {{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'week'">
+                                            {{item.yearPayAmountPercent?item.yearPayAmountPercent:0}}
+                                        </td>
+                                    </template>
+                                    <!--支付订单数-->
+                                    <template v-if="type === 1">
+                                        <td>{{item.payOrderNum?item.payOrderNum:0}}</td>
+                                        <td v-show="time === 'day'">
+                                            {{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'day'">
+                                            {{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'day'">
+                                            {{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'week'">
+                                            {{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'week'">
+                                            {{item.yearPayOrderNumPercent?item.yearPayOrderNumPercent:0}}
+                                        </td>
+                                    </template>
+                                    <!--单均价-->
+                                    <template v-if="type === 2">
+                                        <td>{{item.avgAmount?item.avgAmount:0}}</td>
+                                        <td v-show="time === 'day'">
+                                            {{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'day'">
+                                            {{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'day'">
+                                            {{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'week'">
+                                            {{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}
+                                        </td>
+                                        <td v-show="time === 'week'">
+                                            {{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}
+                                        </td>
+                                    </template>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </template>
 
-                    <!--柱状图：年视图、周视图-->
-                    <histogramItem :total="orderDataArr" :time="time" :type="type" :oneDayLong="oneDayLong"
-                                   :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime"
-                                   :year="year"></histogramItem>
-
-                    <!--折线图：月视图、日视图>-->
-                    <lineItem :total="orderDataArr" :time="time" :type="type" :mondayTime="mondayTime"
-                              :oneDayLong="oneDayLong" :month="month" :timeStamp="timeStamp"
-                              :curTimeStamp="curTimeStamp"></lineItem>
-
-                    <!--数据统计模块-->
-                    <statisticsItem :total="orderDataArr" :time="time" :type="type" :day="day"></statisticsItem>
-
-                    <!--省份、渠道-->
-                    <div class="tab_box tab_ditch_province"
-                         v-show="!isEmpty(orderDataArr.channelStat)&&!isEmpty(orderDataArr.provinceStat)">
-                        <div class="tab_tit">
-                            <div v-for="(item,index) in ditchProvinceArr"
-                                 :key="index"
-                                 class="tab_item"
-                                 :class="{current : item.current}"
-                                 @click="onShowWay(index)">{{item.name}}
-                            </div>
-                        </div>
-                        <div class="tab_con">
-                            <!--渠道-->
-                            <template v-if="showWay === 1">
-                                <!--环形图-->
-                                <div class="ring_type">{{orderTypeArr[type].name}}</div>
-                                <ve-ring :data="yearPieData(orderDataArr).data"
-                                         :settings="yearPieData(orderDataArr).settings"></ve-ring>
-                                <!--表格-->
-                                <table class="table_ditch">
-                                    <thead>
-                                    <tr>
-                                        <th>渠道</th>
-                                        <th>{{orderTypeArr[type].name}}</th>
-                                        <th v-show="time === 'day'">日环比</th>
-                                        <th v-show="time === 'day'">周同比</th>
-                                        <th v-show="time === 'week'">周环比</th>
-                                        <th v-show="time === 'week' || time === 'day'">年同比</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(item,index) in orderDataArr.channelStat" :key="index">
-                                        <td>{{item.channel}}</td>
-                                        <!--支付金额-->
-                                        <template v-if="type === 0">
-                                            <td>{{item.payAmount?item.payAmount:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.yearPayAmountPercent?item.yearPayAmountPercent:0}}
-                                            </td>
-                                        </template>
-                                        <!--支付订单数-->
-                                        <template v-if="type === 1">
-                                            <td>{{item.payOrderNum?item.payOrderNum:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.yearPayOrderNumPercent?item.yearPayOrderNumPercent:0}}
-                                            </td>
-                                        </template>
-                                        <!--单均价-->
-                                        <template v-if="type === 2">
-                                            <td>{{item.avgAmount?item.avgAmount:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}
-                                            </td>
-                                        </template>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </template>
-
-                            <!--省份-->
-                            <template v-if="showWay === 2">
-                                <!--条形图-->
-                                <ve-bar :data="yearBarData(orderDataArr).data"
-                                        :settings="yearBarData(orderDataArr).settings"></ve-bar>
-                            </template>
-                        </div>
+                        <!--省份-->
+                        <template v-if="showWay === 2">
+                            <!--条形图-->
+                            <ve-bar :data="yearBarData(orderDataArr).data"
+                                    :settings="yearBarData(orderDataArr).settings"></ve-bar>
+                        </template>
                     </div>
                 </div>
             </div>
+        </div>
         <!--</v-touch>-->
     </div>
 </template>

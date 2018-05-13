@@ -128,6 +128,7 @@
         }
         .tab_con {
             margin-top: px2rem(28);
+            padding-bottom: px2rem(40);
             .ring_type {
                 margin-bottom: px2rem(20);
                 color: #000;
@@ -168,7 +169,7 @@
         }
     }
 
-    .no_data_tips{
+    .no_data_tips {
         margin: 0 auto;
         padding: px2rem(40) 0;
         color: #999;
@@ -214,123 +215,124 @@
 <template>
     <div class="container">
         <!--<v-touch @swipeleft="onSwipeLeft"-->
-                 <!--@swiperight="onSwipeRight" @pandown="onPanStart($event)" @panmove="onPanmove($event)">-->
-            <div class="tab_box">
-                <div class="tab_tit order_type_tit">
-                    <div v-for="(typeItem,index) in flowTypeArr"
-                         :key="index"
-                         @click="onChangeParam(index,'type')"
-                         :class="{current : typeItem.current}"
-                         class="tab_item order_type_item">{{typeItem.name}}
+        <!--@swiperight="onSwipeRight" @pandown="onPanStart($event)" @panmove="onPanmove($event)">-->
+        <div class="tab_box">
+            <div class="tab_tit order_type_tit">
+                <div v-for="(typeItem,index) in flowTypeArr"
+                     :key="index"
+                     @click="onChangeParam(index,'type')"
+                     :class="{current : typeItem.current}"
+                     class="tab_item order_type_item">{{typeItem.name}}
+                </div>
+            </div>
+            <div class="tab-con">
+                <!--年、月、日、周视图tab-->
+                <div class="tab_tit time_type_tit">
+                    <div v-for="(timeItem,i) in timeTypeArr"
+                         :key="i"
+                         :class="{current : timeItem.current}"
+                         class="tab_item time_type_item"
+                         @click="onChangeParam(i,'time')">{{timeItem.name}}
                     </div>
                 </div>
-                <div class="tab-con">
-                            <!--年、月、日、周视图tab-->
-                            <div class="tab_tit time_type_tit">
-                                <div v-for="(timeItem,i) in timeTypeArr"
-                                     :key="i"
-                                     :class="{current : timeItem.current}"
-                                     class="tab_item time_type_item"
-                                     @click="onChangeParam(i,'time')">{{timeItem.name}}
-                                </div>
-                            </div>
-                            <!--箭头切换-->
-                            <div class="switch_time">
-                                <div class="btn_switch prev" v-show="prevShow" @click="switchTime(-1)"></div>
-                                <div class="btn_switch next" v-show="nextShow" @click="switchTime(1)"></div>
-                                <div class="current_time">{{display}}</div>
-                            </div>
+                <!--箭头切换-->
+                <div class="switch_time">
+                    <div class="btn_switch prev" v-show="prevShow" @click="switchTime(-1)"></div>
+                    <div class="btn_switch next" v-show="nextShow" @click="switchTime(1)"></div>
+                    <div class="current_time">{{display}}</div>
+                </div>
 
-                            <!--柱状图：年视图、周视图-->
-                            <histogramItem :total="flowDataArr" :time="time" :type="type" :oneDayLong="oneDayLong"
-                                           :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime"
-                                           :year="year"></histogramItem>
+                <!--柱状图：年视图、周视图-->
+                <histogramItem :total="flowDataArr" :time="time" :type="type" :oneDayLong="oneDayLong"
+                               :timeStamp="timeStamp" :mondayTime="mondayTime" :sundayTime="sundayTime"
+                               :year="year"></histogramItem>
 
-                            <!--折线图：月视图、日视图>-->
-                            <lineItem :total="flowDataArr" :time="time" :type="type" :mondayTime="mondayTime"
-                                      :oneDayLong="oneDayLong" :month="month" :timeStamp="timeStamp"
-                                      :curTimeStamp="curTimeStamp"></lineItem>
+                <!--折线图：月视图、日视图>-->
+                <lineItem :total="flowDataArr" :time="time" :type="type" :mondayTime="mondayTime"
+                          :oneDayLong="oneDayLong" :month="month" :timeStamp="timeStamp"
+                          :curTimeStamp="curTimeStamp"></lineItem>
 
-                            <!--数据统计模块-->
-                            <statisticsItem :total="flowDataArr" :time="time" :type="type"></statisticsItem>
+                <!--数据统计模块-->
+                <statisticsItem :total="flowDataArr" :time="time" :type="type"></statisticsItem>
 
-                            <!--渠道、页面-->
-                            <div class="tab_box tab_ditch_province"
-                                 v-show="!isEmpty(flowDataArr.channelStat)&&!isEmpty(flowDataArr.pageStat)">
-                                <div class="tab_tit">
-                                    <div v-for="(item,index) in ditchProvinceArr"
-                                         :key="index"
-                                         class="tab_item"
-                                         :class="{current : item.current}"
-                                         @click="onShowWay(index)">{{item.name}}
-                                    </div>
-                                </div>
-                                <div class="tab_con">
-                                    <!--渠道-->
-                                    <template v-if="showWay === 1">
-                                        <!--环形图-->
-                                        <div class="ring_type">{{flowTypeArr[type].name}}</div>
-                                        <ve-ring :data="yearPieData(flowDataArr).data"
-                                                 :settings="yearPieData(flowDataArr).settings"
-                                                 :tooltip="yearPieData(flowDataArr).tooltip"></ve-ring>
-                                        <!--渠道表格-->
-                                        <template v-if="!isEmpty(flowDataArr.channelStat)">
-                                            <!--表格-->
-                                            <table class="table" v-if="!isEmpty(flowDataArr.channelStat[0].channel)">
-                                                <thead>
-                                                <tr>
-                                                    <th>渠道</th>
-                                                    <th>{{flowTypeArr[type].name}}</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr v-for="(item,index) in flowDataArr.channelStat" :key="index">
-                                                    <td>{{item.channel}}</td>
-                                                    <!--UV-->
-                                                    <template v-if="type === 0">
-                                                        <td>{{item.uv?item.uv:0}}</td>
-                                                    </template>
-                                                    <!--PV-->
-                                                    <template v-if="type === 1">
-                                                        <td>{{item.pv?item.pv:0}}</td>
-                                                    </template>
-                                                    <!--登录用户数-->
-                                                    <template v-if="type === 2">
-                                                        <td>{{item.loginUV?item.loginUV:0}}</td>
-                                                    </template>
-                                                    <!--下单用户数-->
-                                                    <template v-if="type === 3">
-                                                        <td>{{item.orderUV?item.orderUV:0}}</td>
-                                                    </template>
-                                                    <!--客单价-->
-                                                    <template v-if="type === 4">
-                                                        <td>{{item.unitPrice?item.unitPrice:0}}</td>
-                                                    </template>
-                                                    <!--转化率-->
-                                                    <template v-if="type === 5">
-                                                        <td>{{item.conversionRate?item.conversionRate:0}}</td>
-                                                    </template>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                        </template>
-                                    </template>
-
-                                    <!--页面-->
-                                    <template v-if="showWay === 2">
-                                        <div v-if="!isEmpty(flowDataArr.pageStat) && type <= 1">
-                                            <ve-bar :data="yearBarData(flowDataArr).data"
-                                                    :settings="yearBarData(flowDataArr).settings"
-                                                    :series="yearBarData(flowDataArr).series"></ve-bar>
-                                        </div>
-                                        <div class="no_data_tips" v-else>
-                                            暂无数据
-                                        </div>
-                                    </template>
-                                </div>
-                            </div>
+                <!--渠道、页面-->
+                <div class="tab_box tab_ditch_province"
+                     v-show="!isEmpty(flowDataArr.channelStat)&&!isEmpty(flowDataArr.pageStat)">
+                    <div class="tab_tit">
+                        <div v-for="(item,index) in ditchProvinceArr"
+                             :key="index"
+                             class="tab_item"
+                             :class="{current : item.current}"
+                             @click="onShowWay(index)">{{item.name}}
                         </div>
+                    </div>
+                    <div class="tab_con">
+                        <!--渠道-->
+                        <template v-if="showWay === 1">
+                            <!--环形图-->
+                            <div class="ring_type">{{flowTypeArr[type].name}}</div>
+                            <ve-ring :data="yearPieData(flowDataArr).data"
+                                     :settings="yearPieData(flowDataArr).settings"
+                                     :tooltip="yearPieData(flowDataArr).tooltip"></ve-ring>
+                            <!--渠道表格-->
+                            <template v-if="!isEmpty(flowDataArr.channelStat)">
+                                <!--表格-->
+                                <table class="table" v-if="!isEmpty(flowDataArr.channelStat[0].channel)">
+                                    <thead>
+                                    <tr>
+                                        <th>渠道</th>
+                                        <th>{{flowTypeArr[type].name}}</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr v-for="(item,index) in flowDataArr.channelStat" :key="index">
+                                        <td>{{item.channel}}</td>
+                                        <!--UV-->
+                                        <template v-if="type === 0">
+                                            <td>{{item.uv?item.uv:0}}</td>
+                                        </template>
+                                        <!--PV-->
+                                        <template v-if="type === 1">
+                                            <td>{{item.pv?item.pv:0}}</td>
+                                        </template>
+                                        <!--登录用户数-->
+                                        <template v-if="type === 2">
+                                            <td>{{item.loginUV?item.loginUV:0}}</td>
+                                        </template>
+                                        <!--下单用户数-->
+                                        <template v-if="type === 3">
+                                            <td>{{item.orderUV?item.orderUV:0}}</td>
+                                        </template>
+                                        <!--客单价-->
+                                        <template v-if="type === 4">
+                                            <td>{{item.unitPrice?item.unitPrice:0}}</td>
+                                        </template>
+                                        <!--转化率-->
+                                        <template v-if="type === 5">
+                                            <td>{{item.conversionRate?item.conversionRate:0}}</td>
+                                        </template>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </template>
+                        </template>
+
+                        <!--页面-->
+                        <template v-if="showWay === 2">
+                            <div v-if="!isEmpty(flowDataArr.pageStat) && type <= 1">
+                                <ve-bar :data="yearBarData(flowDataArr).data"
+                                        :settings="yearBarData(flowDataArr).settings"
+                                        :grid="yearBarData(flowDataArr).grid"></ve-bar>
+                            </div>
+                            <!--:series="yearBarData(flowDataArr).series"-->
+                            <div class="no_data_tips" v-else>
+                                暂无数据
+                            </div>
+                        </template>
+                    </div>
+                </div>
             </div>
+        </div>
         <!--</v-touch>-->
     </div>
 </template>
@@ -565,9 +567,9 @@
                         delete me.param.day;
                         me.param.startTime = new Date(me.mondayTime).Format('Y-MM-dd');
                         me.param.endTime = new Date(me.sundayTime).Format('Y-MM-dd');
-                        if(new Date(me.mondayTime).Format('Y') === new Date(me.sundayTime).Format('Y')){
+                        if (new Date(me.mondayTime).Format('Y') === new Date(me.sundayTime).Format('Y')) {
                             me.display = new Date(me.mondayTime).Format('MM月dd日') + '至' + new Date(me.sundayTime).Format('MM月dd日');
-                        }else{
+                        } else {
                             me.display = new Date(me.mondayTime).Format('Y年MM月dd日') + '至' + new Date(me.sundayTime).Format('Y年MM月dd日');
                         }
                         break;
@@ -742,7 +744,7 @@
                         radius: [104, 50],
                         label: {
                             position: 'inside',
-                            formatter: '{@channel}'+'%'
+                            formatter: '{@channel}' + '%'
                         }
                     }
                 };
@@ -750,22 +752,22 @@
                 switch (me.type) {
                     case 0:
                         dataType = 'uv';
-                        normal(channelStat,tmp,dataType);
+                        normal(channelStat, tmp, dataType);
                         break;
                     case 1:
                         dataType = 'pv';
-                        normal(channelStat,tmp,dataType);
+                        normal(channelStat, tmp, dataType);
                         break;
                     case 2:
                         dataType = 'loginUV';
-                        normal(channelStat,tmp,dataType);
+                        normal(channelStat, tmp, dataType);
                         break;
                     case 3:
                         dataType = 'orderUV';
                         break;
                     case 4:
                         dataType = 'unitPrice';
-                        normal(channelStat,tmp,dataType);
+                        normal(channelStat, tmp, dataType);
                         break;
                     case 5:
                         dataType = 'conversionRate';
@@ -773,25 +775,25 @@
                             //总数
                             let amount = 0;
                             channelStat.map((el) => {
-                                console.log(el[dataType],'el');
-                                amount += (el[dataType].replace(/%/, "")*1000);
+                                console.log(el[dataType], 'el');
+                                amount += (el[dataType].replace(/%/, "") * 1000);
                                 console.log(amount);
                             });
                             channelStat.map((el) => {
                                 tmp.data.rows.push({
                                     'channel': el.channel,
-                                    'percent': ((el[dataType].replace(/%/, "")*1000 / amount).toFixed(5) * 100).toFixed(1)
+                                    'percent': ((el[dataType].replace(/%/, "") * 1000 / amount).toFixed(5) * 100).toFixed(1)
                                 });
                             });
                         }
                         break;
                 }
-                function normal(channelStat,tmp,dataType){
+
+                function normal(channelStat, tmp, dataType) {
                     if (channelStat) {
                         //总数
                         let amount = 0;
                         channelStat.map((el) => {
-                            console.log(el,'el');
                             amount += el[dataType];
                         });
                         channelStat.map((el) => {
@@ -802,7 +804,6 @@
                         });
                     }
                 }
-                // console.log('tmp',tmp);
                 return tmp;
             },
             //渲染年数据-页面
@@ -825,10 +826,12 @@
                         columns: ['xAxis', dataTypeText],
                         rows: []
                     },
-                    series:[{
-                        type: 'bar',
-                        barCategoryGap: '100%'
-                    }],
+                    grid: {
+                        top: 0,
+                        left: -10,
+                        right: 20,
+                        bottom: 0,
+                    },
                     settings: {
                         label: {
                             show: true,

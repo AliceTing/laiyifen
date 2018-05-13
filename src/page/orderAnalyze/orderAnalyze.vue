@@ -125,6 +125,7 @@
         }
         .tab_con {
             margin-top: px2rem(30);
+            padding-bottom: px2rem(40);
             .ring_type {
                 margin-bottom: px2rem(20);
                 color: #000;
@@ -311,7 +312,8 @@
                             <template v-if="showWay === 2">
                                 <!--条形图-->
                                 <ve-bar :data="yearBarData(orderDataArr).data"
-                                        :settings="yearBarData(orderDataArr).settings"></ve-bar>
+                                        :settings="yearBarData(orderDataArr).settings"
+                                        :grid="yearBarData(orderDataArr).grid"></ve-bar>
                             </template>
                         </div>
                     </div>
@@ -765,6 +767,13 @@
                     data: {
                         columns: ['xAxis', dataTypeText],
                         rows: []
+                    },
+                    grid: {
+                        top: 0,
+                        left: -10,
+                        right: 20,
+                        bottom: 0,
+                        containLabel: true
                     },
                     settings: {
                         label: {

@@ -16,6 +16,7 @@ Vue.$loading = Vue.prototype.$loading = Loading;
 import VueTouch from 'vue-touch';
 import vuescroll from 'vue-scroll';
 import VCharts from 'v-charts'
+import echarts from "echarts"
 
 
 Vue.mixin(mixin);

@@ -15,8 +15,7 @@ let ENV = process.env.NODE_ENV || 'development';
 let pre = process.env.pre;
 let test = process.env.test;
 let isDev = (ENV === 'development');
-// let publicPath = '//m.lyf.edu.laiyifen.com';
-let publicPath = '//m.lyf.edu.laiyifen.com';
+let publicPath = '//m.lyf.edu.laiyifen.com/tianpan/';
 let outPath = path.join(__dirname, 'dist');
 
 let glob = require('glob');

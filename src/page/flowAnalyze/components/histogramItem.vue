@@ -5,7 +5,8 @@
     <div class="year_histogram">
         <div v-show="time === 'week'">
             <ve-histogram :data="weekHistogramData(total).data"
-                          :settings="weekHistogramData(total).settings"></ve-histogram>
+                          :settings="weekHistogramData(total).settings"
+                          :colors="weekHistogramData(total).colors"></ve-histogram>
         </div>
     </div>
 </template>
@@ -39,8 +40,20 @@
                 let me = this;
                 let oneWeek = 7;
                 let oneDayLong = 24 * 60 * 60 * 1000;
-                let thisWeekX = new Date(me.mondayTime).Format('Y年MM月dd日') + '至' + new Date(me.sundayTime).Format('Y年MM月dd日');
-                let lastWeekX = new Date(me.mondayTime - oneWeek * oneDayLong).Format('Y年MM月dd日') + '至' + new Date(me.sundayTime - oneWeek * oneDayLong).Format('Y年MM月dd日');
+                let thisWeekX;
+                let lastWeekX;
+                thisWeekX = ifShowYear(me.mondayTime,me.sundayTime);
+                lastWeekX = ifShowYear(me.mondayTime - oneWeek * oneDayLong,me.sundayTime- oneWeek * oneDayLong);
+                //不跨年不需要显示年
+                function ifShowYear(start,end) {
+                    let tmp;
+                    if(new Date(start).Format('Y') === new Date(end).Format('Y')){
+                        tmp = new Date(start).Format('MM月dd日') + '至' + new Date(end).Format('MM月dd日');
+                    }else{
+                        tmp = new Date(start).Format('Y年MM月dd日') + '至' + new Date(end).Format('Y年MM月dd日');
+                    }
+                    return tmp;
+                }
                 let tmp = {
                     data: {
                         columns: ['xAxis', thisWeekX, lastWeekX],
@@ -54,6 +67,7 @@
                             {'xAxis': '周日', [thisWeekX]: 0, [lastWeekX]: 0}
                         ]
                     },
+                    colors: ['#ff6900', 'rgba(255,105,0,.4)'],
                     settings: {}
                 };
                 if (!isEmpty(data)) {

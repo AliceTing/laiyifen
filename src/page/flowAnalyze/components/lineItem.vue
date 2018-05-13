@@ -5,15 +5,18 @@
     <div class="line">
         <div v-show="time === 'day'">
             <ve-line :data="dayLineData(total).data"
-                     :settings="dayLineData(total).settings"></ve-line>
+                     :settings="dayLineData(total).settings"
+                     :colors="dayLineData(total).colors"></ve-line>
         </div>
         <div v-show="time ==='month'">
             <ve-line :data="monthLineData(total).data"
-                     :settings="monthLineData(total).settings"></ve-line>
+                     :settings="monthLineData(total).settings"
+                     :colors="monthLineData(total).colors"></ve-line>
         </div>
         <div v-show="time ==='year'">
             <ve-line :data="yearHistogramData(total).data"
-                     :settings="yearHistogramData(total).settings"></ve-line>
+                     :settings="yearHistogramData(total).settings"
+                     :colors="yearHistogramData(total).colors"></ve-line>
         </div>
     </div>
 </template>
@@ -62,7 +65,9 @@
                             {'xAxis': '11月', [thisYearX]: 0, [lastYearX]: 0},
                             {'xAxis': '12月', [thisYearX]: 0, [lastYearX]: 0}
                         ]
-                    }
+                    },
+                    colors:['#ff6900','rgba(255,105,0,.4)'],
+                    settings:{}
                 };
                 if (!isEmpty(data)) {
                     //客单价
@@ -117,7 +122,6 @@
                 function specialData(arr, which, tmp, diff) {
                     arr.map((el) => {
                         if (Object.values(el) && Object.values(Object.values(el))) {
-                            console.log(Object.values(Object.values(el)));
                             tmp.data.rows[Object.values(Object.values(el))[0].month - 1][which] = Object.values(Object.values(el))[0][diff + 'YearUnitPrice'];
                         }
                     })
@@ -165,6 +169,7 @@
                             {'xAxis': '31', [thisYearMonthX]: 0, [lastYearMonthX]: 0}
                         ]
                     },
+                    colors:['#ff6900','rgba(255,105,0,.4)'],
                     settings: {},
                 };
                 if (!isEmpty(data)) {
@@ -223,6 +228,7 @@
                             {'xAxis': '24', [thisDayX]: 0, [lastDayX]: 0},
                         ]
                     },
+                    colors:['#ff6900','rgba(255,105,0,.4)'],
                     settings: {},
                 };
                 if (!isEmpty(data)) {

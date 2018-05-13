@@ -65,7 +65,7 @@
         height: px2rem(84);
         line-height: px2rem(84);
         text-align: center;
-        @include font-dpr(17);
+        font-size: px2rem(34);
         .btn_switch {
             position: absolute;
             top: 0;
@@ -112,8 +112,8 @@
                 height: px2rem(58);
                 border-left: solid 1px $mainColor;
                 color: $mainColor;
-                line-height: px2rem(56);
-                @include font-dpr(10);
+                line-height: px2rem(58);
+                font-size: px2rem(28);
                 &:first-child {
                     border-left: none;
                 }
@@ -128,7 +128,7 @@
             .ring_type {
                 margin-bottom: px2rem(20);
                 color: #000;
-                font-size: px2rem(30);
+                font-size: px2rem(28);
                 text-align: center;
             }
         }
@@ -169,6 +169,7 @@
 
 <template>
     <div class="container">
+
         <!--<v-touch @swipeleft="onSwipeLeft"-->
         <!--@swiperight="onSwipeRight">-->
         <div class="tab_box">
@@ -309,7 +310,7 @@
                         <template v-if="showWay === 2">
                             <!--条形图-->
                             <ve-bar :data="yearBarData(orderDataArr).data"
-                                    :settings="yearBarData(orderDataArr).settings"></ve-bar>
+                            :settings="yearBarData(orderDataArr).settings"></ve-bar>
                         </template>
                     </div>
                 </div>
@@ -352,11 +353,11 @@
                 timeTypeArr: [{
                     name: '日',
                     time: 'day',
-                    current: true
+                    current: false
                 }, {
                     name: '周',
                     time: 'week',
-                    current: false
+                    current: true
                 }, {
                     name: '月',
                     time: 'month',
@@ -522,7 +523,11 @@
                         delete me.param.day;
                         me.param.startTime = new Date(me.mondayTime).Format('Y-MM-dd');
                         me.param.endTime = new Date(me.sundayTime).Format('Y-MM-dd');
-                        me.display = new Date(me.mondayTime).Format('Y年MM月dd日') + '至' + new Date(me.sundayTime).Format('Y年MM月dd日');
+                        if(new Date(me.mondayTime).Format('Y') === new Date(me.sundayTime).Format('Y')){
+                            me.display = new Date(me.mondayTime).Format('MM月dd日') + '至' + new Date(me.sundayTime).Format('MM月dd日');
+                        }else{
+                            me.display = new Date(me.mondayTime).Format('Y年MM月dd日') + '至' + new Date(me.sundayTime).Format('Y年MM月dd日');
+                        }
                         break;
                     case 'day':
                         if (me.timeStamp === me.curTimeStamp) {
@@ -762,7 +767,7 @@
                 let provinceStat = orderData.provinceStat;
                 if (provinceStat) {
                     provinceStat.map((el) => {
-                        tmp.data.rows.push({
+                        tmp.data.rows.unshift({
                             'xAxis': el.province,
                             [dataTypeText]: Math.round(el[dataType])
                         });

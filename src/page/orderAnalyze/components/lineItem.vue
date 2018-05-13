@@ -5,11 +5,13 @@
     <div class="line">
         <div v-show="time === 'day'">
             <ve-line :data="dayLineData(total).data"
-                     :settings="dayLineData(total).settings"></ve-line>
+                     :settings="dayLineData(total).settings"
+                     :colors="dayLineData(total).colors"></ve-line>
         </div>
         <div v-show="time ==='month'">
             <ve-line :data="monthLineData(total).data"
-                     :settings="monthLineData(total).settings"></ve-line>
+                     :settings="monthLineData(total).settings"
+                     :colors="monthLineData(total).colors"></ve-line>
         </div>
     </div>
 </template>
@@ -78,6 +80,7 @@
                             {'xAxis': '31', [thisYearMonthX]: 0, [lastYearMonthX]: 0}
                         ]
                     },
+                    colors:['#ff6900','rgba(255,105,0,.4)'],
                     settings: {},
                 };
                 if (!isEmpty(data)) {
@@ -133,6 +136,7 @@
                             {'xAxis': '24', [thisDayX]: 0, [lastDayX]: 0},
                         ]
                     },
+                    colors:['#ff6900','rgba(255,105,0,.4)'],
                     settings: {},
                 };
                 if (!isEmpty(data)) {

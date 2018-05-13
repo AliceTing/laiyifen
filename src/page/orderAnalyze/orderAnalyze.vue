@@ -228,7 +228,8 @@
                             <!--环形图-->
                             <div class="ring_type">{{orderTypeArr[type].name}}</div>
                             <ve-ring :data="yearPieData(orderDataArr).data"
-                                     :settings="yearPieData(orderDataArr).settings"></ve-ring>
+                                     :settings="yearPieData(orderDataArr).settings"
+                                     :tooltip="yearPieData(orderDataArr).tooltip"></ve-ring>
                             <!--表格-->
                             <table class="table_ditch">
                                 <thead>
@@ -701,6 +702,9 @@
                         columns: ['channel', 'percent'],
                         rows: []
                     },
+                    tooltip: {
+                        show: false
+                    },
                     settings: {
                         dataType: 'percent',
                         selectedMode: 'single',
@@ -708,7 +712,7 @@
                         radius: [104, 50],
                         label: {
                             position: 'inside',
-                            formatter: ''
+                            formatter: '{@channel}'+'%'
                         }
                     }
                 };
@@ -724,8 +728,6 @@
                             'channel': el.channel,
                             'percent': ((el[dataType] / amount).toFixed(5) * 100).toFixed(1)
                         });
-
-                        tmp.settings.label.formatter = '{@channel}' + '%';
                     });
                 }
                 return tmp;

@@ -271,7 +271,8 @@
                                 <!--环形图-->
                                 <div class="ring_type">{{flowTypeArr[type].name}}</div>
                                 <ve-ring :data="yearPieData(flowDataArr).data"
-                                         :settings="yearPieData(flowDataArr).settings"></ve-ring>
+                                         :settings="yearPieData(flowDataArr).settings"
+                                         :tooltip="yearPieData(flowDataArr).tooltip"></ve-ring>
                                 <!--渠道表格-->
                                 <template v-if="!isEmpty(flowDataArr.channelStat)">
                                     <!--表格-->
@@ -328,12 +329,6 @@
                             </template>
                         </div>
                     </div>
-
-
-                    <!--<template v-if="!isEmpty(flowDataArr.pageStat) && type <= 1">-->
-                        <!--<ve-bar :data="yearBarData(flowDataArr).data"-->
-                                <!--:settings="yearBarData(flowDataArr).settings"></ve-bar>-->
-                    <!--</template>-->
                 </div>
             </div>
         <!--</v-touch>-->
@@ -756,6 +751,9 @@
                         columns: ['channel', 'percent'],
                         rows: []
                     },
+                    tooltip: {
+                        show: false
+                    },
                     settings: {
                         dataType: 'percent',
                         selectedMode: 'single',
@@ -767,7 +765,6 @@
                         }
                     }
                 };
-                //todo
                 let channelStat = orderData.channelStat;
                 if (channelStat) {
                     //总数

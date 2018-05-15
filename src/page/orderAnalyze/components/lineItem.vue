@@ -42,42 +42,42 @@
             monthLineData(data) {
                 let me = this;
                 let thisYearMonthX = new Date(me.timeStamp).Format('Y年MM月');
-                let lastYearMonthX = new Date(me.timeStamp - me.oneDayLong * me.getDaysInMonth()).Format('Y年MM月');
+                let lastYearMonthX = new Date(me.timeStamp).Format('Y') - 1 + '年' + new Date(me.timeStamp).Format('MM月');
                 let tmp = {
                     data: {
                         columns: ['xAxis', thisYearMonthX, lastYearMonthX],
                         rows: [
-                            {'xAxis': '1', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '2', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '3', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '4', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '5', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '6', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '7', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '8', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '9', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '10', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '11', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '12', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '13', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '14', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '15', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '16', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '17', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '18', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '19', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '20', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '21', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '22', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '23', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '24', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '25', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '26', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '27', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '28', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '29', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '30', [thisYearMonthX]: 0, [lastYearMonthX]: 0},
-                            {'xAxis': '31', [thisYearMonthX]: 0, [lastYearMonthX]: 0}
+                            {'xAxis': '1', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '2', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '3', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '4', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '5', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '6', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '7', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '8', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '9', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '10', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '11', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '12', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '13', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '14', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '15', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '16', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '17', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '18', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '19', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '20', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '21', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '22', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '23', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '24', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '25', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '26', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '27', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '28', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '29', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '30', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            {'xAxis': '31', [thisYearMonthX]: null, [lastYearMonthX]: null}
                         ]
                     },
                     colors:['#ff6900','rgba(255,105,0,.4)'],
@@ -105,35 +105,36 @@
                 }else{
                     thisDayX = new Date(me.timeStamp).Format('Y年MM月dd日');
                 }
-                lastDayX = new Date(me.timeStamp - me.oneDayLong).Format('Y年MM月dd日');
+                // lastDayX = new Date(me.timeStamp - me.oneDayLong).Format('Y年MM月dd日');
+                lastDayX = '周同比';
                 let tmp = {
                     data: {
                         columns: ['xAxis', thisDayX, lastDayX],
                         rows: [
-                            {'xAxis': '1', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '2', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '3', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '4', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '5', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '6', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '7', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '8', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '9', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '10', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '11', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '12', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '13', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '14', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '15', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '16', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '17', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '18', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '19', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '20', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '21', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '22', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '23', [thisDayX]: 0, [lastDayX]: 0},
-                            {'xAxis': '24', [thisDayX]: 0, [lastDayX]: 0},
+                            {'xAxis': '1', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '2', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '3', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '4', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '5', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '6', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '7', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '8', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '9', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '10', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '11', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '12', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '13', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '14', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '15', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '16', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '17', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '18', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '19', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '20', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '21', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '22', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '23', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '24', [thisDayX]: null, [lastDayX]: null},
                         ]
                     },
                     colors:['#ff6900','rgba(255,105,0,.4)'],
@@ -143,8 +144,8 @@
                     // 当天
                     let curDayDetail = data.curDayDetail;
                     me.rendDayDate(curDayDetail,thisDayX,tmp);
-                    //昨天
-                    let preDayDetail = data.preDayDetail;
+                    //周同比
+                    let preDayDetail = data.preWeekDayDetail;
                     me.rendDayDate(preDayDetail,lastDayX,tmp);
                 }
                 return tmp;

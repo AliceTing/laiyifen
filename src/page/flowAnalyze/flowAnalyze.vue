@@ -320,11 +320,10 @@
                         <!--页面-->
                         <template v-if="showWay === 2">
                             <div v-if="!isEmpty(flowDataArr.pageStat) && type <= 1">
-                                <ve-bar :data="yearBarData(flowDataArr).data"
+                                <ve-bar height="1000px" :data="yearBarData(flowDataArr).data"
                                         :settings="yearBarData(flowDataArr).settings"
                                         :grid="yearBarData(flowDataArr).grid"></ve-bar>
                             </div>
-                            <!--:series="yearBarData(flowDataArr).series"-->
                             <div class="no_data_tips" v-else>
                                 暂无数据
                             </div>
@@ -827,7 +826,7 @@
                         rows: []
                     },
                     grid: {
-                        top: 0,
+                        top: 30,
                         left: -10,
                         right: 20,
                         bottom: 0,

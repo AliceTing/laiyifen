@@ -19,6 +19,27 @@
                 margin-top: px2rem(10);
                 font-size: px2rem(40);
             }
+            &:first-child{
+                float: none;
+                width: 100%;
+                height: px2rem(125);
+                padding: 0 0 0 px2rem(40);
+                background-color: #fff;
+                color: $mainColor;
+                text-align: left;
+                line-height: px2rem(125);
+                .title,
+                .value{
+                    display: inline-block;
+                }
+                .value{
+                    margin-top: 0;
+                    span{
+                        margin-left: px2rem(8);
+                        font-size: px2rem(24);
+                    }
+                }
+            }
         }
     }
 </style>
@@ -29,9 +50,9 @@
             <div v-show="time ==='day'">
                 <div class="item">
                     <div class="title">当日累计</div>
-                    <div class="value" v-show="type === 0">{{total.curDayTotalPayAmount?total.curDayTotalPayAmount:0}}元</div>
-                    <div class="value" v-show="type === 1">{{total.curDayPayOrderNum?total.curDayPayOrderNum:0}}件</div>
-                    <div class="value" v-show="type === 2">{{total.curDayAvgAmount?total.curDayAvgAmount:0}}元</div>
+                    <div class="value" v-show="type === 0">{{total.curDayTotalPayAmount?total.curDayTotalPayAmount:0}}<span>元</span>  </div>
+                    <div class="value" v-show="type === 1">{{total.curDayPayOrderNum?total.curDayPayOrderNum:0}}<span>件</span></div>
+                    <div class="value" v-show="type === 2">{{total.curDayAvgAmount?total.curDayAvgAmount:0}}<span>元</span></div>
                 </div>
                 <div class="item">
                     <div class="title">昨日累计</div>
@@ -62,9 +83,9 @@
             <div v-show="time ==='week'">
                 <div class="item">
                     <div class="title">当周累计</div>
-                    <div class="value" v-show="type === 0">{{total.thisWeekTotalPayAmount?total.thisWeekTotalPayAmount:0}}元</div>
-                    <div class="value" v-show="type === 1">{{total.thisWeekPayOrderNum?total.thisWeekPayOrderNum:0}}件</div>
-                    <div class="value" v-show="type === 2">{{total.thisWeekAvgAmount?total.thisWeekAvgAmount:0}}元</div>
+                    <div class="value" v-show="type === 0">{{total.thisWeekTotalPayAmount?total.thisWeekTotalPayAmount:0}}<span>元</span></div>
+                    <div class="value" v-show="type === 1">{{total.thisWeekPayOrderNum?total.thisWeekPayOrderNum:0}}<span>件</span></div>
+                    <div class="value" v-show="type === 2">{{total.thisWeekAvgAmount?total.thisWeekAvgAmount:0}}<span>元</span></div>
                 </div>
                 <div class="item">
                     <div class="title">上周累计</div>
@@ -95,9 +116,9 @@
             <div v-show="time ==='month'">
                 <div class="item">
                     <div class="title">当月累计</div>
-                    <div class="value" v-show="type === 0">{{total.thisMonthTotalPayAmount?total.thisMonthTotalPayAmount:0}}元</div>
-                    <div class="value" v-show="type === 1">{{total.thisMonthPayOrderNum?total.thisMonthPayOrderNum:0}}件</div>
-                    <div class="value" v-show="type === 2">{{total.thisMonthAvgAmount?total.thisMonthAvgAmount:0}}元</div>
+                    <div class="value" v-show="type === 0">{{total.thisMonthTotalPayAmount?total.thisMonthTotalPayAmount:0}}<span>元</span></div>
+                    <div class="value" v-show="type === 1">{{total.thisMonthPayOrderNum?total.thisMonthPayOrderNum:0}}<span>件</span></div>
+                    <div class="value" v-show="type === 2">{{total.thisMonthAvgAmount?total.thisMonthAvgAmount:0}}<span>元</span></div>
                 </div>
                 <div class="item">
                     <div class="title">上月累计</div>
@@ -128,9 +149,9 @@
             <div v-show="time ==='year'">
                 <div class="item">
                     <div class="title">当年累计</div>
-                    <div class="value" v-show="type === 0">{{total.thisYearTotalPayAmount?total.thisYearTotalPayAmount:0}}元</div>
-                    <div class="value" v-show="type === 1">{{total.thisYearPayOrderNum?total.thisYearPayOrderNum:0}}件</div>
-                    <div class="value" v-show="type === 2">{{total.thisYearAvgAmount?total.thisYearAvgAmount:0}}元</div>
+                    <div class="value" v-show="type === 0">{{total.thisYearTotalPayAmount?total.thisYearTotalPayAmount:0}}<span>元</span></div>
+                    <div class="value" v-show="type === 1">{{total.thisYearPayOrderNum?total.thisYearPayOrderNum:0}}<span>件</span></div>
+                    <div class="value" v-show="type === 2">{{total.thisYearAvgAmount?total.thisYearAvgAmount:0}}<span>元</span></div>
                 </div>
                 <div class="item">
                     <div class="title">去年累计</div>

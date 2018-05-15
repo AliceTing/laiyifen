@@ -1,12 +1,14 @@
 <style lang="scss" scoped>
     @import '../../public/assets/scss/mix.scss';
 
+    $mainColor: #ff6900;
+
     .container {
         background-color: #fff;
         .real_time {
             height: px2rem(88);
             padding: 0 px2rem(20);
-            color: #993300;
+            color: $mainColor;
             font-size: px2rem(30);
             line-height: px2rem(88);
         }
@@ -15,7 +17,7 @@
                 height: px2rem(84);
                 padding-left: px2rem(40);
                 background-color: #f8f8f8;
-                color: #000;
+                color: #333;
                 line-height: px2rem(84);
                 font-size: px2rem(32);
                 font-weight: bold;
@@ -29,11 +31,11 @@
                 height: px2rem(180);
                 padding-left: px2rem(40);
                 .key {
-                    color: #993300;
+                    color: $mainColor;
                     font-size: px2rem(28);
                 }
                 .value_box {
-                    color: #000;
+                    color: #333;
                     font-size: px2rem(20);
                     .value {
                         margin-right: px2rem(10);

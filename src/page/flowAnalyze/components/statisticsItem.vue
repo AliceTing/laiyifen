@@ -19,6 +19,27 @@
                 margin-top: px2rem(10);
                 font-size: px2rem(40);
             }
+            &:first-child{
+                float: none;
+                width: 100%;
+                height: px2rem(125);
+                padding: 0 0 0 px2rem(40);
+                background-color: #fff;
+                color: $mainColor;
+                text-align: left;
+                line-height: px2rem(125);
+                .title,
+                .value{
+                    display: inline-block;
+                }
+                .value{
+                    margin-top: 0;
+                    span{
+                        margin-left: px2rem(8);
+                        font-size: px2rem(24);
+                    }
+                }
+            }
         }
     }
 </style>

@@ -311,7 +311,7 @@
                             <!--省份-->
                             <template v-if="showWay === 2">
                                 <!--条形图-->
-                                <ve-bar :data="yearBarData(orderDataArr).data"
+                                <ve-bar height="800px" :data="yearBarData(orderDataArr).data"
                                         :settings="yearBarData(orderDataArr).settings"
                                         :grid="yearBarData(orderDataArr).grid"></ve-bar>
                             </template>
@@ -325,7 +325,7 @@
 
 <script>
     import {mapState, mapActions, mapMutations} from 'vuex';
-
+    import Vue from 'vue';
     import statisticsItem from './components/statisticsItem';
     import histogramItem from './components/histogramItem';
     import lineItem from './components/lineItem';
@@ -356,11 +356,11 @@
                 timeTypeArr: [{
                     name: '日',
                     time: 'day',
-                    current: false
+                    current: true
                 }, {
                     name: '周',
                     time: 'week',
-                    current: true
+                    current: false
                 }, {
                     name: '月',
                     time: 'month',
@@ -769,7 +769,7 @@
                         rows: []
                     },
                     grid: {
-                        top: 0,
+                        top: 30,
                         left: -10,
                         right: 20,
                         bottom: 0,
@@ -782,7 +782,8 @@
                         },
                         itemStyle: {
                             color: '#ff6900'
-                        }
+                        },
+                        'barCategoryGap': '70%'
                     }
                 };
                 let provinceStat = orderData.provinceStat;
@@ -794,6 +795,7 @@
                         });
                     });
                 }
+                console.log(tmp,'tmp');
                 return tmp;
             },
             //获取展示月的天数

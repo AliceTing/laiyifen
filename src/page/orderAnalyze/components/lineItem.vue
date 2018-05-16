@@ -27,7 +27,7 @@
             time: '',
             month: '',
             timeStamp: 0,
-            curTimeStamp:0,
+            curTimeStamp: 0,
             oneDayLong: 0
         },
         data() {
@@ -80,7 +80,7 @@
                             {'xAxis': '31', [thisYearMonthX]: null, [lastYearMonthX]: null}
                         ]
                     },
-                    colors:['#ff6900','rgba(255,105,0,.4)'],
+                    colors: ['#ff6900', 'rgba(255,105,0,.4)'],
                     settings: {},
                 };
                 if (!isEmpty(data)) {
@@ -97,56 +97,59 @@
             dayLineData(data) {
                 let me = this;
                 let thisDayX;
-                let lastDayX;
-                if(me.timeStamp === me.curTimeStamp){
+                if (me.timeStamp === me.curTimeStamp) {
                     thisDayX = '今天';
-                }else if(me.timeStamp+me.oneDayLong === me.curTimeStamp){
+                } else if (me.timeStamp + me.oneDayLong === me.curTimeStamp) {
                     thisDayX = '昨天';
-                }else{
+                } else {
                     thisDayX = new Date(me.timeStamp).Format('Y年MM月dd日');
                 }
-                // lastDayX = new Date(me.timeStamp - me.oneDayLong).Format('Y年MM月dd日');
-                lastDayX = '周同比';
+                let lastDayX = '日环比';
+                let lastWeekX = '周同比';
+                let lastYearX = '年同比';
                 let tmp = {
                     data: {
-                        columns: ['xAxis', thisDayX, lastDayX],
+                        columns: ['xAxis', thisDayX, lastDayX, lastWeekX, lastYearX],
                         rows: [
-                            {'xAxis': '1', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '2', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '3', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '4', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '5', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '6', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '7', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '8', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '9', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '10', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '11', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '12', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '13', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '14', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '15', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '16', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '17', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '18', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '19', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '20', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '21', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '22', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '23', [thisDayX]: null, [lastDayX]: null},
-                            {'xAxis': '24', [thisDayX]: null, [lastDayX]: null},
+                            {'xAxis': '1', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '2', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '3', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '4', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '5', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '6', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '7', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '8', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '9', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '10', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '11', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '12', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '13', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '14', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '15', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '16', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '17', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '18', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '19', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '20', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '21', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '22', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '23', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
+                            {'xAxis': '24', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null}
                         ]
                     },
-                    colors:['#ff6900','rgba(255,105,0,.4)'],
+                    colors: ['#ff6900', '#5ab1ef', '#fa6e86', '#ffb980'],
                     settings: {},
                 };
                 if (!isEmpty(data)) {
                     // 当天
-                    let curDayDetail = data.curDayDetail;
-                    me.rendDayDate(curDayDetail,thisDayX,tmp);
+                    me.rendDayDate(data.curDayDetail || {}, thisDayX, tmp);
+                    //日环比
+                    me.rendDayDate(data.preDayDetail || {}, lastDayX, tmp);
                     //周同比
-                    let preDayDetail = data.preWeekDayDetail;
-                    me.rendDayDate(preDayDetail,lastDayX,tmp);
+                    me.rendDayDate(data.preWeekDayDetail || {}, lastWeekX, tmp);
+                    //年同比
+                    me.rendDayDate(data.preYearDayDetail || {}, lastYearX, tmp);
+
                 }
                 return tmp;
             },
@@ -179,7 +182,8 @@
                     });
                 }
             },
-            rendDayDate(arr,which,tmp){
+            rendDayDate(arr, which, tmp) {
+                console.log(arr);
                 if (!isEmpty(arr)) {
                     Object.values(arr).map((el, i) => {
                         tmp.data.rows[i][which] = el;
@@ -187,7 +191,7 @@
                 }
             },
             //获取展示月的天数
-            getDaysInMonth(){
+            getDaysInMonth() {
                 let me = this;
                 let curDate = new Date();
                 let curMonth = me.month;

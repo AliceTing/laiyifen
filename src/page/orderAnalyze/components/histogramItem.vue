@@ -11,7 +11,9 @@
         <div v-show="time === 'week'">
             <ve-histogram :data="weekHistogramData(total).data"
                           :settings="weekHistogramData(total).settings"
-                          :colors="weekHistogramData(total).colors"></ve-histogram>
+                          :colors="weekHistogramData(total).colors"
+                          :tooltip="weekHistogramData(total).tooltip"
+                          :grid="weekHistogramData(total).grid"></ve-histogram>
         </div>
     </div>
 </template>
@@ -106,6 +108,13 @@
                             {'xAxis': '周六', [thisWeekX]: 0, [lastWeekX]: 0},
                             {'xAxis': '周日', [thisWeekX]: 0, [lastWeekX]: 0}
                         ]
+                    },
+                    tooltip: {
+                        position: [5,30]
+                    },
+                    grid: {
+                        top: 80,
+                        bottom: 10
                     },
                     colors: ['#ff6900', 'rgba(255,105,0,.4)'],
                     settings: {}

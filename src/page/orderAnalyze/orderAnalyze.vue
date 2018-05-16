@@ -772,8 +772,7 @@
                         top: 30,
                         left: -10,
                         right: 20,
-                        bottom: 0,
-                        containLabel: true
+                        bottom: 0
                     },
                     settings: {
                         label: {

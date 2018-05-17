@@ -142,14 +142,13 @@
                 };
                 if (!isEmpty(data)) {
                     // 当天
-                    me.rendDayDate(data.curDayDetail || {}, thisDayX, tmp);
+                    me.rendDayData(data.curDayDetail || {}, thisDayX, tmp);
                     //日环比
-                    me.rendDayDate(data.preDayDetail || {}, lastDayX, tmp);
+                    me.rendDayData(data.preDayDetail || {}, lastDayX, tmp);
                     //周同比
-                    me.rendDayDate(data.preWeekDayDetail || {}, lastWeekX, tmp);
+                    me.rendDayData(data.preWeekDayDetail || {}, lastWeekX, tmp);
                     //年同比
-                    me.rendDayDate(data.preYearDayDetail || {}, lastYearX, tmp);
-
+                    me.rendDayData(data.preYearDayDetail || {}, lastYearX, tmp);
                 }
                 return tmp;
             },
@@ -182,8 +181,7 @@
                     });
                 }
             },
-            rendDayDate(arr, which, tmp) {
-                console.log(arr);
+            rendDayData(arr, which, tmp) {
                 if (!isEmpty(arr)) {
                     Object.values(arr).map((el, i) => {
                         tmp.data.rows[i][which] = el;

@@ -256,8 +256,7 @@
                 <statisticsItem :total="flowDataArr" :time="time" :type="type"></statisticsItem>
 
                 <!--渠道、页面-->
-                <div class="tab_box tab_ditch_province"
-                     v-show="!isEmpty(flowDataArr.channelStat)&&!isEmpty(flowDataArr.pageStat)">
+                <div class="tab_box tab_ditch_province">
                     <div class="tab_tit">
                         <div v-for="(item,index) in ditchProvinceArr"
                              :key="index"
@@ -269,52 +268,93 @@
                     <div class="tab_con">
                         <!--渠道-->
                         <template v-if="showWay === 1">
-                            <!--环形图-->
-                            <div class="ring_type">{{flowTypeArr[type].name}}</div>
-                            <ve-ring :data="yearPieData(flowDataArr).data"
-                                     :settings="yearPieData(flowDataArr).settings"
-                                     :tooltip="yearPieData(flowDataArr).tooltip"></ve-ring>
-                            <!--渠道表格-->
-                            <template v-if="!isEmpty(flowDataArr.channelStat)">
-                                <!--表格-->
-                                <table class="table" v-if="!isEmpty(flowDataArr.channelStat[0].channel)">
-                                    <thead>
-                                    <tr>
-                                        <th>渠道</th>
-                                        <th>{{flowTypeArr[type].name}}</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr v-for="(item,index) in flowDataArr.channelStat" :key="index">
-                                        <td>{{item.channel}}</td>
-                                        <!--UV-->
-                                        <template v-if="type === 0">
-                                            <td>{{item.uv?item.uv:0}}</td>
-                                        </template>
-                                        <!--PV-->
-                                        <template v-if="type === 1">
-                                            <td>{{item.pv?item.pv:0}}</td>
-                                        </template>
-                                        <!--登录用户数-->
-                                        <template v-if="type === 2">
-                                            <td>{{item.loginUV?item.loginUV:0}}</td>
-                                        </template>
-                                        <!--下单用户数-->
-                                        <template v-if="type === 3">
-                                            <td>{{item.orderUV?item.orderUV:0}}</td>
-                                        </template>
-                                        <!--客单价-->
-                                        <template v-if="type === 4">
-                                            <td>{{item.unitPrice?item.unitPrice:0}}</td>
-                                        </template>
-                                        <!--转化率-->
-                                        <template v-if="type === 5">
-                                            <td>{{item.conversionRate?item.conversionRate:0}}</td>
-                                        </template>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </template>
+                            <div v-if="!isEmpty(flowDataArr.channelStat)">
+                                <!--环形图-->
+                                <div class="ring_type" v-show="ringShow">{{flowTypeArr[type].name}}</div>
+                                <ve-ring v-show="ringShow"
+                                         :data="yearPieData(flowDataArr).data"
+                                         :settings="yearPieData(flowDataArr).settings"
+                                         :tooltip="yearPieData(flowDataArr).tooltip"></ve-ring>
+                                <!--渠道表格-->
+                                <template v-if="!isEmpty(flowDataArr.channelStat)">
+                                    <!--表格-->
+                                    <table class="table" v-if="!isEmpty(flowDataArr.channelStat[0].channel)">
+                                        <thead>
+                                        <tr>
+                                            <th>渠道</th>
+                                            <th>{{flowTypeArr[type].name}}</th>
+                                            <th v-show="time === 'day'">日环比</th>
+                                            <th v-show="time === 'day'">周同比</th>
+                                            <th v-show="time === 'week'">周环比</th>
+                                            <th v-show="time === 'month'">月环比</th>
+                                            <th>年同比</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr v-for="(item,index) in flowDataArr.channelStat" :key="index">
+                                            <td>{{item.channel}}</td>
+                                            <!--UV-->
+                                            <template v-if="type === 0">
+                                                <td>{{item.uv?item.uv:0}}</td>
+                                                <td v-show="time === 'day'">{{item.dcUVPercent?item.dcUVPercent:0}}</td>
+                                                <td v-show="time === 'day'">{{item.wcUVPercent?item.wcUVPercent:0}}</td>
+                                                <td v-show="time === 'week'">{{item.wcUVPercent?item.wcUVPercent:0}}</td>
+                                                <td v-show="time === 'month'">{{item.mcUVPercent?item.mcUVPercent:0}}</td>
+                                                <td>{{item.ycUVPercent?item.ycUVPercent:0}}</td>
+                                            </template>
+                                            <!--PV-->
+                                            <template v-if="type === 1">
+                                                <td>{{item.pv?item.pv:0}}</td>
+                                                <td v-show="time === 'day'">{{item.dcPVPercent?item.dcPVPercent:0}}</td>
+                                                <td v-show="time === 'day'">{{item.wcPVPercent?item.wcPVPercent:0}}</td>
+                                                <td v-show="time === 'week'">{{item.wcPVPercent?item.wcPVPercent:0}}</td>
+                                                <td v-show="time === 'month'">{{item.mcPVPercent?item.mcPVPercent:0}}</td>
+                                                <td>{{item.ycPVPercent?item.ycPVPercent:0}}</td>
+                                            </template>
+                                            <!--登录用户数-->
+                                            <template v-if="type === 2">
+                                                <td>{{item.loginUV?item.loginUV:0}}</td>
+                                                <td v-show="time === 'day'">{{item.dcLoginUVPercent?item.dcLoginUVPercent:0}}</td>
+                                                <td v-show="time === 'day'">{{item.wcLoginUVPercent?item.wcLoginUVPercent:0}}</td>
+                                                <td v-show="time === 'week'">{{item.wcLoginUVPercent?item.wcLoginUVPercent:0}}</td>
+                                                <td v-show="time === 'month'">{{item.mcLoginUVPercent?item.mcLoginUVPercent:0}}</td>
+                                                <td>{{item.ycLoginUVPercent?item.ycLoginUVPercent:0}}</td>
+                                            </template>
+                                            <!--下单用户数-->
+                                            <template v-if="type === 3">
+                                                <td>{{item.orderUV?item.orderUV:0}}</td>
+                                                <td v-show="time === 'day'">{{item.dcOrderUVPercent?item.dcOrderUVPercent:0}}</td>
+                                                <td v-show="time === 'day'">{{item.wcOrderUVPercent?item.wcOrderUVPercent:0}}</td>
+                                                <td v-show="time === 'week'">{{item.wcOrderUVPercent?item.wcOrderUVPercent:0}}</td>
+                                                <td v-show="time === 'month'">{{item.mcOrderUVPercent?item.mcOrderUVPercent:0}}</td>
+                                                <td>{{item.ycOrderUVPercent?item.ycOrderUVPercent:0}}</td>
+                                            </template>
+                                            <!--客单价-->
+                                            <template v-if="type === 4">
+                                                <td>{{item.unitPrice?item.unitPrice:0}}</td>
+                                                <td v-show="time === 'day'">{{item.dcUnitPricePercent?item.dcUnitPricePercent:0}}</td>
+                                                <td v-show="time === 'day'">{{item.wcUnitPricePercent?item.wcUnitPricePercent:0}}</td>
+                                                <td v-show="time === 'week'">{{item.wcUnitPricePercent?item.wcUnitPricePercent:0}}</td>
+                                                <td v-show="time === 'month'">{{item.mcUnitPricePercent?item.mcUnitPricePercent:0}}</td>
+                                                <td>{{item.ycUnitPricePercent?item.ycUnitPricePercent:0}}</td>
+                                            </template>
+                                            <!--转化率-->
+                                            <template v-if="type === 5">
+                                                <td>{{item.conversionRate?item.conversionRate:0}}</td>
+                                                <td v-show="time === 'day'">{{item.dcConversionRatePercent?item.dcConversionRatePercent:0}}</td>
+                                                <td v-show="time === 'day'">{{item.wcConversionRatePercent?item.wcConversionRatePercent:0}}</td>
+                                                <td v-show="time === 'week'">{{item.wcConversionRatePercent?item.wcConversionRatePercent:0}}</td>
+                                                <td v-show="time === 'month'">{{item.mcConversionRatePercent?item.mcConversionRatePercent:0}}</td>
+                                                <td>{{item.ycConversionRatePercent?item.ycConversionRatePercent:0}}</td>
+                                            </template>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </template>
+                            </div>
+                            <div class="no_data_tips" v-else>
+                                暂无数据
+                            </div>
                         </template>
 
                         <!--页面-->
@@ -342,6 +382,7 @@
     import statisticsItem from './components/statisticsItem';
     import histogramItem from './components/histogramItem';
     import lineItem from './components/lineItem';
+    import {isEmpty} from "Public/util";
 
     export default {
         components: {
@@ -446,7 +487,9 @@
                 oneDayLong: 0,
                 flowDataArr: [],
                 //年视图渠道或者页面切换
-                showWay: 1
+                showWay: 1,
+                //饼图是否显示
+                ringShow: true
             }
         },
         created() {
@@ -763,6 +806,7 @@
                         break;
                     case 3:
                         dataType = 'orderUV';
+                        normal(channelStat, tmp, dataType);
                         break;
                     case 4:
                         dataType = 'unitPrice';
@@ -774,16 +818,19 @@
                             //总数
                             let amount = 0;
                             channelStat.map((el) => {
-                                console.log(el[dataType], 'el');
                                 amount += (el[dataType].replace(/%/, "") * 1000);
-                                console.log(amount);
                             });
-                            channelStat.map((el) => {
-                                tmp.data.rows.push({
-                                    'channel': el.channel,
-                                    'percent': ((el[dataType].replace(/%/, "") * 1000 / amount).toFixed(5) * 100).toFixed(1)
+                            if(amount > 0){
+                                me.ringShow = true;
+                                channelStat.map((el) => {
+                                    tmp.data.rows.push({
+                                        'channel': el.channel,
+                                        'percent': ((el[dataType].replace(/%/, "") * 1000 / amount).toFixed(5) * 100).toFixed(1)
+                                    });
                                 });
-                            });
+                            }else{
+                                me.ringShow = false;
+                            }
                         }
                         break;
                 }
@@ -795,12 +842,20 @@
                         channelStat.map((el) => {
                             amount += el[dataType];
                         });
-                        channelStat.map((el) => {
-                            tmp.data.rows.push({
-                                'channel': el.channel,
-                                'percent': ((el[dataType] / amount).toFixed(5) * 100).toFixed(1)
+                        if(amount > 0){
+                            me.ringShow = true;
+                            channelStat.map((el) => {
+                                if(el[dataType] == null){
+                                    el[dataType] = 0;
+                                }
+                                tmp.data.rows.push({
+                                    'channel': el.channel,
+                                    'percent': ((el[dataType] / amount).toFixed(5) * 100).toFixed(1)
+                                });
                             });
-                        });
+                        }else{
+                            me.ringShow = false;
+                        }
                     }
                 }
                 return tmp;

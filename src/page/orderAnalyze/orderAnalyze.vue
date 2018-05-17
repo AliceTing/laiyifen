@@ -240,7 +240,8 @@
                                         <th v-show="time === 'day'">日环比</th>
                                         <th v-show="time === 'day'">周同比</th>
                                         <th v-show="time === 'week'">周环比</th>
-                                        <th v-show="time === 'week' || time === 'day'">年同比</th>
+                                        <th v-show="time === 'month'">月环比</th>
+                                        <th>年同比</th>
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -255,13 +256,13 @@
                                             <td v-show="time === 'day'">
                                                 {{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}
                                             </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}
-                                            </td>
                                             <td v-show="time === 'week'">
                                                 {{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}
                                             </td>
-                                            <td v-show="time === 'week'">
+                                            <td v-show="time === 'month'">
+                                                {{item.mcPayAmountPercent?item.mcPayAmountPercent:0}}
+                                            </td>
+                                            <td>
                                                 {{item.yearPayAmountPercent?item.yearPayAmountPercent:0}}
                                             </td>
                                         </template>
@@ -274,13 +275,13 @@
                                             <td v-show="time === 'day'">
                                                 {{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}
                                             </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}
-                                            </td>
                                             <td v-show="time === 'week'">
                                                 {{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}
                                             </td>
-                                            <td v-show="time === 'week'">
+                                            <td v-show="time === 'month'">
+                                                {{item.mcPayOrderNumPercent?item.mcPayOrderNumPercent:0}}
+                                            </td>
+                                            <td>
                                                 {{item.yearPayOrderNumPercent?item.yearPayOrderNumPercent:0}}
                                             </td>
                                         </template>
@@ -293,13 +294,13 @@
                                             <td v-show="time === 'day'">
                                                 {{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}
                                             </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}
-                                            </td>
                                             <td v-show="time === 'week'">
                                                 {{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}
                                             </td>
-                                            <td v-show="time === 'week'">
+                                            <td v-show="time === 'month'">
+                                                {{item.mcAvgAmountPercent?item.mcAvgAmountPercent:0}}
+                                            </td>
+                                            <td>
                                                 {{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}
                                             </td>
                                         </template>

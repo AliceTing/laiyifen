@@ -196,7 +196,6 @@
                 } else {
                     thisDayX = new Date(me.timeStamp).Format('Y年MM月dd日');
                 }
-                // lastDayX = new Date(me.timeStamp - me.oneDayLong).Format('Y年MM月dd日');
                 let lastDayX = '日环比';
                 let lastWeekX = '周同比';
                 let lastYearX = '年同比';
@@ -300,8 +299,8 @@
             },
             rendDayData(obj, which, tmp) {
                 if (!isEmpty(obj)) {
-                    Object.keys(obj).sort().map((el, i) => {
-                        tmp.data.rows[i][which] = obj[el];
+                    Object.values(obj).map((el, i) => {
+                        tmp.data.rows[i][which] = el;
                     });
                 }
             },

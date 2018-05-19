@@ -69,8 +69,8 @@
                 <div class="item">
                     <div class="title">上周同期</div>
                     <div class="value" v-show="type === 0">{{total.preWeekDayTotalPayAmount?total.preWeekDayTotalPayAmount:0}}</div>
-                    <div class="value" v-show="type === 1">{{total.preWeekPayOrderNum?total.preWeekPayOrderNum:0}}</div>
-                    <div class="value" v-show="type === 2">{{total.preWeekAvgAmount?total.preWeekAvgAmount:0}}</div>
+                    <div class="value" v-show="type === 1">{{total.preWeekDayPayOrderNum?total.preWeekDayPayOrderNum:0}}</div>
+                    <div class="value" v-show="type === 2">{{total.preWeekDayAvgAmount?total.preWeekDayAvgAmount:0}}</div>
                 </div>
                 <div class="item">
                     <div class="title">周同比</div>

@@ -421,7 +421,8 @@
                 showWay: 1,
                 stompClient: null,
                 oneDayLong: 0,
-                orderDataArr: []
+                orderDataArr: [],
+                connected: true
             }
         },
         created() {
@@ -442,31 +443,11 @@
             });
             me.init();
             me.orderDisplay();
-            try {
-                me.initRealTime();
-            } catch (e) {
-                Vue.$toast.show({
-                    toastText: '服务异常，请稍后重试'
-                });
-                setTimeout(function () {
-                    Vue.$toast.close();
-                }, 2000)
-            }
         },
         methods: {
             ...mapActions([
                 'getData'
             ]),
-            onScroll(e, scroll) {
-                let me = this;
-                let tmp = 50;
-                console.log(scroll.scrollTop);
-                if (scroll.scrollTop >= tmp) {
-                    // me.switchHead('easy');
-                } else {
-                    // me.switchHead('full');
-                }
-            },
             //初始化当天实时数据
             initRealTime() {
                 let me = this;
@@ -488,7 +469,16 @@
                     me.stompClient.subscribe(url, function (msg) {
                         me.orderDataArr = JSON.parse(msg.body);
                     });
+                    me.stompClient.connected = true;
                 });
+            },
+            //断开实时链接
+            disconnectRealTime(){
+                let me = this;
+                if (me.stompClient != null) {
+                    me.stompClient.disconnect();
+                }
+                me.stompClient.connected = false;
             },
             //初始化
             init() {
@@ -528,12 +518,15 @@
                 delete me.param.endTime;
                 switch (me.time) {
                     case 'year':
+                        me.disconnectRealTime();
                         me.display = new Date(me.timeStamp).Format('Y年');
                         break;
                     case 'month':
+                        me.disconnectRealTime();
                         me.display = new Date(me.timeStamp).Format('Y年MM月');
                         break;
                     case 'week':
+                        me.disconnectRealTime();
                         delete me.param.day;
                         me.param.startTime = new Date(me.mondayTime).Format('Y-MM-dd');
                         me.param.endTime = new Date(me.sundayTime).Format('Y-MM-dd');
@@ -546,6 +539,7 @@
                     case 'day':
                         if (me.timeStamp === me.curTimeStamp) {
                             me.display = '今天';
+                            me.initRealTime();
                         } else if (me.timeStamp + me.oneDayLong === me.curTimeStamp) {
                             me.display = '昨天';
                         } else {

@@ -467,18 +467,20 @@
                             break;
                     }
                     me.stompClient.subscribe(url, function (msg) {
-                        me.orderDataArr = JSON.parse(msg.body);
+                        if(me.connected){
+                            me.orderDataArr = JSON.parse(msg.body);
+                        }
                     });
-                    me.stompClient.connected = true;
                 });
             },
             //断开实时链接
             disconnectRealTime(){
                 let me = this;
-                if (me.stompClient != null) {
-                    me.stompClient.disconnect();
-                }
-                me.stompClient.connected = false;
+                me.connected = false;
+            },
+            openRealTime(){
+                let me = this;
+                me.connected = true;
             },
             //初始化
             init() {
@@ -539,11 +541,14 @@
                     case 'day':
                         if (me.timeStamp === me.curTimeStamp) {
                             me.display = '今天';
+                            me.openRealTime();
                             me.initRealTime();
                         } else if (me.timeStamp + me.oneDayLong === me.curTimeStamp) {
                             me.display = '昨天';
+                            me.disconnectRealTime();
                         } else {
                             me.display = new Date(me.timeStamp).Format('Y年MM月dd日');
+                            me.disconnectRealTime();
                         }
                         break;
                 }

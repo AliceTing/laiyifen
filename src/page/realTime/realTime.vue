@@ -99,7 +99,7 @@
                 </div>
                 <div class="item">
                     <div class="key">转换率</div>
-                    <div class="value_box"><span class="value">{{flowArr.conversionPercent}}</span>%</div>
+                    <div class="value_box"><span class="value">{{flowArr.conversionPercent}}</span></div>
                 </div>
             </div>
         </div>

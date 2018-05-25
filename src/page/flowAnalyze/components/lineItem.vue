@@ -230,7 +230,7 @@
                         ]
                     },
                     colors: ['#ff6900', '#5ab1ef', '#fa6e86', '#ffb980'],
-                    settings: {},
+                    settings: {}
                 };
                 if (!isEmpty(data)) {
                     // 当天

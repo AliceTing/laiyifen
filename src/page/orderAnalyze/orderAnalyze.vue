@@ -160,6 +160,14 @@
                     td:nth-child(2) {
                         color: #e74c39;
                     }
+                    td{
+                        &.red{
+                            color: red;
+                        }
+                        &.green{
+                            color: green;
+                        }
+                    }
                 }
 
             }
@@ -250,59 +258,29 @@
                                         <!--支付金额-->
                                         <template v-if="type === 0">
                                             <td>{{item.payAmount?item.payAmount:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'month'">
-                                                {{item.mcPayAmountPercent?item.mcPayAmountPercent:0}}
-                                            </td>
-                                            <td>
-                                                {{item.yearPayAmountPercent?item.yearPayAmountPercent:0}}
-                                            </td>
+                                            <td :class="getStyle(item.dcPayAmountPercent)" v-show="time === 'day'">{{item.dcPayAmountPercent?item.dcPayAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.wcPayAmountPercent)" v-show="time === 'day'">{{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.weekPayAmountPercent)" v-show="time === 'week'">{{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.mcPayAmountPercent)" v-show="time === 'month'">{{item.mcPayAmountPercent?item.mcPayAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.yearPayAmountPercent)">{{item.yearPayAmountPercent?item.yearPayAmountPercent:0}}</td>
                                         </template>
                                         <!--支付订单数-->
                                         <template v-if="type === 1">
                                             <td>{{item.payOrderNum?item.payOrderNum:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'month'">
-                                                {{item.mcPayOrderNumPercent?item.mcPayOrderNumPercent:0}}
-                                            </td>
-                                            <td>
-                                                {{item.yearPayOrderNumPercent?item.yearPayOrderNumPercent:0}}
-                                            </td>
+                                            <td :class="getStyle(item.dcPayOrderNumPercent)" v-show="time === 'day'">{{item.dcPayOrderNumPercent?item.dcPayOrderNumPercent:0}}</td>
+                                            <td :class="getStyle(item.wcPayOrderNumPercent)" v-show="time === 'day'">{{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}</td>
+                                            <td :class="getStyle(item.weekPayOrderNumPercent)" v-show="time === 'week'">{{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}</td>
+                                            <td :class="getStyle(item.mcPayOrderNumPercent)" v-show="time === 'month'">{{item.mcPayOrderNumPercent?item.mcPayOrderNumPercent:0}}</td>
+                                            <td :class="getStyle(item.yearPayOrderNumPercent)">{{item.yearPayOrderNumPercent?item.yearPayOrderNumPercent:0}}</td>
                                         </template>
                                         <!--单均价-->
                                         <template v-if="type === 2">
                                             <td>{{item.avgAmount?item.avgAmount:0}}</td>
-                                            <td v-show="time === 'day'">
-                                                {{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'day'">
-                                                {{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'week'">
-                                                {{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}
-                                            </td>
-                                            <td v-show="time === 'month'">
-                                                {{item.mcAvgAmountPercent?item.mcAvgAmountPercent:0}}
-                                            </td>
-                                            <td>
-                                                {{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}
-                                            </td>
+                                            <td :class="getStyle(item.dcAvgAmountPercent)" v-show="time === 'day'">{{item.dcAvgAmountPercent?item.dcAvgAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.wcAvgAmountPercent)" v-show="time === 'day'">{{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.weekAvgAmountPercent)" v-show="time === 'week'">{{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.mcAvgAmountPercent)" v-show="time === 'month'">{{item.mcAvgAmountPercent?item.mcAvgAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.yearAvgAmountPercent)">{{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}</td>
                                         </template>
                                     </tr>
                                     </tbody>
@@ -805,6 +783,20 @@
                 curDate.setMonth(curMonth);
                 curDate.setDate(0);
                 return curDate.getDate();
+            },
+            //不同颜色区分数值
+            getStyle(value){
+                if(value){
+                    if(parseFloat(value)>0){
+                        return 'red';
+                    }else if(parseFloat(value)<0){
+                        return 'green';
+                    }else{
+                        return '';
+                    }
+                }else{
+                    return '';
+                }
             }
         },
         computed: {

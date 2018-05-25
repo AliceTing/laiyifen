@@ -205,6 +205,14 @@
                 td:nth-child(2) {
                     color: #e74c39;
                 }
+                td{
+                    &.red{
+                        color: red;
+                    }
+                    &.green{
+                        color: green;
+                    }
+                }
             }
 
         }
@@ -296,56 +304,50 @@
                                             <!--UV-->
                                             <template v-if="type === 0">
                                                 <td>{{item.uv?item.uv:0}}</td>
-                                                <td v-show="time === 'day'">{{item.dcUVPercent?item.dcUVPercent:0}}</td>
-                                                <td v-show="time === 'day'">{{item.wcUVPercent?item.wcUVPercent:0}}</td>
-                                                <td v-show="time === 'week'">{{item.wcUVPercent?item.wcUVPercent:0}}</td>
-                                                <td v-show="time === 'month'">{{item.mcUVPercent?item.mcUVPercent:0}}</td>
-                                                <td>{{item.ycUVPercent?item.ycUVPercent:0}}</td>
+                                                <td :class="getStyle(item.dcUVPercent)" v-show="time === 'day'">{{item.dcUVPercent?item.dcUVPercent:0}}</td>
+                                                <td :class="getStyle(item.wcUVPercent)" v-show="time === 'day' || time === 'week'">{{item.wcUVPercent?item.wcUVPercent:0}}</td>
+                                                <td :class="getStyle(item.mcUVPercent)" v-show="time === 'month'">{{item.mcUVPercent?item.mcUVPercent:0}}</td>
+                                                <td :class="getStyle(item.ycUVPercent)">{{item.ycUVPercent?item.ycUVPercent:0}}</td>
                                             </template>
                                             <!--PV-->
                                             <template v-if="type === 1">
                                                 <td>{{item.pv?item.pv:0}}</td>
-                                                <td v-show="time === 'day'">{{item.dcPVPercent?item.dcPVPercent:0}}</td>
-                                                <td v-show="time === 'day'">{{item.wcPVPercent?item.wcPVPercent:0}}</td>
-                                                <td v-show="time === 'week'">{{item.wcPVPercent?item.wcPVPercent:0}}</td>
-                                                <td v-show="time === 'month'">{{item.mcPVPercent?item.mcPVPercent:0}}</td>
-                                                <td>{{item.ycPVPercent?item.ycPVPercent:0}}</td>
+                                                <td :class="getStyle(item.dcPVPercent)" v-show="time === 'day'">{{item.dcPVPercent?item.dcPVPercent:0}}</td>
+                                                <td :class="getStyle(item.wcPVPercent)" v-show="time === 'day' || time === 'week'">{{item.wcPVPercent?item.wcPVPercent:0}}</td>
+                                                <td :class="getStyle(item.mcPVPercent)" v-show="time === 'month'">{{item.mcPVPercent?item.mcPVPercent:0}}</td>
+                                                <td :class="getStyle(item.ycPVPercent)">{{item.ycPVPercent?item.ycPVPercent:0}}</td>
                                             </template>
                                             <!--登录用户数-->
                                             <template v-if="type === 2">
                                                 <td>{{item.loginUV?item.loginUV:0}}</td>
-                                                <td v-show="time === 'day'">{{item.dcLoginUVPercent?item.dcLoginUVPercent:0}}</td>
-                                                <td v-show="time === 'day'">{{item.wcLoginUVPercent?item.wcLoginUVPercent:0}}</td>
-                                                <td v-show="time === 'week'">{{item.wcLoginUVPercent?item.wcLoginUVPercent:0}}</td>
-                                                <td v-show="time === 'month'">{{item.mcLoginUVPercent?item.mcLoginUVPercent:0}}</td>
-                                                <td>{{item.ycLoginUVPercent?item.ycLoginUVPercent:0}}</td>
+                                                <td :class="getStyle(item.dcLoginUVPercent)" v-show="time === 'day'">{{item.dcLoginUVPercent?item.dcLoginUVPercent:0}}</td>
+                                                <td :class="getStyle(item.wcLoginUVPercent)" v-show="time === 'day' || time === 'week'">{{item.wcLoginUVPercent?item.wcLoginUVPercent:0}}</td>
+                                                <td :class="getStyle(item.mcLoginUVPercent)" v-show="time === 'month'">{{item.mcLoginUVPercent?item.mcLoginUVPercent:0}}</td>
+                                                <td :class="getStyle(item.ycLoginUVPercent)">{{item.ycLoginUVPercent?item.ycLoginUVPercent:0}}</td>
                                             </template>
                                             <!--下单用户数-->
                                             <template v-if="type === 3">
                                                 <td>{{item.orderUV?item.orderUV:0}}</td>
-                                                <td v-show="time === 'day'">{{item.dcOrderUVPercent?item.dcOrderUVPercent:0}}</td>
-                                                <td v-show="time === 'day'">{{item.wcOrderUVPercent?item.wcOrderUVPercent:0}}</td>
-                                                <td v-show="time === 'week'">{{item.wcOrderUVPercent?item.wcOrderUVPercent:0}}</td>
-                                                <td v-show="time === 'month'">{{item.mcOrderUVPercent?item.mcOrderUVPercent:0}}</td>
-                                                <td>{{item.ycOrderUVPercent?item.ycOrderUVPercent:0}}</td>
+                                                <td :class="getStyle(item.dcOrderUVPercent)" v-show="time === 'day'">{{item.dcOrderUVPercent?item.dcOrderUVPercent:0}}</td>
+                                                <td :class="getStyle(item.wcOrderUVPercent)" v-show="time === 'day' || time === 'week'">{{item.wcOrderUVPercent?item.wcOrderUVPercent:0}}</td>
+                                                <td :class="getStyle(item.mcOrderUVPercent)" v-show="time === 'month'">{{item.mcOrderUVPercent?item.mcOrderUVPercent:0}}</td>
+                                                <td :class="getStyle(item.ycOrderUVPercent)">{{item.ycOrderUVPercent?item.ycOrderUVPercent:0}}</td>
                                             </template>
                                             <!--客单价-->
                                             <template v-if="type === 4">
                                                 <td>{{item.unitPrice?item.unitPrice:0}}</td>
-                                                <td v-show="time === 'day'">{{item.dcUnitPricePercent?item.dcUnitPricePercent:0}}</td>
-                                                <td v-show="time === 'day'">{{item.wcUnitPricePercent?item.wcUnitPricePercent:0}}</td>
-                                                <td v-show="time === 'week'">{{item.wcUnitPricePercent?item.wcUnitPricePercent:0}}</td>
-                                                <td v-show="time === 'month'">{{item.mcUnitPricePercent?item.mcUnitPricePercent:0}}</td>
-                                                <td>{{item.ycUnitPricePercent?item.ycUnitPricePercent:0}}</td>
+                                                <td :class="getStyle(item.dcUnitPricePercent)" v-show="time === 'day'">{{item.dcUnitPricePercent?item.dcUnitPricePercent:0}}</td>
+                                                <td :class="getStyle(item.wcUnitPricePercent)" v-show="time === 'day' || time === 'week'">{{item.wcUnitPricePercent?item.wcUnitPricePercent:0}}</td>
+                                                <td :class="getStyle(item.mcUnitPricePercent)" v-show="time === 'month'">{{item.mcUnitPricePercent?item.mcUnitPricePercent:0}}</td>
+                                                <td :class="getStyle(item.ycUnitPricePercent)">{{item.ycUnitPricePercent?item.ycUnitPricePercent:0}}</td>
                                             </template>
                                             <!--转化率-->
                                             <template v-if="type === 5">
                                                 <td>{{item.conversionRate?item.conversionRate:0}}</td>
-                                                <td v-show="time === 'day'">{{item.dcConversionRatePercent?item.dcConversionRatePercent:0}}</td>
-                                                <td v-show="time === 'day'">{{item.wcConversionRatePercent?item.wcConversionRatePercent:0}}</td>
-                                                <td v-show="time === 'week'">{{item.wcConversionRatePercent?item.wcConversionRatePercent:0}}</td>
-                                                <td v-show="time === 'month'">{{item.mcConversionRatePercent?item.mcConversionRatePercent:0}}</td>
-                                                <td>{{item.ycConversionRatePercent?item.ycConversionRatePercent:0}}</td>
+                                                <td :class="getStyle(item.dcConversionRatePercent)" v-show="time === 'day'">{{item.dcConversionRatePercent?item.dcConversionRatePercent:0}}</td>
+                                                <td :class="getStyle(item.wcConversionRatePercent)" v-show="time === 'day' || time === 'week'">{{item.wcConversionRatePercent?item.wcConversionRatePercent:0}}</td>
+                                                <td :class="getStyle(item.mcConversionRatePercent)" v-show="time === 'month'">{{item.mcConversionRatePercent?item.mcConversionRatePercent:0}}</td>
+                                                <td :class="getStyle(item.ycConversionRatePercent)">{{item.ycConversionRatePercent?item.ycConversionRatePercent:0}}</td>
                                             </template>
                                         </tr>
                                         </tbody>
@@ -914,6 +916,20 @@
                 curDate.setMonth(curMonth);
                 curDate.setDate(0);
                 return curDate.getDate();
+            },
+            //不同颜色区分数值
+            getStyle(value){
+                if(value){
+                    if(parseFloat(value)>0){
+                        return 'red';
+                    }else if(parseFloat(value)<0){
+                        return 'green';
+                    }else{
+                        return '';
+                    }
+                }else{
+                    return '';
+                }
             }
         },
         computed: {

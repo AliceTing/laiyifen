@@ -103,19 +103,19 @@
                 </div>
             </div>
         </div>
-        <div class="mod">
-            <div class="title">物流</div>
-            <div class="content clearfix">
-                <div class="item">
-                    <div class="key">DO单</div>
-                    <div class="value_box"><span class="value">{{logisticsArr.doNum}}</span>件</div>
-                </div>
-                <div class="item">
-                    <div class="key">发货量</div>
-                    <div class="value_box"><span class="value">{{logisticsArr.deliveryNum}}</span>件</div>
-                </div>
-            </div>
-        </div>
+        <!--<div class="mod">-->
+            <!--<div class="title">物流</div>-->
+            <!--<div class="content clearfix">-->
+                <!--<div class="item">-->
+                    <!--<div class="key">DO单</div>-->
+                    <!--<div class="value_box"><span class="value">{{logisticsArr.doNum}}</span>件</div>-->
+                <!--</div>-->
+                <!--<div class="item">-->
+                    <!--<div class="key">发货量</div>-->
+                    <!--<div class="value_box"><span class="value">{{logisticsArr.deliveryNum}}</span>件</div>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
     </div>
 </template>
 

@@ -400,7 +400,12 @@
                 stompClient: null,
                 oneDayLong: 0,
                 orderDataArr: [],
-                connected: true
+                connected: true,
+                subscribeUrlMap: [
+                '/user/topic/getRealTimeOrderPayMoney',
+                '/user/topic/getRealTimeOrderPayNum',
+                '/user/topic/getRealTimeOrderAvgMoney'
+            ]
             }
         },
         created() {
@@ -445,7 +450,7 @@
                             break;
                     }
                     me.stompClient.subscribe(url, function (msg) {
-                        if(me.connected){
+                        if (me.connected && me.subscribeUrlMap[me.type] === url) {
                             me.orderDataArr = JSON.parse(msg.body);
                         }
                     });

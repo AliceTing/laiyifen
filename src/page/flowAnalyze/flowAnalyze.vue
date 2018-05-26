@@ -493,7 +493,15 @@
                 showWay: 1,
                 //饼图是否显示
                 ringShow: true,
-                connected: true
+                connected: true,
+                subscribeUrlMap: [
+                    '/user/topic/getRealTimeFlowUv',
+                    '/user/topic/getRealTimeFlowPv',
+                    '/user/topic/getRealTimeFlowLogin',
+                    '/user/topic/getRealTimeFlowOrderUser',
+                    '/user/topic/getRealTimeFlowAvgUserMoney',
+                    '/user/topic/getRealTimeFlowConversion'
+                ]
             }
         },
         created() {
@@ -552,7 +560,7 @@
                             break;
                     }
                     me.stompClient.subscribe(url, function (msg) {
-                        if(me.connected){
+                        if (me.connected && me.subscribeUrlMap[me.type] === url) {
                             me.flowDataArr = JSON.parse(msg.body);
                         }
                     });

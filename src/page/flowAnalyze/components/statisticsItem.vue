@@ -49,7 +49,7 @@
             <!--日-->
             <div v-show="time ==='day'">
                 <div class="item">
-                    <div class="title">当前日</div>
+                    <div class="title">当日累计</div>
                     <div class="value" v-show="type === 0">{{total.curDayUV?total.curDayUV:0}}</div>
                     <div class="value" v-show="type === 1">{{total.curDayPV?total.curDayPV:0}}</div>
                     <div class="value" v-show="type === 2">{{total.curDayLoginUV?total.curDayLoginUV:0}}</div>
@@ -58,7 +58,7 @@
                     <div class="value" v-show="type === 5">{{total.curDayConversionRate?total.curDayConversionRate:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">前一日</div>
+                    <div class="title">昨日累计</div>
                     <div class="value" v-show="type === 0">{{total.preDayUV?total.preDayUV:0}}</div>
                     <div class="value" v-show="type === 1">{{total.preDayPV?total.preDayPV:0}}</div>
                     <div class="value" v-show="type === 2">{{total.preDayLoginUV?total.preDayLoginUV:0}}</div>
@@ -97,7 +97,7 @@
             <!--周-->
             <div v-show="time ==='week'">
                 <div class="item">
-                    <div class="title">当前周</div>
+                    <div class="title">当周累计</div>
                     <div class="value" v-show="type === 0">{{total.curWeekUV?total.curWeekUV:0}}</div>
                     <div class="value" v-show="type === 1">{{total.curWeekPV?total.curWeekPV:0}}</div>
                     <div class="value" v-show="type === 2">{{total.curWeekLoginUV?total.curWeekLoginUV:0}}</div>
@@ -106,7 +106,7 @@
                     <div class="value" v-show="type === 5">{{total.curWeekConversionRate?total.curWeekConversionRate:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">前一周</div>
+                    <div class="title">上周累计</div>
                     <div class="value" v-show="type === 0">{{total.preWeekUV?total.preWeekUV:0}}</div>
                     <div class="value" v-show="type === 1">{{total.preWeekPV?total.preWeekPV:0}}</div>
                     <div class="value" v-show="type === 2">{{total.preWeekLoginUV?total.preWeekLoginUV:0}}</div>
@@ -145,7 +145,7 @@
             <!--月-->
             <div v-show="time ==='month'">
                 <div class="item">
-                    <div class="title">当前月</div>
+                    <div class="title">当月累计</div>
                     <div class="value" v-show="type === 0">{{total.curMonthUV?total.curMonthUV:0}}</div>
                     <div class="value" v-show="type === 1">{{total.curMonthPV?total.curMonthPV:0}}</div>
                     <div class="value" v-show="type === 2">{{total.curMonthLoginUV?total.curMonthLoginUV:0}}</div>
@@ -154,7 +154,7 @@
                     <div class="value" v-show="type === 5">{{total.curMonthConversionRate?total.curMonthConversionRate:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">前一月</div>
+                    <div class="title">上月累计</div>
                     <div class="value" v-show="type === 0">{{total.preMonthUV?total.preMonthUV:0}}</div>
                     <div class="value" v-show="type === 1">{{total.preMonthPV?total.preMonthPV:0}}</div>
                     <div class="value" v-show="type === 2">{{total.preMonthLoginUV?total.preMonthLoginUV:0}}</div>
@@ -193,7 +193,7 @@
             <!--年-->
             <div v-show="time ==='year'">
                 <div class="item">
-                    <div class="title">本年度</div>
+                    <div class="title">当年累计</div>
                     <div class="value" v-show="type === 0">{{total.curYearUV?total.curYearUV:0}}</div>
                     <div class="value" v-show="type === 1">{{total.curYearPV?total.curYearPV:0}}</div>
                     <div class="value" v-show="type === 2">{{total.curYearLoginUV?total.curYearLoginUV:0}}</div>

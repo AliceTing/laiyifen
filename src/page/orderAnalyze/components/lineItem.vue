@@ -6,7 +6,8 @@
         <div v-show="time === 'day'">
             <ve-line :data="dayLineData(total).data"
                      :settings="dayLineData(total).settings"
-                     :colors="dayLineData(total).colors"></ve-line>
+                     :colors="dayLineData(total).colors"
+                     :legend="dayLineData(total).legend"></ve-line>
         </div>
         <div v-show="time ==='month'">
             <ve-line :data="monthLineData(total).data"
@@ -136,6 +137,12 @@
                             {'xAxis': '23', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null},
                             {'xAxis': '24', [thisDayX]: null, [lastDayX]: null, [lastWeekX]: null, [lastYearX]: null}
                         ]
+                    },
+                    legend: {
+                        selected: {
+                            [lastWeekX] : false,
+                            [lastYearX] : false
+                        }
                     },
                     colors: ['#ff6900', '#5ab1ef', '#fa6e86', '#ffb980'],
                     settings: {},

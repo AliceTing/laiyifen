@@ -224,7 +224,6 @@
     <div class="container">
         <!--<v-touch @swipeleft="onSwipeLeft"-->
         <!--@swiperight="onSwipeRight" @pandown="onPanStart($event)" @panmove="onPanmove($event)">-->
-        <div>{{flowDataArr.curDayDetail}}</div>
         <div class="tab_box">
             <div class="tab_tit order_type_tit">
                 <div v-for="(typeItem,index) in flowTypeArr"

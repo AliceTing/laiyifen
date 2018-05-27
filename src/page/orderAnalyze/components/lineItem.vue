@@ -7,7 +7,8 @@
             <ve-line :data="dayLineData(total).data"
                      :settings="dayLineData(total).settings"
                      :colors="dayLineData(total).colors"
-                     :legend="dayLineData(total).legend"></ve-line>
+                     :legend="dayLineData(total).legend"
+                     :events="chartEvents"></ve-line>
         </div>
         <div v-show="time ==='month'">
             <ve-line :data="monthLineData(total).data"
@@ -32,9 +33,25 @@
             oneDayLong: 0
         },
         data() {
-            return {}
+            return {
+                wkStatus: false,
+                yeStatus: false
+            }
         },
         created() {
+            let me = this;
+            me.chartEvents = {
+                legendselectchanged(e){
+                    switch(e.name){
+                        case '周同比':
+                            me.wkStatus = e.selected[e.name];
+                            break;
+                        case '年同比':
+                            me.yeStatus = e.selected[e.name];
+                            break;
+                    }
+                }
+            }
         },
         mounted() {
         },
@@ -140,8 +157,8 @@
                     },
                     legend: {
                         selected: {
-                            [lastWeekX] : false,
-                            [lastYearX] : false
+                            [lastWeekX] : me.wkStatus,
+                            [lastYearX] : me.yeStatus
                         }
                     },
                     colors: ['#ff6900', '#5ab1ef', '#fa6e86', '#ffb980'],

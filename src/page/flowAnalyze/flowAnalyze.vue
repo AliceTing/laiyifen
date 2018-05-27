@@ -364,7 +364,8 @@
                             <div v-if="!isEmpty(flowDataArr.pageStat) && type <= 1">
                                 <ve-bar height="1000px" :data="yearBarData(flowDataArr).data"
                                         :settings="yearBarData(flowDataArr).settings"
-                                        :grid="yearBarData(flowDataArr).grid"></ve-bar>
+                                        :grid="yearBarData(flowDataArr).grid"
+                                        :xAxis="yearBarData(flowDataArr).xAxis"></ve-bar>
                             </div>
                             <div class="no_data_tips" v-else>
                                 暂无数据
@@ -869,7 +870,7 @@
                 }
                 return tmp;
             },
-            //渲染年数据-页面
+            //渲染页面条形图
             yearBarData(orderData) {
                 let me = this;
                 let dataType;
@@ -903,6 +904,11 @@
                         itemStyle: {
                             color: '#ff6900'
                         }
+                    },
+                    xAxis:{
+                        axisLabel: {
+                            rotate: 20
+                        }
                     }
                 };
                 let pageStat = orderData.pageStat;
@@ -914,6 +920,7 @@
                         });
                     });
                 }
+                console.log(tmp);
                 return tmp;
             },
             //获取展示月的天数

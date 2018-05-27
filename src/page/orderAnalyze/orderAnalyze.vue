@@ -292,7 +292,8 @@
                                 <!--条形图-->
                                 <ve-bar height="800px" :data="yearBarData(orderDataArr).data"
                                         :settings="yearBarData(orderDataArr).settings"
-                                        :grid="yearBarData(orderDataArr).grid"></ve-bar>
+                                        :grid="yearBarData(orderDataArr).grid"
+                                        :xAxis="yearBarData(orderDataArr).xAxis"></ve-bar>
                             </template>
                         </div>
                     </div>
@@ -766,6 +767,11 @@
                             color: '#ff6900'
                         },
                         'barCategoryGap': '70%'
+                    },
+                    xAxis:{
+                        axisLabel: {
+                            rotate: 20
+                        }
                     }
                 };
                 let provinceStat = orderData.provinceStat;

@@ -926,11 +926,8 @@
             //获取展示月的天数
             getDaysInMonth() {
                 let me = this;
-                let curDate = new Date();
-                let curMonth = me.month;
-                curDate.setMonth(curMonth);
-                curDate.setDate(0);
-                return curDate.getDate();
+                let d = new Date(new Date(me.timeStamp).Format('Y'), new Date(me.timeStamp).Format('M'), 0);
+                return d.getDate();
             },
             //不同颜色区分数值
             getStyle(value){

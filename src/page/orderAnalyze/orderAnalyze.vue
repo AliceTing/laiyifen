@@ -475,9 +475,8 @@
                 let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
                 let nowTime = date.getTime();
                 let weekDay = date.getDay();
-                let mondayTime = nowTime - (weekDay - 1) * me.oneDayLong - 7 * me.oneDayLong;
-                let sundayTime = nowTime + (7 - weekDay) * me.oneDayLong - 7 * me.oneDayLong;
-                console.log(weekDay,'weekDay',new Date(sundayTime));
+                let mondayTime = nowTime - (weekDay - 1) * me.oneDayLong;
+                let sundayTime = nowTime + (7 - weekDay) * me.oneDayLong;
                 me.year = year;
                 me.month = month;
                 me.day = day;
@@ -790,11 +789,8 @@
             //获取展示月的天数
             getDaysInMonth() {
                 let me = this;
-                let curDate = new Date();
-                let curMonth = me.month;
-                curDate.setMonth(curMonth);
-                curDate.setDate(0);
-                return curDate.getDate();
+                let d = new Date(new Date(me.timeStamp).Format('Y'), new Date(me.timeStamp).Format('M'), 0);
+                return d.getDate();
             },
             //不同颜色区分数值
             getStyle(value){

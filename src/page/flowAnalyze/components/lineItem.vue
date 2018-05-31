@@ -154,37 +154,37 @@
                     data: {
                         columns: ['xAxis', thisYearMonthX, lastYearMonthX],
                         rows: [
-                            {'xAxis': '1', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '2', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '3', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '4', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '5', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '6', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '7', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '8', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '9', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '10', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '11', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '12', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '13', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '14', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '15', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '16', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '17', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '18', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '19', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '20', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '21', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '22', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '23', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '24', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '25', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '26', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '27', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '28', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '29', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '30', [thisYearMonthX]: null, [lastYearMonthX]: null},
-                            {'xAxis': '31', [thisYearMonthX]: null, [lastYearMonthX]: null}
+                            // {'xAxis': '1', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '2', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '3', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '4', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '5', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '6', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '7', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '8', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '9', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '10', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '11', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '12', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '13', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '14', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '15', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '16', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '17', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '18', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '19', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '20', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '21', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '22', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '23', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '24', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '25', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '26', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '27', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '28', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '29', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '30', [thisYearMonthX]: null, [lastYearMonthX]: null},
+                            // {'xAxis': '31', [thisYearMonthX]: null, [lastYearMonthX]: null}
                         ]
                     },
                     colors:['#ff6900','rgba(255,105,0,.4)'],
@@ -303,17 +303,26 @@
                         arr.map((el) => {
                             tmpData.push(el[dataType]);
                         });
-                        //初始化时设定31天，实际展示要根据展示月天数
-                        for (let a = 0; a < 31 - me.getDaysInMonth(); a++) {
-                            tmp.data.rows.pop();
-                            tmpData.pop();
-                        }
                         tmpData.map((el, i) => {
+                            if (tmp.data.rows[i]) {
+                                if (Object.keys(tmp.data.rows[i])[0] !== 'xAxis') {
+                                    tmp.data.rows.push({'xAxis': i + 1});
+                                }
+                            } else {
+                                tmp.data.rows.push({'xAxis': i + 1});
+                            }
                             tmp.data.rows[i][which] = el;
                         });
                     }
                     function specialData(arr, which, tmp, diff) {
                         arr.map((el, i) => {
+                            if (tmp.data.rows[i]) {
+                                if (Object.keys(tmp.data.rows[i])[0] !== 'xAxis') {
+                                    tmp.data.rows.push({'xAxis': i + 1});
+                                }
+                            } else {
+                                tmp.data.rows.push({'xAxis': i + 1});
+                            }
                             if (Object.values(el) && Object.values(el)[0][diff + 'MonthUnitPrice']) {
                                 tmp.data.rows[i][which] = Object.values(el)[0][diff + 'MonthUnitPrice'];
                             }
@@ -331,11 +340,8 @@
             //获取展示月的天数
             getDaysInMonth() {
                 let me = this;
-                let curDate = new Date();
-                let curMonth = me.month;
-                curDate.setMonth(curMonth);
-                curDate.setDate(0);
-                return curDate.getDate();
+                let d = new Date(new Date(me.timeStamp).Format('Y'), new Date(me.timeStamp).Format('M'), 0);
+                return d.getDate();
             }
         }
     }

@@ -103,6 +103,14 @@
         }
     }
 
+    .no_data_tips {
+        margin: 0 auto;
+        padding: px2rem(40) 0;
+        color: #999;
+        text-align: center;
+        font-size: px2rem(40);
+    }
+
     .tab_ditch_province {
         .tab_tit {
             margin: px2rem(15) px2rem(32) 0;
@@ -222,7 +230,7 @@
 
                     <!--省份、渠道-->
                     <div class="tab_box tab_ditch_province"
-                         v-show="!isEmpty(orderDataArr.channelStat)&&!isEmpty(orderDataArr.provinceStat)">
+                         v-show="!isEmpty(orderDataArr.channelStat)||!isEmpty(orderDataArr.provinceStat)">
                         <div class="tab_tit">
                             <div v-for="(item,index) in ditchProvinceArr"
                                  :key="index"
@@ -289,11 +297,16 @@
 
                             <!--省份-->
                             <template v-if="showWay === 2">
-                                <!--条形图-->
-                                <ve-bar height="800px" :data="yearBarData(orderDataArr).data"
-                                        :settings="yearBarData(orderDataArr).settings"
-                                        :grid="yearBarData(orderDataArr).grid"
-                                        :xAxis="yearBarData(orderDataArr).xAxis"></ve-bar>
+                                <div v-if="!isEmpty(orderDataArr.provinceStat)">
+                                    <!--条形图-->
+                                    <ve-bar height="800px" :data="yearBarData(orderDataArr).data"
+                                            :settings="yearBarData(orderDataArr).settings"
+                                            :grid="yearBarData(orderDataArr).grid"
+                                            :xAxis="yearBarData(orderDataArr).xAxis"></ve-bar>
+                                </div>
+                                <div class="no_data_tips" v-else>
+                                    暂无数据
+                                </div>
                             </template>
                         </div>
                     </div>

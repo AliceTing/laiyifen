@@ -584,8 +584,8 @@
                 let day = date.getDate() < 10 ? '0' + date.getDate() : date.getDate();
                 let nowTime = date.getTime();
                 let weekDay = date.getDay();
-                let mondayTime = nowTime - (weekDay - 1) * me.oneDayLong - 7 * me.oneDayLong;
-                let sundayTime = nowTime + (7 - weekDay) * me.oneDayLong - 7 * me.oneDayLong;
+                let mondayTime = nowTime - (weekDay - 1) * me.oneDayLong;
+                let sundayTime = nowTime + (7 - weekDay) * me.oneDayLong;
                 me.year = year;
                 me.month = month;
                 me.day = day;

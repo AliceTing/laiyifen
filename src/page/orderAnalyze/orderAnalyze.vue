@@ -498,7 +498,7 @@
                         break;
                     // 周二
                     case 2:
-                        mondayTime = nowTime - (me.oneDayLong * 1);
+                        mondayTime = nowTime - me.oneDayLong;
                         sundayTime = nowTime + (me.oneDayLong * 5);
                         break;
                     // 周三
@@ -519,7 +519,7 @@
                     // 周六
                     case 6:
                         mondayTime = nowTime - (me.oneDayLong * 5);
-                        sundayTime = nowTime + (me.oneDayLong * 1);
+                        sundayTime = nowTime + me.oneDayLong;
                         break;
                     //周日
                     case 0:

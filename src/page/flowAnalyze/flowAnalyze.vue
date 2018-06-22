@@ -410,7 +410,7 @@
                     current: false,
                     type: 2
                 }, {
-                    name: '下单用户数',
+                    name: '支付人数',
                     current: false,
                     type: 3
                 }, {
@@ -418,7 +418,7 @@
                     current: false,
                     type: 4
                 }, {
-                    name: '转化率',
+                    name: '买家转化率',
                     current: false,
                     type: 5
                 }],

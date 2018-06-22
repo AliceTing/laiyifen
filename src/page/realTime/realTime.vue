@@ -90,8 +90,8 @@
                     <div class="value_box"><span class="value">{{flowArr.loginUserNum}}</span>位</div>
                 </div>
                 <div class="item">
-                    <div class="key">下单用户数</div>
-                    <div class="value_box"><span class="value">{{flowArr.orderUserNum}}</span>位</div>
+                    <div class="key">支付成功人数</div>
+                    <div class="value_box"><span class="value">{{flowArr.paymentUv}}</span>位</div>
                 </div>
                 <div class="item">
                     <div class="key">客单价</div>
@@ -137,7 +137,7 @@
                     uv: 0,
                     pv:0,
                     loginUserNum: 0,
-                    orderUserNum:0 ,
+                    paymentUv:0 ,
                     avgUserAmount: 0,
                     conversionPercent: '0'
                 },
@@ -192,7 +192,7 @@
                             me.flowArr.uv = data.uv || 0;
                             me.flowArr.pv = data.pv || 0;
                             me.flowArr.loginUserNum = data.loginUserNum || 0;
-                            me.flowArr.orderUserNum = data.orderUserNum || 0;
+                            me.flowArr.paymentUv = data.paymentUv || 0;
                             me.flowArr.avgUserAmount = data.avgUserAmount || 0;
                             me.flowArr.conversionPercent = data.conversionPercent || 0;
                             me.logisticsArr.doNum = data.doNum || 0;

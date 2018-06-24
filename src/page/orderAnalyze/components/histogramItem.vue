@@ -1,15 +1,24 @@
 <style lang="scss" scoped>
     @import '../../../public/assets/scss/mix.scss';
+
+    .center{
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 <template>
     <div class="year_histogram">
         <div v-show="time ==='year'">
-            <ve-histogram :data="yearHistogramData(total).data"
+            <ve-histogram :width="width"
+                          class="center"
+                          :data="yearHistogramData(total).data"
                           :settings="yearHistogramData(total).settings"
                           :colors="yearHistogramData(total).colors"></ve-histogram>
         </div>
         <div v-show="time === 'week'">
-            <ve-histogram :data="weekHistogramData(total).data"
+            <ve-histogram :width="width"
+                          class="center"
+                          :data="weekHistogramData(total).data"
                           :settings="weekHistogramData(total).settings"
                           :colors="weekHistogramData(total).colors"
                           :tooltip="weekHistogramData(total).tooltip"
@@ -36,10 +45,16 @@
         },
         data() {
             return {
-                dataType: ''
+                dataType: '',
+                width: ''
             }
         },
         created() {
+            let me = this;
+            let maxWidth = 414;
+            let _w = parseInt(window.getComputedStyle(document.querySelector('body')).getPropertyValue('width'));
+            _w > maxWidth ? _w = maxWidth : _w;
+            me.width = _w + 'px';
         },
         mounted() {
         },
@@ -174,6 +189,6 @@
                 }
             }
         },
-        computed: {},
+        computed: {}
     }
 </script>

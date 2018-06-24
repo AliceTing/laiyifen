@@ -1,17 +1,26 @@
 <style lang="scss" scoped>
     @import '../../../public/assets/scss/mix.scss';
+
+    .center{
+        margin-left: auto;
+        margin-right: auto;
+    }
 </style>
 <template>
     <div class="line">
         <div v-show="time === 'day'">
-            <ve-line :data="dayLineData(total).data"
+            <ve-line :width="width"
+                     class="center"
+                     :data="dayLineData(total).data"
                      :settings="dayLineData(total).settings"
                      :colors="dayLineData(total).colors"
                      :legend="dayLineData(total).legend"
                      :events="chartEvents"></ve-line>
         </div>
         <div v-show="time ==='month'">
-            <ve-line :data="monthLineData(total).data"
+            <ve-line :width="width"
+                     class="center"
+                     :data="monthLineData(total).data"
                      :settings="monthLineData(total).settings"
                      :colors="monthLineData(total).colors"
                      :xAxis="monthLineData(total).xAxis"></ve-line>
@@ -37,11 +46,16 @@
             return {
                 wkStatus: false,
                 yeStatus: false,
-                maxDays: 31
+                maxDays: 31,
+                width: ''
             }
         },
         created() {
             let me = this;
+            let maxWidth = 414;
+            let _w = parseInt(window.getComputedStyle(document.querySelector('body')).getPropertyValue('width'));
+            _w > maxWidth ? _w = maxWidth : _w;
+            me.width = _w + 'px';
             me.chartEvents = {
                 legendselectchanged(e) {
                     switch (e.name) {

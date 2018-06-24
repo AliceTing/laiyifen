@@ -4,19 +4,25 @@
 <template>
     <div class="line">
         <div v-show="time === 'day'">
-            <ve-line :data="dayLineData(total).data"
+            <ve-line :width="width"
+                     class="center"
+                     :data="dayLineData(total).data"
                      :settings="dayLineData(total).settings"
                      :colors="dayLineData(total).colors"
                      :legend="dayLineData(total).legend"
                      :events="chartEvents"></ve-line>
         </div>
         <div v-show="time ==='month'">
-            <ve-line :data="monthLineData(total).data"
+            <ve-line :width="width"
+                     class="center"
+                     :data="monthLineData(total).data"
                      :settings="monthLineData(total).settings"
                      :colors="monthLineData(total).colors"></ve-line>
         </div>
         <div v-show="time ==='year'">
-            <ve-line :data="yearHistogramData(total).data"
+            <ve-line :width="width"
+                     class="center"
+                     :data="yearHistogramData(total).data"
                      :settings="yearHistogramData(total).settings"
                      :colors="yearHistogramData(total).colors"></ve-line>
         </div>
@@ -40,11 +46,17 @@
         data() {
             return {
                 wkStatus: false,
-                yeStatus: false
+                yeStatus: false,
+                width: ''
             }
         },
         created() {
             let me = this;
+            let maxWidth = 414;
+            let _w = parseInt(window.getComputedStyle(document.querySelector('body')).getPropertyValue('width'));
+            _w > maxWidth ? _w = maxWidth : _w;
+            me.width = _w + 'px';
+
             me.chartEvents = {
                 legendselectchanged(e){
                     switch(e.name){
@@ -119,7 +131,7 @@
                             normalData(arr, which, tmp, dataType);
                             break;
                         case 3:
-                            dataType = 'orderUv';
+                            dataType = 'paymentUv';
                             normalData(arr, which, tmp, dataType);
                             break;
                         case 4:
@@ -286,7 +298,7 @@
                             normalData(arr, which, tmp, dataType);
                             break;
                         case 3:
-                            dataType = 'orderUv';
+                            dataType = 'paymentUv';
                             normalData(arr, which, tmp, dataType);
                             break;
                         case 4:

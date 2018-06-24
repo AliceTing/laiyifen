@@ -279,7 +279,9 @@
                             <div v-if="!isEmpty(flowDataArr.channelStat)">
                                 <!--环形图-->
                                 <div class="ring_type" v-show="ringShow">{{flowTypeArr[type].name}}</div>
-                                <ve-ring v-show="ringShow"
+                                <ve-ring :width="width"
+                                         class="center"
+                                         v-show="ringShow"
                                          :data="yearPieData(flowDataArr).data"
                                          :settings="yearPieData(flowDataArr).settings"
                                          :tooltip="yearPieData(flowDataArr).tooltip"></ve-ring>
@@ -362,7 +364,10 @@
                         <!--页面-->
                         <template v-if="showWay === 2">
                             <div v-if="!isEmpty(flowDataArr.pageStat) && type <= 1">
-                                <ve-bar height="1000px" :data="yearBarData(flowDataArr).data"
+                                <ve-bar :width="width"
+                                        class="center"
+                                        height="1000px"
+                                        :data="yearBarData(flowDataArr).data"
                                         :settings="yearBarData(flowDataArr).settings"
                                         :grid="yearBarData(flowDataArr).grid"
                                         :xAxis="yearBarData(flowDataArr).xAxis"></ve-bar>
@@ -501,11 +506,17 @@
                     '/user/topic/getRealTimeFlowOrderUser',
                     '/user/topic/getRealTimeFlowAvgUserMoney',
                     '/user/topic/getRealTimeFlowConversion'
-                ]
+                ],
+                width: ''
             }
         },
         created() {
             let me = this;
+            let maxWidth = 414;
+            let _w = parseInt(window.getComputedStyle(document.querySelector('body')).getPropertyValue('width'));
+            _w > maxWidth ? _w = maxWidth : _w;
+            me.width = _w + 'px';
+
             me.oneDayLong = 24 * 60 * 60 * 1000;
             //初始化入参
             me.timeTypeArr.map(function (el) {

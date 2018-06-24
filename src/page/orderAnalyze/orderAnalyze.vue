@@ -181,6 +181,10 @@
             }
         }
     }
+    .center{
+        margin-left: auto;
+        margin-right: auto;
+    }
 
 </style>
 
@@ -244,7 +248,9 @@
                             <template v-if="showWay === 1">
                                 <!--环形图-->
                                 <div class="ring_type">{{orderTypeArr[type].name}}</div>
-                                <ve-ring :data="yearPieData(orderDataArr).data"
+                                <ve-ring :width="width"
+                                         class="center"
+                                         :data="yearPieData(orderDataArr).data"
                                          :settings="yearPieData(orderDataArr).settings"
                                          :tooltip="yearPieData(orderDataArr).tooltip"></ve-ring>
                                 <!--表格-->
@@ -299,7 +305,10 @@
                             <template v-if="showWay === 2">
                                 <div v-if="!isEmpty(orderDataArr.provinceStat)">
                                     <!--条形图-->
-                                    <ve-bar height="800px" :data="yearBarData(orderDataArr).data"
+                                    <ve-bar :width="width"
+                                            height="800px"
+                                            class="center"
+                                            :data="yearBarData(orderDataArr).data"
                                             :settings="yearBarData(orderDataArr).settings"
                                             :grid="yearBarData(orderDataArr).grid"
                                             :xAxis="yearBarData(orderDataArr).xAxis"></ve-bar>
@@ -419,11 +428,17 @@
                 '/user/topic/getRealTimeOrderPayMoney',
                 '/user/topic/getRealTimeOrderPayNum',
                 '/user/topic/getRealTimeOrderAvgMoney'
-            ]
+                ],
+                width: ''
             }
         },
         created() {
             let me = this;
+            let maxWidth = 414;
+            let _w = parseInt(window.getComputedStyle(document.querySelector('body')).getPropertyValue('width'));
+            _w > maxWidth ? _w = maxWidth : _w;
+            me.width = _w + 'px';
+
             me.oneDayLong = 24 * 60 * 60 * 1000;
 
             //初始化入参
@@ -813,7 +828,6 @@
                         });
                     });
                 }
-                console.log(tmp,'tmp');
                 return tmp;
             },
             //获取展示月的天数

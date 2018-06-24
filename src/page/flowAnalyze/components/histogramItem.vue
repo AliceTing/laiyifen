@@ -4,7 +4,9 @@
 <template>
     <div class="year_histogram">
         <div v-show="time === 'week'">
-            <ve-histogram :data="weekHistogramData(total).data"
+            <ve-histogram :width="width"
+                          class="center"
+                          :data="weekHistogramData(total).data"
                           :settings="weekHistogramData(total).settings"
                           :colors="weekHistogramData(total).colors"
                           :tooltip="weekHistogramData(total).tooltip"
@@ -34,6 +36,11 @@
             }
         },
         created() {
+            let me = this;
+            let maxWidth = 414;
+            let _w = parseInt(window.getComputedStyle(document.querySelector('body')).getPropertyValue('width'));
+            _w > maxWidth ? _w = maxWidth : _w;
+            me.width = _w + 'px';
         },
         mounted() {
         },
@@ -110,7 +117,7 @@
                             normalData(arr, which, tmp, dataType);
                             break;
                         case 3:
-                            dataType = 'orderUv';
+                            dataType = 'paymentUv';
                             normalData(arr, which, tmp, dataType);
                             break;
                         case 4:

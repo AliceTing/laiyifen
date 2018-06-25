@@ -329,11 +329,11 @@
                                             </template>
                                             <!--下单用户数-->
                                             <template v-if="type === 3">
-                                                <td>{{item.orderUV?item.orderUV:0}}</td>
-                                                <td :class="getStyle(item.dcOrderUVPercent)" v-show="time === 'day'">{{item.dcOrderUVPercent?item.dcOrderUVPercent:0}}</td>
-                                                <td :class="getStyle(item.wcOrderUVPercent)" v-show="time === 'day' || time === 'week'">{{item.wcOrderUVPercent?item.wcOrderUVPercent:0}}</td>
-                                                <td :class="getStyle(item.mcOrderUVPercent)" v-show="time === 'month'">{{item.mcOrderUVPercent?item.mcOrderUVPercent:0}}</td>
-                                                <td :class="getStyle(item.ycOrderUVPercent)">{{item.ycOrderUVPercent?item.ycOrderUVPercent:0}}</td>
+                                                <td>{{item.paymentUv?item.paymentUv:0}}</td>
+                                                <td :class="getStyle(item.dcPaymentUvPercent)" v-show="time === 'day'">{{item.dcPaymentUvPercent?item.dcPaymentUvPercent:0}}</td>
+                                                <td :class="getStyle(item.wcPaymentUvPercent)" v-show="time === 'day' || time === 'week'">{{item.wcPaymentUvPercent?item.wcPaymentUvPercent:0}}</td>
+                                                <td :class="getStyle(item.mcPaymentUvPercent)" v-show="time === 'month'">{{item.mcPaymentUvPercent?item.mcPaymentUvPercent:0}}</td>
+                                                <td :class="getStyle(item.ycPaymentUvPercent)">{{item.ycPaymentUvPercent?item.ycPaymentUvPercent:0}}</td>
                                             </template>
                                             <!--客单价-->
                                             <template v-if="type === 4">
@@ -843,7 +843,7 @@
                         normal(channelStat, tmp, dataType);
                         break;
                     case 3:
-                        dataType = 'orderUV';
+                        dataType = 'paymentUv';
                         normal(channelStat, tmp, dataType);
                         break;
                     case 4:

@@ -43,13 +43,13 @@
                     }
                 }
             }
-            &.mod_order {
-                .item {
-                    &:first-child {
-                        width: 100%;
-                    }
-                }
-            }
+            /*&.mod_order {*/
+                /*.item {*/
+                    /*&:first-child {*/
+                        /*width: 100%;*/
+                    /*}*/
+                /*}*/
+            /*}*/
         }
     }
 </style>
@@ -71,6 +71,10 @@
                 <div class="item">
                     <div class="key">单均价</div>
                     <div class="value_box"><span class="value">{{orderArr.avgOrderAmount}}</span>元</div>
+                </div>
+                <div class="item">
+                    <div class="key">订单转化率</div>
+                    <div class="value_box"><span class="value">{{orderArr.orderConRate}}</span></div>
                 </div>
             </div>
         </div>
@@ -98,7 +102,7 @@
                     <div class="value_box"><span class="value">{{flowArr.avgUserAmount}}</span>元</div>
                 </div>
                 <div class="item">
-                    <div class="key">转换率</div>
+                    <div class="key">买家转化率</div>
                     <div class="value_box"><span class="value">{{flowArr.conversionPercent}}</span></div>
                 </div>
             </div>
@@ -130,7 +134,8 @@
                 orderArr: {
                     payAmount: 0,
                     payOrderNum:0,
-                    avgOrderAmount: 0
+                    avgOrderAmount: 0,
+                    orderConRate: 0
                 },
                 //流量
                 flowArr:{
@@ -189,6 +194,7 @@
                             me.orderArr.payAmount = data.payAmount || 0;
                             me.orderArr.payOrderNum = data.payOrderNum || 0;
                             me.orderArr.avgOrderAmount = data.avgOrderAmount || 0;
+                            me.orderArr.orderConRate = data.orderConRate || 0;
                             me.flowArr.uv = data.uv || 0;
                             me.flowArr.pv = data.pv || 0;
                             me.flowArr.loginUserNum = data.loginUserNum || 0;

@@ -247,8 +247,9 @@
                             <!--渠道-->
                             <template v-if="showWay === 1">
                                 <!--环形图-->
-                                <div class="ring_type">{{orderTypeArr[type].name}}</div>
-                                <ve-ring :width="width"
+                                <div v-if=showRing class="ring_type">{{orderTypeArr[type].name}}</div>
+                                <ve-ring v-if=showRing
+                                         :width="width"
                                          class="center"
                                          :data="yearPieData(orderDataArr).data"
                                          :settings="yearPieData(orderDataArr).settings"
@@ -296,6 +297,15 @@
                                             <td :class="getStyle(item.mcAvgAmountPercent)" v-show="time === 'month'">{{item.mcAvgAmountPercent?item.mcAvgAmountPercent:0}}</td>
                                             <td :class="getStyle(item.yearAvgAmountPercent)">{{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}</td>
                                         </template>
+                                        <!--订单转化率-->
+                                        <template v-if="type === 3">
+                                            <td>{{item.orderConRate?item.orderConRate:0}}</td>
+                                            <td :class="getStyle(item.dcOrderConRatePercent)" v-show="time === 'day'">{{item.dcOrderConRatePercent?item.dcAvgAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.wcOrderConRatePercent)" v-show="time === 'day'">{{item.wcOrderConRatePercent?item.wcOrderConRatePercent:0}}</td>
+                                            <td :class="getStyle(item.weekOrderConRatePercent)" v-show="time === 'week'">{{item.weekOrderConRatePercent?item.weekOrderConRatePercent:0}}</td>
+                                            <td :class="getStyle(item.mcOrderConRatePercent)" v-show="time === 'month'">{{item.mcOrderConRatePercent?item.mcOrderConRatePercent:0}}</td>
+                                            <td :class="getStyle(item.yearOrderConRatePercent)">{{item.yearOrderConRatePercent?item.yearOrderConRatePercent:0}}</td>
+                                        </template>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -331,6 +341,7 @@
     import statisticsItem from './components/statisticsItem';
     import histogramItem from './components/histogramItem';
     import lineItem from './components/lineItem';
+    import {parseIntMoney} from "Public/util";
 
     export default {
         components: {
@@ -353,6 +364,10 @@
                     name: '单均价',
                     current: false,
                     type: 2
+                }, {
+                    name: '订单转化率',
+                    current: false,
+                    type: 3
                 }],
                 //时间类型
                 timeTypeArr: [{
@@ -429,7 +444,8 @@
                 '/user/topic/getRealTimeOrderPayNum',
                 '/user/topic/getRealTimeOrderAvgMoney'
                 ],
-                width: ''
+                width: '',
+                showRing: true
             }
         },
         created() {
@@ -476,6 +492,9 @@
                             break;
                         case 2:
                             url = '/user/topic/getRealTimeOrderAvgMoney';
+                            break;
+                        case 3:
+                            url = '/user/topic/getRealTimeOrderConRate';
                             break;
                     }
                     me.stompClient.subscribe(url, function (msg) {
@@ -571,7 +590,7 @@
                         if (me.timeStamp === me.curTimeStamp) {
                             me.display = '今天';
                             me.openRealTime();
-                            me.initRealTime();
+                            // me.initRealTime();
                         } else if (me.timeStamp + me.oneDayLong === me.curTimeStamp) {
                             me.display = '昨天';
                             me.disconnectRealTime();
@@ -737,6 +756,9 @@
                     case 2:
                         dataType = 'avgAmount';
                         break;
+                    case 3:
+                        dataType = 'orderConRate';
+                        break;
                 }
                 let tmp = {
                     data: {
@@ -762,15 +784,38 @@
                     //总数
                     let amount = 0;
                     channelStat.map((el) => {
-                        amount += el[dataType];
+                        if(me.type == 3){
+                            amount += (+(el[dataType].slice(0,-1)));
+                        }else{
+                            amount += el[dataType];
+                        }
                     });
+
                     channelStat.map((el) => {
-                        tmp.data.rows.push({
-                            'channel': el.channel,
-                            'percent': ((el[dataType] / amount).toFixed(5) * 100).toFixed(1)
-                        });
+                        //订单转化率接口返回数据带有%，需要去掉
+                        if(me.type == 3){
+                            console.log('amount',amount);
+                            if(amount > 0){
+                                tmp.data.rows.push({
+                                    'channel': el.channel,
+                                    'percent': (((el[dataType].slice(0,-1)) / amount).toFixed(5) * 100).toFixed(1)
+                                });
+                            }else{
+                                tmp.data.rows.push({
+                                    'channel': el.channel,
+                                    'percent': 0
+                                });
+                            }
+                        }else{
+                            tmp.data.rows.push({
+                                'channel': el.channel,
+                                'percent': ((el[dataType] / amount).toFixed(5) * 100).toFixed(1)
+                            });
+                        }
                     });
                 }
+
+                console.log(tmp);
                 return tmp;
             },
             //渲染年数据-省份
@@ -790,6 +835,10 @@
                     case 2:
                         dataType = 'avgAmount';
                         dataTypeText = '单均价';
+                        break;
+                    case 3:
+                        dataType = 'orderConRate';
+                        dataTypeText = '订单转化率';
                         break;
                 }
                 let tmp = {
@@ -822,12 +871,20 @@
                 let provinceStat = orderData.provinceStat;
                 if (provinceStat) {
                     provinceStat.map((el) => {
-                        tmp.data.rows.unshift({
-                            'xAxis': el.province,
-                            [dataTypeText]: Math.round(el[dataType])
-                        });
+                        if(me.type == 3){
+                            tmp.data.rows.unshift({
+                                'xAxis': el.province,
+                                [dataTypeText]: Math.round(el[dataType].slice(0,-1))
+                            });
+                        }else{
+                            tmp.data.rows.unshift({
+                                'xAxis': el.province,
+                                [dataTypeText]: Math.round(el[dataType])
+                            });
+                        }
                     });
                 }
+                console.log(tmp);
                 return tmp;
             },
             //获取展示月的天数

@@ -159,6 +159,9 @@
                         case 2:
                             dataType = 'avgPayAmount';
                             break;
+                        case 3:
+                            dataType = 'orderConRate';
+                            break;
                     }
                     arr.map((el) => {
                         tmpData.push(el[dataType]);
@@ -180,6 +183,9 @@
                         break;
                     case 2:
                         dataType = 'avgPayAmount';
+                        break;
+                    case 3:
+                        dataType = 'orderConRate';
                         break;
                 }
                 if (!isEmpty(arr)) {

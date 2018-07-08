@@ -300,11 +300,11 @@
                                         <!--订单转化率-->
                                         <template v-if="type === 3">
                                             <td>{{item.orderConRate?item.orderConRate:0}}</td>
-                                            <td :class="getStyle(item.dcOrderConRatePercent)" v-show="time === 'day'">{{item.dcOrderConRatePercent?item.dcAvgAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.dcOrderConRatePercent)" v-show="time === 'day'">{{item.dcOrderConRatePercent?item.dcOrderConRatePercent:0}}</td>
                                             <td :class="getStyle(item.wcOrderConRatePercent)" v-show="time === 'day'">{{item.wcOrderConRatePercent?item.wcOrderConRatePercent:0}}</td>
                                             <td :class="getStyle(item.weekOrderConRatePercent)" v-show="time === 'week'">{{item.weekOrderConRatePercent?item.weekOrderConRatePercent:0}}</td>
                                             <td :class="getStyle(item.mcOrderConRatePercent)" v-show="time === 'month'">{{item.mcOrderConRatePercent?item.mcOrderConRatePercent:0}}</td>
-                                            <td :class="getStyle(item.yearOrderConRatePercent)">{{item.yearOrderConRatePercent?item.yearOrderConRatePercent:0}}</td>
+                                            <td :class="getStyle(item.yearOrderConRatePercent)">{{item.yearOrderConRatePercent?item.yearOrderConRatePercent:'0%'}}</td>
                                         </template>
                                     </tr>
                                     </tbody>
@@ -313,7 +313,7 @@
 
                             <!--省份-->
                             <template v-if="showWay === 2">
-                                <div v-if="!isEmpty(orderDataArr.provinceStat)">
+                                <div v-if="!isEmpty(orderDataArr.provinceStat) && type < 3">
                                     <!--条形图-->
                                     <ve-bar :width="width"
                                             height="800px"
@@ -794,7 +794,6 @@
                     channelStat.map((el) => {
                         //订单转化率接口返回数据带有%，需要去掉
                         if(me.type == 3){
-                            console.log('amount',amount);
                             if(amount > 0){
                                 tmp.data.rows.push({
                                     'channel': el.channel,
@@ -814,8 +813,6 @@
                         }
                     });
                 }
-
-                console.log(tmp);
                 return tmp;
             },
             //渲染年数据-省份
@@ -884,7 +881,6 @@
                         }
                     });
                 }
-                console.log(tmp);
                 return tmp;
             },
             //获取展示月的天数

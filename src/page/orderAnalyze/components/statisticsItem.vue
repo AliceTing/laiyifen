@@ -56,7 +56,7 @@
                     <div class="value" v-show="type === 3">{{total.curDayOrderConRate?total.curDayOrderConRate:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">昨日累计</div>
+                    <div class="title">昨日同期累计</div>
                     <div class="value" v-show="type === 0">{{total.preDayTotalPayAmount?total.preDayTotalPayAmount:0}}元</div>
                     <div class="value" v-show="type === 1">{{total.preDayPayOrderNum?total.preDayPayOrderNum:0}}件</div>
                     <div class="value" v-show="type === 2">{{total.preDayAvgAmount?total.preDayAvgAmount:0}}元</div>
@@ -70,7 +70,7 @@
                     <div class="value" v-show="type === 3">{{total.dayOrderConRatePercent?total.dayOrderConRatePercent:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">上周同期</div>
+                    <div class="title">上周同期累计</div>
                     <div class="value" v-show="type === 0">{{total.preWeekDayTotalPayAmount?total.preWeekDayTotalPayAmount:0}}</div>
                     <div class="value" v-show="type === 1">{{total.preWeekDayPayOrderNum?total.preWeekDayPayOrderNum:0}}</div>
                     <div class="value" v-show="type === 2">{{total.preWeekDayAvgAmount?total.preWeekDayAvgAmount:0}}</div>
@@ -94,7 +94,7 @@
                     <div class="value" v-show="type === 3">{{total.thisWeekOrderConRate?total.thisWeekOrderConRate:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">上周累计</div>
+                    <div class="title">上周同期累计</div>
                     <div class="value" v-show="type === 0">{{total.lastWeekTotalPayAmount?total.lastWeekTotalPayAmount:0}}元</div>
                     <div class="value" v-show="type === 1">{{total.lastWeekPayOrderNum?total.lastWeekPayOrderNum:0}}件</div>
                     <div class="value" v-show="type === 2">{{total.lastWeekAvgAmount?total.lastWeekAvgAmount:0}}元</div>
@@ -108,7 +108,7 @@
                     <div class="value" v-show="type === 3">{{total.weekOrderConRatePercent?total.weekOrderConRatePercent:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">去年同期</div>
+                    <div class="title">去年同期累计</div>
                     <div class="value" v-show="type === 0">{{total.lastYearWeekTotalPayAmount?total.lastYearWeekTotalPayAmount:0}}</div>
                     <div class="value" v-show="type === 1">{{total.lastYearWeekPayOrderNum?total.lastYearWeekPayOrderNum:0}}</div>
                     <div class="value" v-show="type === 2">{{total.lastYearWeekAvgAmount?total.lastYearWeekAvgAmount:0}}</div>
@@ -132,7 +132,7 @@
                     <div class="value" v-show="type === 3">{{total.thisMonthOrderConRate?total.thisMonthOrderConRate:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">上月累计</div>
+                    <div class="title">上月同期累计</div>
                     <div class="value" v-show="type === 0">{{total.lastMonthTotalPayAmount?total.lastMonthTotalPayAmount:0}}元</div>
                     <div class="value" v-show="type === 1">{{total.lastMonthPayOrderNum?total.lastMonthPayOrderNum:0}}件</div>
                     <div class="value" v-show="type === 2">{{total.lastMonthAvgAmount?total.lastMonthAvgAmount:0}}元</div>
@@ -146,7 +146,7 @@
                     <div class="value" v-show="type === 3">{{total.monthOrderConRatePercent?total.monthOrderConRatePercent:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">去年同期</div>
+                    <div class="title">去年同期累计</div>
                     <div class="value" v-show="type === 0">{{total.lastYearMonthTotalPayAmount?total.lastYearMonthTotalPayAmount:0}}</div>
                     <div class="value" v-show="type === 1">{{total.lastYearMonthPayOrderNum?total.lastYearMonthPayOrderNum:0}}</div>
                     <div class="value" v-show="type === 2">{{total.lastYearMonthAvgAmount?total.lastYearMonthAvgAmount:0}}</div>
@@ -170,7 +170,7 @@
                     <div class="value" v-show="type === 3">{{total.thisYearOrderConRate?total.thisYearOrderConRate:0}}</div>
                 </div>
                 <div class="item">
-                    <div class="title">去年累计</div>
+                    <div class="title">去年同期累计</div>
                     <div class="value" v-show="type === 0">{{total.lastYearTotalPayAmount?total.lastYearTotalPayAmount:0}}元</div>
                     <div class="value" v-show="type === 1">{{total.lastYearPayOrderNum?total.lastYearPayOrderNum:0}}件</div>
                     <div class="value" v-show="type === 2">{{total.lastYearAvgAmount?total.lastYearAvgAmount:0}}元</div>

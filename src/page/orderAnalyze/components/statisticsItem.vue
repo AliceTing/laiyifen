@@ -154,8 +154,8 @@
                 </div>
                 <div class="item">
                     <div class="title">年同比</div>
-                    <div class="value" v-show="type === 0">{{total.yearPayAmountPercent?total.yearPayAmountPercent:0}}</div>
-                    <div class="value" v-show="type === 1">{{total.yearPayOrderNumPercent?total.yearPayOrderNumPercent:0}}</div>
+                    <div class="value" v-show="type === 0">{{total.yearAmountPercent?total.yearAmountPercent:0}}</div>
+                    <div class="value" v-show="type === 1">{{total.yearOrderNumPercent?total.yearOrderNumPercent:0}}</div>
                     <div class="value" v-show="type === 2">{{total.yearAvgAmountPercent?total.yearAvgAmountPercent:0}}</div>
                     <div class="value" v-show="type === 3">{{total.yearOrderConRatePercent?total.yearOrderConRatePercent:0}}</div>
                 </div>
@@ -178,8 +178,8 @@
                 </div>
                 <div class="item">
                     <div class="title">年环比</div>
-                    <div class="value" v-show="type === 0">{{total.yearPayAmountPercent?total.yearPayAmountPercent:0}}</div>
-                    <div class="value" v-show="type === 1">{{total.yearPayOrderNumPercent?total.yearPayOrderNumPercent:0}}</div>
+                    <div class="value" v-show="type === 0">{{total.yearAmountPercent?total.yearAmountPercent:0}}</div>
+                    <div class="value" v-show="type === 1">{{total.yearOrderNumPercent?total.yearOrderNumPercent:0}}</div>
                     <div class="value" v-show="type === 2">{{total.yearAvgAmountPercent?total.yearAvgAmountPercent:0}}</div>
                     <div class="value" v-show="type === 3">{{total.yearOrderConRatePercent?total.yearOrderConRatePercent:0}}</div>
                 </div>

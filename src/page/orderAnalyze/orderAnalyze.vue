@@ -277,7 +277,7 @@
                                             <td :class="getStyle(item.wcPayAmountPercent)" v-show="time === 'day'">{{item.wcPayAmountPercent?item.wcPayAmountPercent:0}}</td>
                                             <td :class="getStyle(item.weekPayAmountPercent)" v-show="time === 'week'">{{item.weekPayAmountPercent?item.weekPayAmountPercent:0}}</td>
                                             <td :class="getStyle(item.mcPayAmountPercent)" v-show="time === 'month'">{{item.mcPayAmountPercent?item.mcPayAmountPercent:0}}</td>
-                                            <td :class="getStyle(item.yearPayAmountPercent)">{{item.yearPayAmountPercent?item.yearPayAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.ycPayAmountPercent)">{{item.ycPayAmountPercent?item.ycPayAmountPercent:0}}</td>
                                         </template>
                                         <!--支付订单数-->
                                         <template v-if="type === 1">
@@ -286,7 +286,7 @@
                                             <td :class="getStyle(item.wcPayOrderNumPercent)" v-show="time === 'day'">{{item.wcPayOrderNumPercent?item.wcPayOrderNumPercent:0}}</td>
                                             <td :class="getStyle(item.weekPayOrderNumPercent)" v-show="time === 'week'">{{item.weekPayOrderNumPercent?item.weekPayOrderNumPercent:0}}</td>
                                             <td :class="getStyle(item.mcPayOrderNumPercent)" v-show="time === 'month'">{{item.mcPayOrderNumPercent?item.mcPayOrderNumPercent:0}}</td>
-                                            <td :class="getStyle(item.yearPayOrderNumPercent)">{{item.yearPayOrderNumPercent?item.yearPayOrderNumPercent:0}}</td>
+                                            <td :class="getStyle(item.ycPayOrderNumPercent)">{{item.ycPayOrderNumPercent?item.ycPayOrderNumPercent:0}}</td>
                                         </template>
                                         <!--单均价-->
                                         <template v-if="type === 2">
@@ -295,7 +295,7 @@
                                             <td :class="getStyle(item.wcAvgAmountPercent)" v-show="time === 'day'">{{item.wcAvgAmountPercent?item.wcAvgAmountPercent:0}}</td>
                                             <td :class="getStyle(item.weekAvgAmountPercent)" v-show="time === 'week'">{{item.weekAvgAmountPercent?item.weekAvgAmountPercent:0}}</td>
                                             <td :class="getStyle(item.mcAvgAmountPercent)" v-show="time === 'month'">{{item.mcAvgAmountPercent?item.mcAvgAmountPercent:0}}</td>
-                                            <td :class="getStyle(item.yearAvgAmountPercent)">{{item.yearAvgAmountPercent?item.yearAvgAmountPercent:0}}</td>
+                                            <td :class="getStyle(item.ycAvgAmountPercent)">{{item.ycAvgAmountPercent?item.ycAvgAmountPercent:0}}</td>
                                         </template>
                                         <!--订单转化率-->
                                         <template v-if="type === 3">
@@ -304,7 +304,7 @@
                                             <td :class="getStyle(item.wcOrderConRatePercent)" v-show="time === 'day'">{{item.wcOrderConRatePercent?item.wcOrderConRatePercent:0}}</td>
                                             <td :class="getStyle(item.weekOrderConRatePercent)" v-show="time === 'week'">{{item.weekOrderConRatePercent?item.weekOrderConRatePercent:0}}</td>
                                             <td :class="getStyle(item.mcOrderConRatePercent)" v-show="time === 'month'">{{item.mcOrderConRatePercent?item.mcOrderConRatePercent:0}}</td>
-                                            <td :class="getStyle(item.yearOrderConRatePercent)">{{item.yearOrderConRatePercent?item.yearOrderConRatePercent:'0%'}}</td>
+                                            <td :class="getStyle(item.ycOrderConRatePercent)">{{item.ycOrderConRatePercent?item.ycOrderConRatePercent:'0%'}}</td>
                                         </template>
                                     </tr>
                                     </tbody>

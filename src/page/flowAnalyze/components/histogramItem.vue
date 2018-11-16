@@ -135,8 +135,10 @@
                             tmpData.push(el[dataType]);
                         });
                         tmpData.map((el, i) => {
-                            tmp.data.rows[i][which] = el;
-                        })
+                            if (i < tmp.data.rows.length) {
+                                tmp.data.rows[i][which] = el;
+                            }
+                        });
                     }
 
                     function specialData(arr, which, tmp, diff) {
